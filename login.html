@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modern Sign In</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
       box-sizing: border-box;
@@ -269,6 +270,27 @@
       color: #d1d5db;
     }
 
+    /* Persian Font (Vazir) */
+    body[dir="rtl"] {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    body[dir="rtl"] .form-container {
+      text-align: right;
+      direction: rtl;
+    }
+    body[dir="rtl"] .forgot-password {
+      text-align: left;
+    }
+    body[dir="rtl"] .divider {
+      text-align: right;
+    }
+    body[dir="rtl"] .social-login {
+      flex-direction: row-reverse;
+    }
+    body[dir="rtl"] .signup-link {
+      text-align: right;
+    }
+
     /* Mobile Responsiveness */
     @media (max-width: 480px) {
       .controls-container {
@@ -403,7 +425,7 @@
       signUpLink: document.getElementById('signUpLink')
     };
 
-    // Apply translations
+    // Apply translations and styling
     function applyLanguage(lang) {
       Object.keys(elements).forEach(key => {
         if (key === 'noAccountText') {
@@ -419,6 +441,13 @@
           elements[key].textContent = texts[lang][key];
         }
       });
+
+      // Apply RTL and font for Persian
+      if (lang === 'fa') {
+        body.setAttribute('dir', 'rtl');
+      } else {
+        body.removeAttribute('dir');
+      }
     }
 
     // Load saved preferences
