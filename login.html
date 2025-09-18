@@ -10,6 +10,7 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
     }
     body {
       font-family: 'Inter', sans-serif;
@@ -20,6 +21,60 @@
       align-items: center;
       min-height: 100vh;
       padding: 16px;
+    }
+    .theme-toggle-container {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 100;
+    }
+    .theme-toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #4b5563;
+    }
+    .theme-toggle {
+      position: relative;
+      display: inline-block;
+      width: 56px;
+      height: 32px;
+    }
+    .theme-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #d1d5db;
+      transition: .4s;
+      border-radius: 32px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    input:checked + .slider {
+      background-color: #3b82f6;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
     }
     .form-container {
       width: 100%;
@@ -55,6 +110,8 @@
       font-size: 16px;
       transition: border 0.2s ease;
       outline: none;
+      background-color: white;
+      color: #111827;
     }
     input[type="email"]:focus,
     input[type="password"]:focus {
@@ -139,9 +196,73 @@
     .signup-link a:hover {
       text-decoration: underline;
     }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+      background-color: #111827;
+      color: #f9fafb;
+    }
+    body.dark-mode .form-container {
+      background: #1f2937;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    }
+    body.dark-mode h1 {
+      color: #f9fafb;
+    }
+    body.dark-mode label {
+      color: #d1d5db;
+    }
+    body.dark-mode input[type="email"],
+    body.dark-mode input[type="password"] {
+      background-color: #374151;
+      color: #f9fafb;
+      border-color: #4b5563;
+    }
+    body.dark-mode input[type="email"]:focus,
+    body.dark-mode input[type="password"]:focus {
+      border-color: #60a5fa;
+    }
+    body.dark-mode .divider {
+      color: #9ca3af;
+    }
+    body.dark-mode .divider::before,
+    body.dark-mode .divider::after {
+      background-color: #374151;
+    }
+    body.dark-mode .social-btn {
+      background: #374151;
+      border-color: #4b5563;
+      color: #f9fafb;
+    }
+    body.dark-mode .social-btn:hover {
+      background-color: #4b5563;
+    }
+    body.dark-mode .forgot-password a {
+      color: #d1d5db;
+    }
+    body.dark-mode .signup-link {
+      color: #d1d5db;
+    }
+    body.dark-mode button {
+      background-color: #3b82f6;
+    }
+    body.dark-mode button:hover {
+      background-color: #2563eb;
+    }
+    body.dark-mode .theme-toggle-label {
+      color: #d1d5db;
+    }
   </style>
 </head>
 <body>
+  <div class="theme-toggle-container">
+    <span class="theme-toggle-label">Dark Mode</span>
+    <label class="theme-toggle">
+      <input type="checkbox" id="darkModeToggle"/>
+      <span class="slider"></span>
+    </label>
+  </div>
+
   <div class="form-container">
     <h1>Sign in to your account</h1>
     <form>
@@ -169,5 +290,23 @@
       Don't have an account? <a href="#">Sign up</a>
     </p>
   </div>
+
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    // Check user preference
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+      body.classList.add('dark-mode');
+      darkModeToggle.checked = true;
+    }
+
+    // Toggle dark mode
+    darkModeToggle.addEventListener('change', () => {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    });
+  </script>
 </body>
 </html>
