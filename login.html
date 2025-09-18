@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Modern Sign In</title>
+  <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Vazirmatn (Persian Font) -->
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
     * {
@@ -89,9 +91,25 @@
       background: white;
       color: #111827;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
     .language-select:hover {
       border-color: #3b82f6;
+    }
+    .flag {
+      width: 16px;
+      height: 12px;
+      background-size: cover;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .flag-en {
+      background-image: url('/image/flag-united-kingdom.svg');
+    }
+    .flag-fa {
+      background-image: url('/image/flag-iran.svg');
     }
     .form-container {
       width: 100%;
@@ -350,8 +368,8 @@
     <div class="control-group">
       <span>Language</span>
       <select id="languageSelect" class="select language-select">
-        <option value="en" selected>English</option>
-        <option value="fa">فارسی</option>
+        <option value="en" selected><span class="flag flag-en"></span> English</option>
+        <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
       </select>
     </div>
   </div>
