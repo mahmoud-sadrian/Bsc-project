@@ -22,25 +22,29 @@
       min-height: 100vh;
       padding: 16px;
     }
-    .theme-toggle-container {
+    .controls-container {
       position: absolute;
       top: 24px;
       right: 24px;
       display: flex;
-      align-items: center;
       gap: 12px;
       z-index: 100;
     }
-    .theme-toggle-label {
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-size: 14px;
       font-weight: 500;
       color: #4b5563;
     }
-    .theme-toggle {
+    .toggle, .select {
       position: relative;
-      display: inline-block;
-      width: 56px;
       height: 32px;
+    }
+    .theme-toggle {
+      width: 44px;
+      height: 24px;
     }
     .theme-toggle input {
       opacity: 0;
@@ -56,13 +60,13 @@
       bottom: 0;
       background-color: #d1d5db;
       transition: .4s;
-      border-radius: 32px;
+      border-radius: 24px;
     }
     .slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
+      height: 18px;
+      width: 18px;
       left: 3px;
       bottom: 3px;
       background-color: white;
@@ -74,7 +78,19 @@
       background-color: #3b82f6;
     }
     input:checked + .slider:before {
-      transform: translateX(24px);
+      transform: translateX(18px);
+    }
+    .language-select {
+      padding: 6px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      background: white;
+      color: #111827;
+      cursor: pointer;
+    }
+    .language-select:hover {
+      border-color: #3b82f6;
     }
     .form-container {
       width: 100%;
@@ -249,15 +265,18 @@
     body.dark-mode button:hover {
       background-color: #2563eb;
     }
-    body.dark-mode .theme-toggle-label {
+    body.dark-mode .control-group {
       color: #d1d5db;
     }
 
     /* Mobile Responsiveness */
     @media (max-width: 480px) {
+      .controls-container {
+        top: 16px;
+        right: 16px;
+      }
       .form-container {
         padding: 24px;
-        border-radius: 12px;
         margin: 0 8px;
       }
       h1 {
@@ -294,62 +313,133 @@
         font-size: 14px;
         margin-top: 20px;
       }
-      .theme-toggle-container {
-        top: 16px;
-        right: 16px;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="theme-toggle-container">
-    <span class="theme-toggle-label">Dark Mode</span>
-    <label class="theme-toggle">
-      <input type="checkbox" id="darkModeToggle"/>
-      <span class="slider"></span>
-    </label>
+  <div class="controls-container">
+    <div class="control-group">
+      <span class="theme-label">Dark Mode</span>
+      <label class="toggle theme-toggle">
+        <input type="checkbox" id="darkModeToggle"/>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="control-group">
+      <span>Language</span>
+      <select id="languageSelect" class="select language-select">
+        <option value="en" selected>English</option>
+        <option value="fa">فارسی</option>
+      </select>
+    </div>
   </div>
 
   <div class="form-container">
-    <h1>Sign in to your account</h1>
+    <h1 id="title">Sign in to your account</h1>
     <form>
       <div class="form-group">
-        <label for="email">Email address</label>
+        <label for="email" id="emailLabel">Email address</label>
         <input type="email" id="email" placeholder="you@example.com" required />
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password" id="passwordLabel">Password</label>
         <input type="password" id="password" placeholder="••••••••" required />
       </div>
       <div class="forgot-password">
-        <a href="#">Forgot password?</a>
+        <a href="#" id="forgotLink">Forgot password?</a>
       </div>
-      <button type="submit">Sign in</button>
+      <button type="submit" id="signInButton">Sign in</button>
     </form>
 
-    <div class="divider"><span>or continue with</span></div>
+    <div class="divider"><span id="orText">or continue with</span></div>
 
     <div class="social-login">
       <button class="social-btn">Google</button>
     </div>
 
     <p class="signup-link">
-      Don't have an account? <a href="#">Sign up</a>
+      <span id="noAccountText">Don't have an account?</span> <a href="#" id="signUpLink">Sign up</a>
     </p>
   </div>
 
   <script>
     const darkModeToggle = document.getElementById('darkModeToggle');
+    const languageSelect = document.getElementById('languageSelect');
     const body = document.body;
 
-    // Check user preference
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
-      body.classList.add('dark-mode');
-      darkModeToggle.checked = true;
+    // Text mappings
+    const texts = {
+      en: {
+        title: "Sign in to your account",
+        emailLabel: "Email address",
+        passwordLabel: "Password",
+        forgotLink: "Forgot password?",
+        signInButton: "Sign in",
+        orText: "or continue with",
+        noAccountText: "Don't have an account?",
+        signUpLink: "Sign up"
+      },
+      fa: {
+        title: "ورود به حساب کاربری",
+        emailLabel: "آدرس ایمیل",
+        passwordLabel: "رمز عبور",
+        forgotLink: "رمز عبور خود را فراموش کرده‌اید؟",
+        signInButton: "ورود",
+        orText: "یا ادامه با",
+        noAccountText: "حساب کاربری ندارید؟",
+        signUpLink: "ثبت‌نام"
+      }
+    };
+
+    // Elements to update
+    const elements = {
+      title: document.getElementById('title'),
+      emailLabel: document.getElementById('emailLabel'),
+      passwordLabel: document.getElementById('passwordLabel'),
+      forgotLink: document.getElementById('forgotLink'),
+      signInButton: document.getElementById('signInButton'),
+      orText: document.querySelector('.divider span'),
+      noAccountText: document.querySelector('.signup-link'),
+      signUpLink: document.getElementById('signUpLink')
+    };
+
+    // Apply translations
+    function applyLanguage(lang) {
+      Object.keys(elements).forEach(key => {
+        if (key === 'noAccountText') {
+          // Special handling for combined text
+          const parent = elements[key];
+          const link = parent.querySelector('a');
+          const text = parent.cloneNode(true);
+          link.remove();
+          text.textContent = texts[lang][key];
+          text.appendChild(link);
+          parent.replaceWith(text);
+        } else {
+          elements[key].textContent = texts[lang][key];
+        }
+      });
     }
 
-    // Toggle dark mode
+    // Load saved preferences
+    const savedLang = localStorage.getItem('uiLanguage') || 'en';
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    languageSelect.value = savedLang;
+    darkModeToggle.checked = isDarkMode;
+    if (isDarkMode) body.classList.add('dark-mode');
+
+    // Apply initial language
+    applyLanguage(savedLang);
+
+    // Language change handler
+    languageSelect.addEventListener('change', () => {
+      const selectedLang = languageSelect.value;
+      applyLanguage(selectedLang);
+      localStorage.setItem('uiLanguage', selectedLang);
+    });
+
+    // Dark mode toggle
     darkModeToggle.addEventListener('change', () => {
       body.classList.toggle('dark-mode');
       localStorage.setItem('darkMode', darkModeToggle.checked);
