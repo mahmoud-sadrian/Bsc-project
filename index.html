@@ -8,7 +8,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   
   <style>
-    /* CSS Variables for Theming */
     :root {
       --bg-primary: #f9fafb;
       --bg-secondary: white;
@@ -49,7 +48,6 @@
       --error-color: #f87171;
     }
 
-    /* Reset & Base */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -77,7 +75,6 @@
       display: none;
     }
 
-    /* Header and Nav */
     header {
       background: var(--bg-secondary);
       box-shadow: 0 2px 4px var(--shadow-primary);
@@ -97,6 +94,10 @@
       font-size: 24px;
       font-weight: 600;
       color: var(--text-primary);
+    }
+    .logo a {
+        text-decoration: none;
+        color: inherit;
     }
     .nav-links {
       display: flex;
@@ -135,7 +136,6 @@
       padding: 0;
     }
     
-    /* Language Selection Styles */
     .language-select-wrapper {
         position: relative;
         display: flex;
@@ -145,11 +145,11 @@
         cursor: pointer;
         padding: 4px;
         border-radius: 8px;
-        transition: background-color 0.2s ease, transform 0.2s ease; /* Added transform for animation */
+        transition: background-color 0.2s ease, transform 0.2s ease;
     }
     .language-dropdown-icon:hover {
       background-color: var(--social-hover);
-      transform: scale(1.05); /* Slight scale on hover for better feedback */
+      transform: scale(1.05);
     }
     .language-dropdown {
         position: absolute;
@@ -163,8 +163,6 @@
         z-index: 10;
         padding: 8px 0;
         min-width: 120px;
-
-        /* Animation properties */
         opacity: 0;
         visibility: hidden;
         transform: translateY(10px) scale(0.95);
@@ -190,7 +188,6 @@
         color: var(--text-primary);
     }
 
-    /* Main Content */
     main {
       flex: 1 0 auto;
       display: flex;
@@ -223,7 +220,6 @@
       line-height: 1.6;
     }
 
-    /* Action Buttons */
     .action-buttons {
       display: flex;
       flex-direction: column;
@@ -255,7 +251,6 @@
       border-color: var(--border-focus);
     }
 
-    /* Footer */
     footer {
       flex-shrink: 0;
       background: var(--bg-secondary);
@@ -288,7 +283,6 @@
       transform: scale(1.1);
     }
 
-    /* Persian Font & RTL */
     body[dir="rtl"] {
       font-family: 'Vazirmatn', sans-serif;
     }
@@ -306,7 +300,6 @@
       right: 0;
     }
 
-    /* Mobile Responsiveness */
     @media (max-width: 768px) {
       nav {
         flex-direction: column;
@@ -346,7 +339,9 @@
 <body>
   <header>
     <nav>
-      <div class="logo" id="logo">Smartify24</div>
+      <div class="logo">
+        <a href="#" id="logo">Smartify24</a>
+      </div>
       <div class="nav-links">
         <a href="#" id="homeLink">Home</a>
         <a href="#" id="aboutLink">About</a>
@@ -379,7 +374,7 @@
   <main>
     <div class="content-container">
       <h1 id="title">Welcome to Smartify24</h1>
-      <p id="description">Smartify24 is an innovative IoT platform developed as part of a university bachelor's program. It enables seamless integration with microcontrollers like the ESP8266, allowing users to remotely control and monitor smart devices such as light bulbs, sensors, and home appliances. Whether you're automating your home, monitoring environmental data, or building custom IoT projects, Smartify24 provides a user-friendly interface to manage everything from anywhere. Sign in to access your personalized dashboard, view real-time device status, and control your connected world. If you're new, sign up to start your journey into smart technology today!</p>
+      <p id="description">This platform allows you to connect microcontrollers like ESP8266 to control devices such as light bulbs remotely. Sign in to access your dashboard or sign up to get started.</p>
       <div class="action-buttons">
         <button class="action-btn" id="signInButton">Sign In</button>
         <button class="action-btn secondary-btn" id="signUpButton">Sign Up</button>
@@ -408,12 +403,10 @@
       const signInButton = document.getElementById('signInButton');
       const signUpButton = document.getElementById('signUpButton');
 
-      // New language selection elements
       const langWrapper = document.getElementById('languageWrapper');
       const langDropdown = document.getElementById('languageDropdown');
       const langItems = document.querySelectorAll('.language-dropdown-item');
 
-      // Text mappings
       const texts = {
         en: {
           logo: "Smartify24",
@@ -443,7 +436,6 @@
         }
       };
 
-      // Elements to update
       const elements = {
         logo: document.getElementById('logo'),
         homeLink: document.getElementById('homeLink'),
@@ -458,10 +450,6 @@
         contactTitle: document.getElementById('contactTitle')
       };
 
-      /**
-       * Applies the selected language to the UI.
-       * @param {string} lang - The language code ('en' or 'fa').
-       */
       function applyLanguage(lang) {
         Object.keys(elements).forEach(key => {
           elements[key].textContent = texts[lang][key];
@@ -470,35 +458,31 @@
         document.documentElement.lang = lang;
       }
 
-      // Load saved preferences from local storage
       const savedLang = localStorage.getItem('uiLanguage') || 'en';
       const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-      // Apply initial settings
       if (isDarkMode) {
         body.classList.add('dark-mode');
       }
       applyLanguage(savedLang);
 
-      // Event Listeners
       darkModeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
       });
       
-      // New language selection listeners
       langWrapper.addEventListener('click', (event) => {
-        event.stopPropagation(); // Prevents the document click listener from firing immediately
+        event.stopPropagation();
         langDropdown.classList.toggle('active');
       });
 
       langItems.forEach(item => {
         item.addEventListener('click', (event) => {
-          event.preventDefault(); // Prevents link from navigating
+          event.preventDefault();
           const selectedLang = item.getAttribute('data-lang');
           applyLanguage(selectedLang);
           localStorage.setItem('uiLanguage', selectedLang);
-          langDropdown.classList.remove('active'); // Hide dropdown after selection
+          langDropdown.classList.remove('active');
         });
       });
 
@@ -508,7 +492,6 @@
         }
       });
       
-      // Add click listeners for button navigation
       signInButton.addEventListener('click', () => {
         window.location.href = 'sign-in.html';
       });
