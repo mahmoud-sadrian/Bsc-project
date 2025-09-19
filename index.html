@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home - IoT Control Platform</title>
+  <title>Home - Smartify24</title>
   <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <!-- Vazirmatn (Persian Font) -->
@@ -61,119 +62,97 @@
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-primary);
       color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header and Nav */
+    header {
+      background: var(--bg-secondary);
+      box-shadow: 0 2px 4px var(--shadow-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    .nav-links a:hover {
+      color: var(--border-focus);
+    }
+    .nav-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .nav-icon {
+      width: 24px;
+      height: 24px;
+      fill: var(--text-muted);
+      transition: fill 0.2s ease;
+    }
+    .nav-icon:hover {
+      fill: var(--border-focus);
+    }
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+    .language-select {
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 16px;
+      appearance: none;
+      padding: 0;
+    }
+    .language-select-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .language-select-wrapper .nav-icon {
+      margin-right: 8px;
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      padding: 16px;
+      padding: 32px 16px;
     }
-
-    /* Controls Container (Top Right) */
-    .controls-container {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      display: flex;
-      gap: 16px;
-      z-index: 100;
-      align-items: center;
-    }
-    .control-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-
-    /* Dark Mode Toggle */
-    .theme-toggle {
-      width: 44px;
-      height: 24px;
-      position: relative;
-      cursor: pointer;
-    }
-    .theme-toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--border-primary);
-      border: 1px solid var(--divider);
-      border-radius: 24px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .slider:before {
-      content: "";
-      position: absolute;
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: var(--bg-secondary);
-      border-radius: 50%;
-      box-shadow: 0 2px 4px var(--shadow-primary);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    input:checked + .slider {
-      background-color: var(--border-focus);
-      border-color: var(--border-focus);
-    }
-    input:checked + .slider:before {
-      transform: translateX(18px);
-    }
-
-    /* Language Selector */
-    .language-select {
-      padding: 6px 12px;
-      border: 1px solid var(--border-primary);
-      border-radius: 8px;
-      font-size: 14px;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 120px;
-      box-shadow: 0 1px 2px var(--shadow-primary);
-      transition: all 0.2s ease;
-    }
-    .language-select:hover {
-      border-color: var(--border-focus);
-      box-shadow: 0 2px 4px var(--shadow-primary);
-    }
-    .language-select:focus-visible {
-      outline: 2px solid var(--border-focus);
-      outline-offset: 2px;
-    }
-
-    /* Flag Icons */
-    .flag {
-      width: 16px;
-      height: 12px;
-      background-size: cover;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .flag-en {
-      background-image: url('/image/flag-united-kingdom.svg');
-    }
-    .flag-fa {
-      background-image: url('/image/flag-iran.svg');
-    }
-
-    /* Content Container */
     .content-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 600px;
       padding: 32px;
       background: var(--bg-secondary);
       border-radius: 16px;
@@ -183,7 +162,7 @@
       text-align: center;
     }
     h1 {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 600;
       margin-bottom: 16px;
       letter-spacing: -0.02em;
@@ -193,9 +172,10 @@
       font-size: 16px;
       color: var(--text-secondary);
       margin-bottom: 24px;
+      line-height: 1.6;
     }
 
-    /* Buttons */
+    /* Action Buttons */
     .action-buttons {
       display: flex;
       flex-direction: column;
@@ -227,100 +207,207 @@
       border-color: var(--border-focus);
     }
 
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      box-shadow: 0 -2px 4px var(--shadow-primary);
+      padding: 24px 32px;
+      text-align: center;
+    }
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+    }
+    .social-link img {
+      width: 32px;
+      height: 32px;
+      transition: transform 0.2s ease;
+    }
+    .social-link:hover img {
+      transform: scale(1.1);
+    }
+
     /* Persian Font & RTL */
     body[dir="rtl"] {
       font-family: 'Vazirmatn', sans-serif;
     }
-    body[dir="rtl"] .content-container {
+    body[dir="rtl"] nav,
+    body[dir="rtl"] .content-container,
+    body[dir="rtl"] footer {
       text-align: right;
       direction: rtl;
     }
+    body[dir="rtl"] .nav-links {
+      flex-direction: row-reverse;
+    }
+    body[dir="rtl"] .language-select-wrapper .nav-icon {
+      margin-right: 0;
+      margin-left: 8px;
+    }
 
     /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px;
+      }
+      .content-container {
+        max-width: 400px;
+      }
+    }
     @media (max-width: 480px) {
-      .controls-container {
-        top: 16px;
-        right: 16px;
+      nav {
+        padding: 16px;
+      }
+      .logo {
+        font-size: 20px;
+      }
+      .nav-links a {
+        font-size: 14px;
       }
       .content-container {
         padding: 24px;
-        margin: 0 8px;
       }
       h1 {
-        font-size: 22px;
-        margin-bottom: 16px;
+        font-size: 24px;
       }
       p {
         font-size: 15px;
-        margin-bottom: 20px;
-      }
-      .action-btn {
-        padding: 12px;
-        font-size: 16px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="controls-container">
-    <div class="control-group">
-      <span class="theme-label" id="darkModeLabel">Dark Mode</span>
-    </div>
-    <label class="theme-toggle">
-      <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
-      <span class="slider"></span>
-    </label>
-    <div class="control-group">
-      <span id="languageLabel">Language</span>
-      <select id="languageSelect" class="language-select" aria-label="Select language">
-        <option value="en" selected><span class="flag flag-en"></span> English</option>
-        <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
-      </select>
-    </div>
-  </div>
+  <header>
+    <nav>
+      <div class="logo" id="logo">Smartify24</div>
+      <div class="nav-links">
+        <a href="#" id="homeLink">Home</a>
+        <a href="#" id="aboutLink">About</a>
+        <a href="#" id="contactLink">Contact</a>
+        <a href="sign-in.html" id="signInLink">Sign in</a>
+        <a href="sign-up.html" id="signUpLink">Sign up</a>
+        <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
+            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" style="display: none;" viewBox="0 0 16 16">
+            <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z"/>
+          </svg>
+        </button>
+        <div class="language-select-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon" viewBox="0 0 16 16">
+            <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4h1.835zm-.354 2.923A6.957 6.957 0 0 0 3.27 8h9.46a6.957 6.957 0 0 0-.466-1.077H3.736zm.78-2.246a6.585 6.585 0 0 0-.419-.814 9.49 9.49 0 0 0-.323-1.078H2.04c.235-.778.481-1.528.731-2.24.098.482.181.972.258 1.45.023.088.046.177.068.265h1.625c.007.128.012.258.016.389a6.361 6.361 0 0 1-.013 2.272H3.736a9.513 9.513 0 0 0 .322 1.078 6.585 6.585 0 0 0 .419.814zm1.881 6.93A6.585 6.585 0 0 0 5.69 13.46a9.49 9.49 0 0 0 .323 1.078h2.974c-.235.778-.481 1.528-.731 2.24-.098-.482-.181-.972-.258-1.45-.023-.088-.046-.177-.068-.265H4.375a6.361 6.361 0 0 1 .013-2.272h1.625c-.007-.128-.012-.258-.016-.389zm4.187 2.246a9.513 9.513 0 0 0-.322-1.078 6.585 6.585 0 0 0-.419-.814h8.528a6.957 6.957 0 0 0 .466 1.077h-9.46zm-.78 2.246a6.585 6.585 0 0 0 .419.814 9.49 9.49 0 0 0 .323 1.078h1.974c-.235.778-.481 1.528-.731 2.24-.098-.482-.181-.972-.258-1.45-.023-.088-.046-.177-.068-.265H12.625a6.361 6.361 0 0 1-.013-2.272H11.736zM8.5 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-.5v.5a.5.5 0 0 1-1 0V6h-.5a.5.5 0 0 1 0-1h.5V5H8.5z"/>
+          </svg>
+          <select id="languageSelect" class="language-select" aria-label="Select language">
+            <option value="en" selected>English</option>
+            <option value="fa">فارسی</option>
+          </select>
+        </div>
+      </div>
+    </nav>
+  </header>
 
-  <div class="content-container">
-    <h1 id="title">Welcome to IoT Control Platform</h1>
-    <p id="description">This platform allows you to connect microcontrollers like ESP8266 to control devices such as light bulbs remotely. Sign in to access your dashboard or sign up to get started.</p>
-    <div class="action-buttons">
-      <button class="action-btn" id="signInButton" onclick="window.location.href='sign-in.html'">Sign In</button>
-      <button class="action-btn secondary-btn" id="signUpButton" onclick="window.location.href='sign-up.html'">Sign Up</button>
+  <main>
+    <div class="content-container">
+      <h1 id="title">Welcome to Smartify24</h1>
+      <p id="description">Smartify24 is an innovative IoT platform developed as part of a university bachelor's program. It enables seamless integration with microcontrollers like the ESP8266, allowing users to remotely control and monitor smart devices such as light bulbs, sensors, and home appliances. Whether you're automating your home, monitoring environmental data, or building custom IoT projects, Smartify24 provides a user-friendly interface to manage everything from anywhere. Sign in to access your personalized dashboard, view real-time device status, and control your connected world. If you're new, sign up to start your journey into smart technology today!</p>
+      <div class="action-buttons">
+        <button class="action-btn" id="signInButton" onclick="window.location.href='sign-in.html'">Sign In</button>
+        <button class="action-btn secondary-btn" id="signUpButton" onclick="window.location.href='sign-up.html'">Sign Up</button>
+      </div>
     </div>
-  </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <h3 class="footer-title" id="contactTitle">Contact Us</h3>
+      <div class="social-links">
+        <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer">
+          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+        </a>
+        <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+        </a>
+      </div>
+    </div>
+  </footer>
 
   <script>
     const darkModeToggle = document.getElementById('darkModeToggle');
     const languageSelect = document.getElementById('languageSelect');
     const body = document.body;
+    const sunIcon = document.querySelector('.sun-icon');
+    const moonIcon = document.querySelector('.moon-icon');
+
+    // Toggle dark mode and icons
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      const isDark = body.classList.contains('dark-mode');
+      sunIcon.style.display = isDark ? 'none' : 'block';
+      moonIcon.style.display = isDark ? 'block' : 'none';
+      localStorage.setItem('darkMode', isDark);
+    });
 
     // Text mappings
     const texts = {
       en: {
-        title: "Welcome to IoT Control Platform",
-        description: "This platform allows you to connect microcontrollers like ESP8266 to control devices such as light bulbs remotely. Sign in to access your dashboard or sign up to get started.",
+        logo: "Smartify24",
+        homeLink: "Home",
+        aboutLink: "About",
+        contactLink: "Contact",
+        signInLink: "Sign in",
+        signUpLink: "Sign up",
+        title: "Welcome to Smartify24",
+        description: "Smartify24 is an innovative IoT platform developed as part of a university bachelor's program. It enables seamless integration with microcontrollers like the ESP8266, allowing users to remotely control and monitor smart devices such as light bulbs, sensors, and home appliances. Whether you're automating your home, monitoring environmental data, or building custom IoT projects, Smartify24 provides a user-friendly interface to manage everything from anywhere. Sign in to access your personalized dashboard, view real-time device status, and control your connected world. If you're new, sign up to start your journey into smart technology today!",
         signInButton: "Sign In",
         signUpButton: "Sign Up",
-        darkModeLabel: "Dark Mode",
-        languageLabel: "Language"
+        contactTitle: "Contact Us"
       },
       fa: {
-        title: "به پلتفرم کنترل IoT خوش آمدید",
-        description: "این پلتفرم به شما اجازه می‌دهد میکروکنترلرهایی مانند ESP8266 را به وبسایت متصل کنید تا دستگاه‌هایی مانند لامپ‌ها را از راه دور کنترل کنید. برای دسترسی به داشبورد وارد شوید یا برای شروع ثبت‌نام کنید.",
+        logo: "Smartify24",
+        homeLink: "خانه",
+        aboutLink: "درباره",
+        contactLink: "تماس",
+        signInLink: "ورود",
+        signUpLink: "ثبت‌نام",
+        title: "به Smartify24 خوش آمدید",
+        description: "Smartify24 یک پلتفرم نوآورانه IoT است که به عنوان بخشی از برنامه کارشناسی دانشگاه توسعه یافته است. این پلتفرم امکان ادغام یکپارچه با میکروکنترلرهایی مانند ESP8266 را فراهم می‌کند و به کاربران اجازه می‌دهد دستگاه‌های هوشمند مانند لامپ‌ها، سنسورها و لوازم خانگی را از راه دور کنترل و نظارت کنند. چه در حال اتوماسیون خانه خود باشید، چه نظارت بر داده‌های محیطی، یا ساخت پروژه‌های سفارشی IoT، Smartify24 رابط کاربری دوستانه‌ای برای مدیریت همه چیز از هر جایی ارائه می‌دهد. برای دسترسی به داشبورد شخصی‌سازی شده خود وارد شوید، وضعیت دستگاه را در زمان واقعی مشاهده کنید و دنیای متصل خود را کنترل کنید. اگر جدید هستید، برای شروع سفر خود به فناوری هوشمند امروز ثبت‌نام کنید!",
         signInButton: "ورود",
         signUpButton: "ثبت‌نام",
-        darkModeLabel: "حالت تاریک",
-        languageLabel: "زبان"
+        contactTitle: "با ما تماس بگیرید"
       }
     };
 
     // Elements to update
     const elements = {
+      logo: document.getElementById('logo'),
+      homeLink: document.getElementById('homeLink'),
+      aboutLink: document.getElementById('aboutLink'),
+      contactLink: document.getElementById('contactLink'),
+      signInLink: document.getElementById('signInLink'),
+      signUpLink: document.getElementById('signUpLink'),
       title: document.getElementById('title'),
       description: document.getElementById('description'),
       signInButton: document.getElementById('signInButton'),
       signUpButton: document.getElementById('signUpButton'),
-      darkModeLabel: document.getElementById('darkModeLabel'),
-      languageLabel: document.getElementById('languageLabel')
+      contactTitle: document.getElementById('contactTitle')
     };
 
     // Apply translations and styling
@@ -338,8 +425,11 @@
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
     languageSelect.value = savedLang;
-    darkModeToggle.checked = isDarkMode;
-    if (isDarkMode) body.classList.add('dark-mode');
+    if (isDarkMode) {
+      body.classList.add('dark-mode');
+      sunIcon.style.display = 'none';
+      moonIcon.style.display = 'block';
+    }
 
     // Apply initial language
     applyLanguage(savedLang);
@@ -350,12 +440,7 @@
       applyLanguage(selectedLang);
       localStorage.setItem('uiLanguage', selectedLang);
     });
-
-    // Dark mode toggle
-    darkModeToggle.addEventListener('change', () => {
-      body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', darkModeToggle.checked);
-    });
   </script>
 </body>
 </html>
+```
