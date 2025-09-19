@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Home - IoT Control Platform</title>
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <!-- Vazirmatn (Persian Font) -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-primary: #f9fafb;
+      --bg-secondary: white;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --border-primary: #d1d5db;
+      --border-focus: #3b82f6;
+      --accent-primary: #111827;
+      --accent-hover: #1f2937;
+      --shadow-primary: rgba(0, 0, 0, 0.1);
+      --shadow-focus: rgba(59, 130, 246, 0.1);
+      --divider: #e5e7eb;
+      --social-bg: white;
+      --social-border: #d1d5db;
+      --social-hover: #f3f4f6;
+      --social-hover-border: #3b82f6;
+      --error-color: #ef4444;
+    }
+
+    body.dark-mode {
+      --bg-primary: #111827;
+      --bg-secondary: #1f2937;
+      --text-primary: #f9fafb;
+      --text-secondary: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-primary: #4b5563;
+      --border-focus: #60a5fa;
+      --accent-primary: #3b82f6;
+      --accent-hover: #2563eb;
+      --shadow-primary: rgba(0, 0, 0, 0.3);
+      --shadow-focus: rgba(96, 165, 250, 0.1);
+      --divider: #374151;
+      --social-bg: #374151;
+      --social-border: #4b5563;
+      --social-hover: #4b5563;
+      --social-hover-border: #60a5fa;
+      --error-color: #f87171;
+    }
+
+    /* Reset & Base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 16px;
+    }
+
+    /* Controls Container (Top Right) */
+    .controls-container {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      display: flex;
+      gap: 16px;
+      z-index: 100;
+      align-items: center;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    /* Dark Mode Toggle */
+    .theme-toggle {
+      width: 44px;
+      height: 24px;
+      position: relative;
+      cursor: pointer;
+    }
+    .theme-toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-primary);
+      border: 1px solid var(--divider);
+      border-radius: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: var(--bg-secondary);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px var(--shadow-primary);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    input:checked + .slider {
+      background-color: var(--border-focus);
+      border-color: var(--border-focus);
+    }
+    input:checked + .slider:before {
+      transform: translateX(18px);
+    }
+
+    /* Language Selector */
+    .language-select {
+      padding: 6px 12px;
+      border: 1px solid var(--border-primary);
+      border-radius: 8px;
+      font-size: 14px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 120px;
+      box-shadow: 0 1px 2px var(--shadow-primary);
+      transition: all 0.2s ease;
+    }
+    .language-select:hover {
+      border-color: var(--border-focus);
+      box-shadow: 0 2px 4px var(--shadow-primary);
+    }
+    .language-select:focus-visible {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
+    }
+
+    /* Flag Icons */
+    .flag {
+      width: 16px;
+      height: 12px;
+      background-size: cover;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .flag-en {
+      background-image: url('/image/flag-united-kingdom.svg');
+    }
+    .flag-fa {
+      background-image: url('/image/flag-iran.svg');
+    }
+
+    /* Content Container */
+    .content-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 32px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px var(--shadow-primary);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      text-align: center;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+    }
+    p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    /* Buttons */
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--accent-primary);
+      color: var(--bg-secondary);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      box-shadow: 0 2px 4px var(--shadow-primary);
+    }
+    .action-btn:hover {
+      background-color: var(--accent-hover);
+    }
+    .secondary-btn {
+      background-color: transparent;
+      border: 1px solid var(--border-primary);
+      color: var(--text-primary);
+    }
+    .secondary-btn:hover {
+      background-color: var(--social-hover);
+      border-color: var(--border-focus);
+    }
+
+    /* Persian Font & RTL */
+    body[dir="rtl"] {
+      font-family: 'Vazirmatn', sans-serif;
+    }
+    body[dir="rtl"] .content-container {
+      text-align: right;
+      direction: rtl;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 480px) {
+      .controls-container {
+        top: 16px;
+        right: 16px;
+      }
+      .content-container {
+        padding: 24px;
+        margin: 0 8px;
+      }
+      h1 {
+        font-size: 22px;
+        margin-bottom: 16px;
+      }
+      p {
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+      .action-btn {
+        padding: 12px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="controls-container">
+    <div class="control-group">
+      <span class="theme-label" id="darkModeLabel">Dark Mode</span>
+    </div>
+    <label class="theme-toggle">
+      <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
+      <span class="slider"></span>
+    </label>
+    <div class="control-group">
+      <span id="languageLabel">Language</span>
+      <select id="languageSelect" class="language-select" aria-label="Select language">
+        <option value="en" selected><span class="flag flag-en"></span> English</option>
+        <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="content-container">
+    <h1 id="title">Welcome to IoT Control Platform</h1>
+    <p id="description">This platform allows you to connect microcontrollers like ESP8266 to control devices such as light bulbs remotely. Sign in to access your dashboard or sign up to get started.</p>
+    <div class="action-buttons">
+      <button class="action-btn" id="signInButton" onclick="window.location.href='sign-in.html'">Sign In</button>
+      <button class="action-btn secondary-btn" id="signUpButton" onclick="window.location.href='sign-up.html'">Sign Up</button>
+    </div>
+  </div>
+
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const languageSelect = document.getElementById('languageSelect');
+    const body = document.body;
+
+    // Text mappings
+    const texts = {
+      en: {
+        title: "Welcome to IoT Control Platform",
+        description: "This platform allows you to connect microcontrollers like ESP8266 to control devices such as light bulbs remotely. Sign in to access your dashboard or sign up to get started.",
+        signInButton: "Sign In",
+        signUpButton: "Sign Up",
+        darkModeLabel: "Dark Mode",
+        languageLabel: "Language"
+      },
+      fa: {
+        title: "به پلتفرم کنترل IoT خوش آمدید",
+        description: "این پلتفرم به شما اجازه می‌دهد میکروکنترلرهایی مانند ESP8266 را به وبسایت متصل کنید تا دستگاه‌هایی مانند لامپ‌ها را از راه دور کنترل کنید. برای دسترسی به داشبورد وارد شوید یا برای شروع ثبت‌نام کنید.",
+        signInButton: "ورود",
+        signUpButton: "ثبت‌نام",
+        darkModeLabel: "حالت تاریک",
+        languageLabel: "زبان"
+      }
+    };
+
+    // Elements to update
+    const elements = {
+      title: document.getElementById('title'),
+      description: document.getElementById('description'),
+      signInButton: document.getElementById('signInButton'),
+      signUpButton: document.getElementById('signUpButton'),
+      darkModeLabel: document.getElementById('darkModeLabel'),
+      languageLabel: document.getElementById('languageLabel')
+    };
+
+    // Apply translations and styling
+    function applyLanguage(lang) {
+      Object.keys(elements).forEach(key => {
+        elements[key].textContent = texts[lang][key];
+      });
+
+      body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
+      document.documentElement.lang = lang;
+    }
+
+    // Load saved preferences
+    const savedLang = localStorage.getItem('uiLanguage') || 'en';
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+    languageSelect.value = savedLang;
+    darkModeToggle.checked = isDarkMode;
+    if (isDarkMode) body.classList.add('dark-mode');
+
+    // Apply initial language
+    applyLanguage(savedLang);
+
+    // Language change handler
+    languageSelect.addEventListener('change', (e) => {
+      const selectedLang = e.target.value;
+      applyLanguage(selectedLang);
+      localStorage.setItem('uiLanguage', selectedLang);
+    });
+
+    // Dark mode toggle
+    darkModeToggle.addEventListener('change', () => {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', darkModeToggle.checked);
+    });
+  </script>
+</body>
+</html>
