@@ -9,14 +9,15 @@
   <!-- Vazirmatn (Persian Font) -->
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
+    /* Reset & Base */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: #f9fafb;
       color: #111827;
       display: flex;
@@ -25,13 +26,16 @@
       min-height: 100vh;
       padding: 16px;
     }
+
+    /* Controls Container (Top Right) */
     .controls-container {
       position: absolute;
       top: 24px;
       right: 24px;
       display: flex;
-      gap: 12px;
+      gap: 16px;
       z-index: 100;
+      align-items: center;
     }
     .control-group {
       display: flex;
@@ -41,13 +45,13 @@
       font-weight: 500;
       color: #4b5563;
     }
-    .toggle, .select {
-      position: relative;
-      height: 32px;
-    }
+
+    /* Dark Mode Toggle */
     .theme-toggle {
       width: 44px;
       height: 24px;
+      position: relative;
+      cursor: pointer;
     }
     .theme-toggle input {
       opacity: 0;
@@ -56,33 +60,36 @@
     }
     .slider {
       position: absolute;
-      cursor: pointer;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
       background-color: #d1d5db;
-      transition: .4s;
+      border: 1px solid #e5e7eb;
       border-radius: 24px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .slider:before {
-      position: absolute;
       content: "";
+      position: absolute;
       height: 18px;
       width: 18px;
       left: 3px;
       bottom: 3px;
       background-color: white;
-      transition: .4s;
       border-radius: 50%;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     input:checked + .slider {
       background-color: #3b82f6;
+      border-color: #3b82f6;
     }
     input:checked + .slider:before {
       transform: translateX(18px);
     }
+
+    /* Language Selector */
     .language-select {
       padding: 6px 12px;
       border: 1px solid #d1d5db;
@@ -94,10 +101,20 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 120px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
     }
     .language-select:hover {
       border-color: #3b82f6;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+    .language-select:focus-visible {
+      outline: 2px solid #3b82f6;
+      outline-offset: 2px;
+    }
+
+    /* Flag Icons */
     .flag {
       width: 16px;
       height: 12px;
@@ -111,13 +128,17 @@
     .flag-fa {
       background-image: url('/image/flag-iran.svg');
     }
+
+    /* Form Container */
     .form-container {
       width: 100%;
       max-width: 400px;
       padding: 32px;
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
     h1 {
       font-size: 24px;
@@ -125,7 +146,11 @@
       color: #111827;
       margin-bottom: 24px;
       text-align: center;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
     }
+
+    /* Form Fields */
     .form-group {
       margin-bottom: 20px;
     }
@@ -143,15 +168,18 @@
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 16px;
-      transition: border 0.2s ease;
-      outline: none;
       background-color: white;
       color: #111827;
+      outline: none;
+      transition: all 0.2s ease;
     }
     input[type="email"]:focus,
     input[type="password"]:focus {
       border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
     }
+
+    /* Links & Buttons */
     .forgot-password {
       text-align: right;
       margin-top: -8px;
@@ -176,10 +204,13 @@
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     button:hover {
       background-color: #1f2937;
     }
+
+    /* Divider */
     .divider {
       display: flex;
       align-items: center;
@@ -197,6 +228,8 @@
     .divider span {
       padding: 0 12px;
     }
+
+    /* Social Login */
     .social-login {
       display: flex;
       gap: 12px;
@@ -214,10 +247,14 @@
       justify-content: center;
       gap: 8px;
       color: #111827;
+      transition: all 0.2s ease;
     }
     .social-btn:hover {
       background-color: #f3f4f6;
+      border-color: #3b82f6;
     }
+
+    /* Sign Up Link */
     .signup-link {
       text-align: center;
       margin-top: 24px;
@@ -239,13 +276,15 @@
     }
     body.dark-mode .form-container {
       background: #1f2937;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      border-color: rgba(255, 255, 255, 0.05);
     }
-    body.dark-mode h1 {
+    body.dark-mode h1,
+    body.dark-mode label,
+    body.dark-mode .divider,
+    body.dark-mode .forgot-password a,
+    body.dark-mode .signup-link {
       color: #f9fafb;
-    }
-    body.dark-mode label {
-      color: #d1d5db;
     }
     body.dark-mode input[type="email"],
     body.dark-mode input[type="password"] {
@@ -256,13 +295,7 @@
     body.dark-mode input[type="email"]:focus,
     body.dark-mode input[type="password"]:focus {
       border-color: #60a5fa;
-    }
-    body.dark-mode .divider {
-      color: #9ca3af;
-    }
-    body.dark-mode .divider::before,
-    body.dark-mode .divider::after {
-      background-color: #374151;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
     }
     body.dark-mode .social-btn {
       background: #374151;
@@ -272,41 +305,42 @@
     body.dark-mode .social-btn:hover {
       background-color: #4b5563;
     }
-    body.dark-mode .forgot-password a {
-      color: #d1d5db;
-    }
-    body.dark-mode .signup-link {
-      color: #d1d5db;
-    }
     body.dark-mode button {
       background-color: #3b82f6;
     }
     body.dark-mode button:hover {
       background-color: #2563eb;
     }
-    body.dark-mode .control-group {
-      color: #d1d5db;
+    body.dark-mode .language-select {
+      background: #374151;
+      color: #f9fafb;
+      border-color: #4b5563;
+    }
+    body.dark-mode .language-select:hover {
+      border-color: #60a5fa;
+    }
+    body.dark-mode .theme-toggle input:checked + .slider {
+      background-color: #60a5fa;
+      border-color: #60a5fa;
+    }
+    body.dark-mode .theme-toggle input:checked + .slider:before {
+      background-color: #f9fafb;
     }
 
-    /* Persian Font (Vazir) */
+    /* Persian Font & RTL */
     body[dir="rtl"] {
       font-family: 'Vazirmatn', sans-serif;
     }
-    body[dir="rtl"] .form-container {
+    body[dir="rtl"] .form-container,
+    body[dir="rtl"] .forgot-password,
+    body[dir="rtl"] .divider,
+    body[dir="rtl"] .social-login,
+    body[dir="rtl"] .signup-link {
       text-align: right;
       direction: rtl;
     }
-    body[dir="rtl"] .forgot-password {
-      text-align: left;
-    }
-    body[dir="rtl"] .divider {
-      text-align: right;
-    }
     body[dir="rtl"] .social-login {
       flex-direction: row-reverse;
-    }
-    body[dir="rtl"] .signup-link {
-      text-align: right;
     }
 
     /* Mobile Responsiveness */
@@ -360,14 +394,14 @@
   <div class="controls-container">
     <div class="control-group">
       <span class="theme-label">Dark Mode</span>
-      <label class="toggle theme-toggle">
-        <input type="checkbox" id="darkModeToggle"/>
+      <label class="theme-toggle">
+        <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
         <span class="slider"></span>
       </label>
     </div>
     <div class="control-group">
       <span>Language</span>
-      <select id="languageSelect" class="select language-select">
+      <select id="languageSelect" class="language-select" aria-label="Select language">
         <option value="en" selected><span class="flag flag-en"></span> English</option>
         <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
       </select>
@@ -447,7 +481,6 @@
     function applyLanguage(lang) {
       Object.keys(elements).forEach(key => {
         if (key === 'noAccountText') {
-          // Special handling for combined text
           const parent = elements[key];
           const link = parent.querySelector('a');
           const text = parent.cloneNode(true);
@@ -460,7 +493,6 @@
         }
       });
 
-      // Apply RTL and font for Persian
       if (lang === 'fa') {
         body.setAttribute('dir', 'rtl');
       } else {
