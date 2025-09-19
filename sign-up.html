@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign In</title>
+  <title>Sign Up</title>
   <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <!-- Vazirmatn (Persian Font) -->
@@ -27,6 +27,7 @@
       --social-border: #d1d5db;
       --social-hover: #f3f4f6;
       --social-hover-border: #3b82f6;
+      --error-color: #ef4444;
     }
 
     body.dark-mode {
@@ -46,6 +47,7 @@
       --social-border: #4b5563;
       --social-hover: #4b5563;
       --social-hover-border: #60a5fa;
+      --error-color: #f87171;
     }
 
     /* Reset & Base */
@@ -199,9 +201,9 @@
       margin-bottom: 8px;
       color: var(--text-secondary);
     }
+    input[type="text"],
     input[type="email"],
-    input[type="password"],
-    input[type="text"] {
+    input[type="password"] {
       width: 100%;
       padding: 12px 40px 12px 16px;
       border: 1px solid var(--border-primary);
@@ -212,9 +214,9 @@
       outline: none;
       transition: all 0.2s ease;
     }
+    input[type="text"]:focus,
     input[type="email"]:focus,
-    input[type="password"]:focus,
-    input[type="text"]:focus {
+    input[type="password"]:focus {
       border-color: var(--border-focus);
       box-shadow: 0 0 0 3px var(--shadow-focus);
     }
@@ -247,20 +249,39 @@
       outline-offset: 2px;
     }
 
-    /* Links & Buttons */
-    .forgot-password {
-      text-align: right;
-      margin-top: -8px;
+    /* Error Messages */
+    .error-message {
+      display: none;
+      font-size: 12px;
+      color: var(--error-color);
+      margin-top: 4px;
+    }
+    .error-message.visible {
+      display: block;
+    }
+    input.invalid {
+      border-color: var(--error-color);
+    }
+
+    /* Checkbox */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
       margin-bottom: 20px;
     }
-    .forgot-password a {
+    .checkbox-group input {
+      margin-right: 8px;
+    }
+    .checkbox-group label {
       font-size: 14px;
-      color: var(--text-muted);
-      text-decoration: none;
+      color: var(--text-secondary);
     }
-    .forgot-password a:hover {
-      color: var(--border-focus);
+    body[dir="rtl"] .checkbox-group input {
+      margin-right: 0;
+      margin-left: 8px;
     }
+
+    /* Links & Buttons */
     button[type="submit"] {
       width: 100%;
       padding: 12px;
@@ -322,18 +343,18 @@
       border-color: var(--social-hover-border);
     }
 
-    /* Sign Up Link */
-    .signup-link {
+    /* Sign In Link */
+    .signin-link {
       text-align: center;
       margin-top: 24px;
       font-size: 14px;
       color: var(--text-muted);
     }
-    .signup-link a {
+    .signin-link a {
       color: var(--border-focus);
       text-decoration: none;
     }
-    .signup-link a:hover {
+    .signin-link a:hover {
       text-decoration: underline;
     }
 
@@ -342,26 +363,22 @@
       font-family: 'Vazirmatn', sans-serif;
     }
     body[dir="rtl"] .form-container,
-    body[dir="rtl"] .forgot-password,
     body[dir="rtl"] .divider,
     body[dir="rtl"] .social-login,
-    body[dir="rtl"] .signup-link {
+    body[dir="rtl"] .signin-link {
       text-align: right;
       direction: rtl;
     }
     body[dir="rtl"] .social-login {
       flex-direction: row-reverse;
     }
-    body[dir="rtl"] .forgot-password {
-      text-align: left; /* Adjust for RTL */
-    }
     body[dir="rtl"] .toggle-password {
       right: auto;
       left: 16px;
     }
+    body[dir="rtl"] input[type="text"],
     body[dir="rtl"] input[type="email"],
-    body[dir="rtl"] input[type="password"],
-    body[dir="rtl"] input[type="text"] {
+    body[dir="rtl"] input[type="password"] {
       padding: 12px 16px 12px 40px;
     }
 
@@ -385,9 +402,9 @@
       label {
         font-size: 14px;
       }
+      input[type="text"],
       input[type="email"],
-      input[type="password"],
-      input[type="text"] {
+      input[type="password"] {
         padding: 12px 40px 12px 16px;
         font-size: 16px;
       }
@@ -406,7 +423,7 @@
         margin: 20px 0;
         font-size: 13px;
       }
-      .signup-link {
+      .signin-link {
         font-size: 14px;
         margin-top: 20px;
       }
@@ -432,11 +449,20 @@
   </div>
 
   <div class="form-container">
-    <h1 id="title">Sign in to your account</h1>
-    <form aria-labelledby="title">
+    <h1 id="title">Create an account</h1>
+    <form id="signupForm" aria-labelledby="title">
       <div class="form-group">
-        <label for="email" id="emailLabel">Email / Username</label>
-        <input type="email" id="email" placeholder="you@example.com" required aria-required="true" />
+        <label for="firstName" id="firstNameLabel">First name</label>
+        <input type="text" id="firstName" placeholder="John" aria-required="false" />
+      </div>
+      <div class="form-group">
+        <label for="lastName" id="lastNameLabel">Last name</label>
+        <input type="text" id="lastName" placeholder="Doe" aria-required="false" />
+      </div>
+      <div class="form-group">
+        <label for="emailUsername" id="emailUsernameLabel">Email / Username</label>
+        <input type="text" id="emailUsername" placeholder="you@example.com or username" required aria-required="true" />
+        <span class="error-message" id="emailUsernameError"></span>
       </div>
       <div class="form-group">
         <label for="password" id="passwordLabel">Password</label>
@@ -444,21 +470,32 @@
           <input type="password" id="password" placeholder="••••••••" required aria-required="true" />
           <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
         </div>
+        <span class="error-message" id="passwordError"></span>
       </div>
-      <div class="forgot-password">
-        <a href="#" id="forgotLink">Forgot password?</a>
+      <div class="form-group">
+        <label for="confirmPassword" id="confirmPasswordLabel">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" placeholder="••••••••" required aria-required="true" />
+          <button type="button" class="toggle-password" id="toggleConfirmPassword" aria-label="Toggle confirm password visibility">👁️</button>
+        </div>
+        <span class="error-message" id="confirmPasswordError"></span>
       </div>
-      <button type="submit" id="signInButton">Sign in</button>
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms" required aria-required="true" />
+        <label for="terms" id="termsLabel">I agree to the terms and conditions</label>
+      </div>
+      <span class="error-message" id="termsError"></span>
+      <button type="submit" id="signUpButton">Sign up</button>
     </form>
 
     <div class="divider"><span id="orText">or continue with</span></div>
 
     <div class="social-login">
-      <button class="social-btn" aria-label="Sign in with Google">Google</button>
+      <button class="social-btn" aria-label="Sign up with Google">Google</button>
     </div>
 
-    <p class="signup-link" id="signupLink">
-      <span id="noAccountText">Don't have an account?</span> <a href="#" id="signUpLink">Sign up</a>
+    <p class="signin-link" id="signinLink">
+      <span id="haveAccountText">Already have an account?</span> <a href="#" id="signInLink">Sign in</a>
     </p>
   </div>
 
@@ -466,8 +503,11 @@
     const darkModeToggle = document.getElementById('darkModeToggle');
     const languageSelect = document.getElementById('languageSelect');
     const body = document.body;
+    const signupForm = document.getElementById('signupForm');
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
 
     // Toggle password visibility
     togglePassword.addEventListener('click', () => {
@@ -476,64 +516,176 @@
       togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
     });
 
+    toggleConfirmPassword.addEventListener('click', () => {
+      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      confirmPasswordInput.setAttribute('type', type);
+      toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Form validation
+    signupForm.addEventListener('submit', (e) => {
+      let valid = true;
+
+      // Clear previous errors
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.classList.remove('visible');
+        el.textContent = '';
+      });
+      document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
+
+      // Email/Username validation
+      const emailUsername = document.getElementById('emailUsername').value.trim();
+      const emailUsernameError = document.getElementById('emailUsernameError');
+      if (!emailUsername) {
+        valid = false;
+        emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorRequired || 'Email or Username is required';
+        emailUsernameError.classList.add('visible');
+        document.getElementById('emailUsername').classList.add('invalid');
+      } else if (emailUsername.includes('@')) {
+        // Validate as email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailUsername)) {
+          valid = false;
+          emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorInvalidEmail || 'Invalid email format';
+          emailUsernameError.classList.add('visible');
+          document.getElementById('emailUsername').classList.add('invalid');
+        }
+      } else {
+        // Validate as username: starts with letter (a-z, A-Z, or Persian letters)
+        const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
+        if (!usernameRegex.test(emailUsername)) {
+          valid = false;
+          emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorInvalidUsername || 'Username must start with a letter';
+          emailUsernameError.classList.add('visible');
+          document.getElementById('emailUsername').classList.add('invalid');
+        }
+      }
+
+      // Password validation
+      const password = passwordInput.value;
+      const passwordError = document.getElementById('passwordError');
+      const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+      if (password.length < 4 || !alphanumericRegex.test(password)) {
+        valid = false;
+        passwordError.textContent = texts[languageSelect.value].passwordError || 'Password must be at least 4 letters or numbers';
+        passwordError.classList.add('visible');
+        passwordInput.classList.add('invalid');
+      }
+
+      // Confirm password
+      const confirmPassword = confirmPasswordInput.value;
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      if (confirmPassword !== password) {
+        valid = false;
+        confirmPasswordError.textContent = texts[languageSelect.value].confirmPasswordError || 'Passwords do not match';
+        confirmPasswordError.classList.add('visible');
+        confirmPasswordInput.classList.add('invalid');
+      }
+
+      // Terms checkbox
+      const terms = document.getElementById('terms');
+      const termsError = document.getElementById('termsError');
+      if (!terms.checked) {
+        valid = false;
+        termsError.textContent = texts[languageSelect.value].termsError || 'You must agree to the terms';
+        termsError.classList.add('visible');
+        terms.classList.add('invalid');
+      }
+
+      if (!valid) {
+        e.preventDefault();
+      }
+    });
+
     // Text mappings including placeholders and additional labels
     const texts = {
       en: {
-        title: "Sign in to your account",
-        emailLabel: "Email / Username",
+        title: "Create an account",
+        firstNameLabel: "First name",
+        lastNameLabel: "Last name",
+        emailUsernameLabel: "Email / Username",
         passwordLabel: "Password",
-        forgotLink: "Forgot password?",
-        signInButton: "Sign in",
+        confirmPasswordLabel: "Confirm Password",
+        termsLabel: "I agree to the terms and conditions",
+        signUpButton: "Sign up",
         orText: "or continue with",
-        noAccountText: "Don't have an account?",
-        signUpLink: "Sign up",
+        haveAccountText: "Already have an account?",
+        signInLink: "Sign in",
         darkModeLabel: "Dark Mode",
         languageLabel: "Language",
-        emailPlaceholder: "you@example.com",
-        passwordPlaceholder: "••••••••"
+        firstNamePlaceholder: "John",
+        lastNamePlaceholder: "Doe",
+        emailUsernamePlaceholder: "you@example.com or username",
+        passwordPlaceholder: "••••••••",
+        confirmPasswordPlaceholder: "••••••••",
+        emailUsernameErrorRequired: "Email or Username is required",
+        emailUsernameErrorInvalidEmail: "Invalid email format",
+        emailUsernameErrorInvalidUsername: "Username must start with a letter",
+        passwordError: "Password must be at least 4 letters or numbers",
+        confirmPasswordError: "Passwords do not match",
+        termsError: "You must agree to the terms"
       },
       fa: {
-        title: "ورود به حساب کاربری",
-        emailLabel: "ایمیل / نام کاربری",
+        title: "ایجاد حساب کاربری",
+        firstNameLabel: "نام",
+        lastNameLabel: "نام خانوادگی",
+        emailUsernameLabel: "ایمیل / نام کاربری",
         passwordLabel: "رمز عبور",
-        forgotLink: "رمز عبور خود را فراموش کرده‌اید؟",
-        signInButton: "ورود",
+        confirmPasswordLabel: "تایید رمز عبور",
+        termsLabel: "با شرایط و قوانین موافقم",
+        signUpButton: "ثبت‌نام",
         orText: "یا ادامه با",
-        noAccountText: "حساب کاربری ندارید؟",
-        signUpLink: "ثبت‌نام",
+        haveAccountText: "حساب کاربری دارید؟",
+        signInLink: "ورود",
         darkModeLabel: "حالت تاریک",
         languageLabel: "زبان",
-        emailPlaceholder: "you@example.com", // Kept English for email, or translate if needed
-        passwordPlaceholder: "••••••••"
+        firstNamePlaceholder: "جان",
+        lastNamePlaceholder: "دو",
+        emailUsernamePlaceholder: "you@example.com یا نام کاربری",
+        passwordPlaceholder: "••••••••",
+        confirmPasswordPlaceholder: "••••••••",
+        emailUsernameErrorRequired: "ایمیل یا نام کاربری الزامی است",
+        emailUsernameErrorInvalidEmail: "فرمت ایمیل نامعتبر است",
+        emailUsernameErrorInvalidUsername: "نام کاربری باید با حرف شروع شود",
+        passwordError: "رمز عبور باید حداقل ۴ حرف یا عدد باشد",
+        confirmPasswordError: "رمزهای عبور مطابقت ندارند",
+        termsError: "باید با شرایط موافقت کنید"
       }
     };
 
     // Elements to update
     const elements = {
       title: document.getElementById('title'),
-      emailLabel: document.getElementById('emailLabel'),
+      firstNameLabel: document.getElementById('firstNameLabel'),
+      lastNameLabel: document.getElementById('lastNameLabel'),
+      emailUsernameLabel: document.getElementById('emailUsernameLabel'),
       passwordLabel: document.getElementById('passwordLabel'),
-      forgotLink: document.getElementById('forgotLink'),
-      signInButton: document.getElementById('signInButton'),
+      confirmPasswordLabel: document.getElementById('confirmPasswordLabel'),
+      termsLabel: document.getElementById('termsLabel'),
+      signUpButton: document.getElementById('signUpButton'),
       orText: document.getElementById('orText'),
-      noAccountText: document.getElementById('noAccountText'),
-      signUpLink: document.getElementById('signUpLink'),
+      haveAccountText: document.getElementById('haveAccountText'),
+      signInLink: document.getElementById('signInLink'),
       darkModeLabel: document.getElementById('darkModeLabel'),
       languageLabel: document.getElementById('languageLabel'),
-      emailInput: document.getElementById('email'),
-      passwordInput: document.getElementById('password')
+      firstNameInput: document.getElementById('firstName'),
+      lastNameInput: document.getElementById('lastName'),
+      emailUsernameInput: document.getElementById('emailUsername'),
+      passwordInput: document.getElementById('password'),
+      confirmPasswordInput: document.getElementById('confirmPassword')
     };
 
     // Apply translations and styling
     function applyLanguage(lang) {
       Object.keys(texts[lang]).forEach(key => {
-        if (key === 'emailPlaceholder') {
-          elements.emailInput.placeholder = texts[lang][key];
-        } else if (key === 'passwordPlaceholder') {
-          elements.passwordInput.placeholder = texts[lang][key];
-        } else if (key === 'noAccountText') {
-          elements.noAccountText.textContent = texts[lang][key];
-        } else {
+        if (key.endsWith('Placeholder')) {
+          const inputKey = key.replace('Placeholder', 'Input');
+          if (elements[inputKey]) {
+            elements[inputKey].placeholder = texts[lang][key];
+          }
+        } else if (key === 'haveAccountText') {
+          elements.haveAccountText.textContent = texts[lang][key];
+        } else if (elements[key]) {
           elements[key].textContent = texts[lang][key];
         }
       });
