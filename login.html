@@ -9,6 +9,45 @@
   <!-- Vazirmatn (Persian Font) -->
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <style>
+    /* CSS Variables for Theming */
+    :root {
+      --bg-primary: #f9fafb;
+      --bg-secondary: white;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --border-primary: #d1d5db;
+      --border-focus: #3b82f6;
+      --accent-primary: #111827;
+      --accent-hover: #1f2937;
+      --shadow-primary: rgba(0, 0, 0, 0.1);
+      --shadow-focus: rgba(59, 130, 246, 0.1);
+      --divider: #e5e7eb;
+      --social-bg: white;
+      --social-border: #d1d5db;
+      --social-hover: #f3f4f6;
+      --social-hover-border: #3b82f6;
+    }
+
+    body.dark-mode {
+      --bg-primary: #111827;
+      --bg-secondary: #1f2937;
+      --text-primary: #f9fafb;
+      --text-secondary: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-primary: #4b5563;
+      --border-focus: #60a5fa;
+      --accent-primary: #3b82f6;
+      --accent-hover: #2563eb;
+      --shadow-primary: rgba(0, 0, 0, 0.3);
+      --shadow-focus: rgba(96, 165, 250, 0.1);
+      --divider: #374151;
+      --social-bg: #374151;
+      --social-border: #4b5563;
+      --social-hover: #4b5563;
+      --social-hover-border: #60a5fa;
+    }
+
     /* Reset & Base */
     * {
       box-sizing: border-box;
@@ -18,8 +57,8 @@
     }
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: #f9fafb;
-      color: #111827;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -43,7 +82,7 @@
       gap: 8px;
       font-size: 14px;
       font-weight: 500;
-      color: #4b5563;
+      color: var(--text-muted);
     }
 
     /* Dark Mode Toggle */
@@ -64,8 +103,8 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: #d1d5db;
-      border: 1px solid #e5e7eb;
+      background-color: var(--border-primary);
+      border: 1px solid var(--divider);
       border-radius: 24px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -76,14 +115,14 @@
       width: 18px;
       left: 3px;
       bottom: 3px;
-      background-color: white;
+      background-color: var(--bg-secondary);
       border-radius: 50%;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px var(--shadow-primary);
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     input:checked + .slider {
-      background-color: #3b82f6;
-      border-color: #3b82f6;
+      background-color: var(--border-focus);
+      border-color: var(--border-focus);
     }
     input:checked + .slider:before {
       transform: translateX(18px);
@@ -92,25 +131,25 @@
     /* Language Selector */
     .language-select {
       padding: 6px 12px;
-      border: 1px solid #d1d5db;
+      border: 1px solid var(--border-primary);
       border-radius: 8px;
       font-size: 14px;
-      background: white;
-      color: #111827;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 8px;
       min-width: 120px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 2px var(--shadow-primary);
       transition: all 0.2s ease;
     }
     .language-select:hover {
-      border-color: #3b82f6;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      border-color: var(--border-focus);
+      box-shadow: 0 2px 4px var(--shadow-primary);
     }
     .language-select:focus-visible {
-      outline: 2px solid #3b82f6;
+      outline: 2px solid var(--border-focus);
       outline-offset: 2px;
     }
 
@@ -134,16 +173,15 @@
       width: 100%;
       max-width: 400px;
       padding: 32px;
-      background: white;
+      background: var(--bg-secondary);
       border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 25px var(--shadow-primary);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.05); /* Kept light for consistency, adjust if needed */
     }
     h1 {
       font-size: 24px;
       font-weight: 600;
-      color: #111827;
       margin-bottom: 24px;
       text-align: center;
       letter-spacing: -0.02em;
@@ -159,24 +197,54 @@
       font-size: 14px;
       font-weight: 500;
       margin-bottom: 8px;
-      color: #374151;
+      color: var(--text-secondary);
     }
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+    input[type="text"] {
       width: 100%;
-      padding: 12px 16px;
-      border: 1px solid #d1d5db;
+      padding: 12px 40px 12px 16px;
+      border: 1px solid var(--border-primary);
       border-radius: 8px;
       font-size: 16px;
-      background-color: white;
-      color: #111827;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
       outline: none;
       transition: all 0.2s ease;
     }
     input[type="email"]:focus,
-    input[type="password"]:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    input[type="password"]:focus,
+    input[type="text"]:focus {
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px var(--shadow-focus);
+    }
+    input::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Password Wrapper */
+    .password-wrapper {
+      position: relative;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+      padding: 0;
+      transition: color 0.2s ease;
+    }
+    .toggle-password:hover {
+      color: var(--text-primary);
+    }
+    .toggle-password:focus {
+      outline: 2px solid var(--border-focus);
+      outline-offset: 2px;
     }
 
     /* Links & Buttons */
@@ -187,27 +255,27 @@
     }
     .forgot-password a {
       font-size: 14px;
-      color: #6b7280;
+      color: var(--text-muted);
       text-decoration: none;
     }
     .forgot-password a:hover {
-      color: #3b82f6;
+      color: var(--border-focus);
     }
-    button {
+    button[type="submit"] {
       width: 100%;
       padding: 12px;
-      background-color: #111827;
-      color: white;
+      background-color: var(--accent-primary);
+      color: var(--bg-secondary);
       border: none;
       border-radius: 8px;
       font-size: 16px;
       font-weight: 500;
       cursor: pointer;
       transition: background 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 4px var(--shadow-primary);
     }
-    button:hover {
-      background-color: #1f2937;
+    button[type="submit"]:hover {
+      background-color: var(--accent-hover);
     }
 
     /* Divider */
@@ -215,7 +283,7 @@
       display: flex;
       align-items: center;
       margin: 24px 0;
-      color: #6b7280;
+      color: var(--text-muted);
       font-size: 14px;
     }
     .divider::before,
@@ -223,7 +291,7 @@
       content: '';
       flex: 1;
       height: 1px;
-      background-color: #e5e7eb;
+      background-color: var(--divider);
     }
     .divider span {
       padding: 0 12px;
@@ -237,8 +305,8 @@
     .social-btn {
       flex: 1;
       padding: 12px;
-      border: 1px solid #d1d5db;
-      background: white;
+      border: 1px solid var(--social-border);
+      background: var(--social-bg);
       border-radius: 8px;
       font-size: 16px;
       cursor: pointer;
@@ -246,12 +314,12 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      color: #111827;
+      color: var(--text-primary);
       transition: all 0.2s ease;
     }
     .social-btn:hover {
-      background-color: #f3f4f6;
-      border-color: #3b82f6;
+      background-color: var(--social-hover);
+      border-color: var(--social-hover-border);
     }
 
     /* Sign Up Link */
@@ -259,72 +327,14 @@
       text-align: center;
       margin-top: 24px;
       font-size: 14px;
-      color: #6b7280;
+      color: var(--text-muted);
     }
     .signup-link a {
-      color: #3b82f6;
+      color: var(--border-focus);
       text-decoration: none;
     }
     .signup-link a:hover {
       text-decoration: underline;
-    }
-
-    /* Dark Mode Styles */
-    body.dark-mode {
-      background-color: #111827;
-      color: #f9fafb;
-    }
-    body.dark-mode .form-container {
-      background: #1f2937;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.05);
-    }
-    body.dark-mode h1,
-    body.dark-mode label,
-    body.dark-mode .divider,
-    body.dark-mode .forgot-password a,
-    body.dark-mode .signup-link {
-      color: #f9fafb;
-    }
-    body.dark-mode input[type="email"],
-    body.dark-mode input[type="password"] {
-      background-color: #374151;
-      color: #f9fafb;
-      border-color: #4b5563;
-    }
-    body.dark-mode input[type="email"]:focus,
-    body.dark-mode input[type="password"]:focus {
-      border-color: #60a5fa;
-      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
-    }
-    body.dark-mode .social-btn {
-      background: #374151;
-      border-color: #4b5563;
-      color: #f9fafb;
-    }
-    body.dark-mode .social-btn:hover {
-      background-color: #4b5563;
-    }
-    body.dark-mode button {
-      background-color: #3b82f6;
-    }
-    body.dark-mode button:hover {
-      background-color: #2563eb;
-    }
-    body.dark-mode .language-select {
-      background: #374151;
-      color: #f9fafb;
-      border-color: #4b5563;
-    }
-    body.dark-mode .language-select:hover {
-      border-color: #60a5fa;
-    }
-    body.dark-mode .theme-toggle input:checked + .slider {
-      background-color: #60a5fa;
-      border-color: #60a5fa;
-    }
-    body.dark-mode .theme-toggle input:checked + .slider:before {
-      background-color: #f9fafb;
     }
 
     /* Persian Font & RTL */
@@ -341,6 +351,18 @@
     }
     body[dir="rtl"] .social-login {
       flex-direction: row-reverse;
+    }
+    body[dir="rtl"] .forgot-password {
+      text-align: left; /* Adjust for RTL */
+    }
+    body[dir="rtl"] .toggle-password {
+      right: auto;
+      left: 16px;
+    }
+    body[dir="rtl"] input[type="email"],
+    body[dir="rtl"] input[type="password"],
+    body[dir="rtl"] input[type="text"] {
+      padding: 12px 16px 12px 40px;
     }
 
     /* Mobile Responsiveness */
@@ -364,11 +386,12 @@
         font-size: 14px;
       }
       input[type="email"],
-      input[type="password"] {
-        padding: 12px 16px;
+      input[type="password"],
+      input[type="text"] {
+        padding: 12px 40px 12px 16px;
         font-size: 16px;
       }
-      button {
+      button[type="submit"] {
         padding: 12px;
         font-size: 16px;
       }
@@ -393,14 +416,14 @@
 <body>
   <div class="controls-container">
     <div class="control-group">
-      <span class="theme-label">Dark Mode</span>
-      <label class="theme-toggle">
-        <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
-        <span class="slider"></span>
-      </label>
+      <span class="theme-label" id="darkModeLabel">Dark Mode</span>
     </div>
+    <label class="theme-toggle">
+      <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
+      <span class="slider"></span>
+    </label>
     <div class="control-group">
-      <span>Language</span>
+      <span id="languageLabel">Language</span>
       <select id="languageSelect" class="language-select" aria-label="Select language">
         <option value="en" selected><span class="flag flag-en"></span> English</option>
         <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
@@ -410,14 +433,17 @@
 
   <div class="form-container">
     <h1 id="title">Sign in to your account</h1>
-    <form>
+    <form aria-labelledby="title">
       <div class="form-group">
-        <label for="email" id="emailLabel">Email address</label>
-        <input type="email" id="email" placeholder="you@example.com" required />
+        <label for="email" id="emailLabel">Email / Username</label>
+        <input type="email" id="email" placeholder="you@example.com" required aria-required="true" />
       </div>
       <div class="form-group">
         <label for="password" id="passwordLabel">Password</label>
-        <input type="password" id="password" placeholder="••••••••" required />
+        <div class="password-wrapper">
+          <input type="password" id="password" placeholder="••••••••" required aria-required="true" />
+          <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
+        </div>
       </div>
       <div class="forgot-password">
         <a href="#" id="forgotLink">Forgot password?</a>
@@ -428,10 +454,10 @@
     <div class="divider"><span id="orText">or continue with</span></div>
 
     <div class="social-login">
-      <button class="social-btn">Google</button>
+      <button class="social-btn" aria-label="Sign in with Google">Google</button>
     </div>
 
-    <p class="signup-link">
+    <p class="signup-link" id="signupLink">
       <span id="noAccountText">Don't have an account?</span> <a href="#" id="signUpLink">Sign up</a>
     </p>
   </div>
@@ -440,8 +466,17 @@
     const darkModeToggle = document.getElementById('darkModeToggle');
     const languageSelect = document.getElementById('languageSelect');
     const body = document.body;
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
 
-    // Text mappings
+    // Toggle password visibility
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Text mappings including placeholders and additional labels
     const texts = {
       en: {
         title: "Sign in to your account",
@@ -451,7 +486,11 @@
         signInButton: "Sign in",
         orText: "or continue with",
         noAccountText: "Don't have an account?",
-        signUpLink: "Sign up"
+        signUpLink: "Sign up",
+        darkModeLabel: "Dark Mode",
+        languageLabel: "Language",
+        emailPlaceholder: "you@example.com",
+        passwordPlaceholder: "••••••••"
       },
       fa: {
         title: "ورود به حساب کاربری",
@@ -461,7 +500,11 @@
         signInButton: "ورود",
         orText: "یا ادامه با",
         noAccountText: "حساب کاربری ندارید؟",
-        signUpLink: "ثبت‌نام"
+        signUpLink: "ثبت‌نام",
+        darkModeLabel: "حالت تاریک",
+        languageLabel: "زبان",
+        emailPlaceholder: "you@example.com", // Kept English for email, or translate if needed
+        passwordPlaceholder: "••••••••"
       }
     };
 
@@ -472,32 +515,31 @@
       passwordLabel: document.getElementById('passwordLabel'),
       forgotLink: document.getElementById('forgotLink'),
       signInButton: document.getElementById('signInButton'),
-      orText: document.querySelector('.divider span'),
-      noAccountText: document.querySelector('.signup-link'),
-      signUpLink: document.getElementById('signUpLink')
+      orText: document.getElementById('orText'),
+      noAccountText: document.getElementById('noAccountText'),
+      signUpLink: document.getElementById('signUpLink'),
+      darkModeLabel: document.getElementById('darkModeLabel'),
+      languageLabel: document.getElementById('languageLabel'),
+      emailInput: document.getElementById('email'),
+      passwordInput: document.getElementById('password')
     };
 
     // Apply translations and styling
     function applyLanguage(lang) {
-      Object.keys(elements).forEach(key => {
-        if (key === 'noAccountText') {
-          const parent = elements[key];
-          const link = parent.querySelector('a');
-          const text = parent.cloneNode(true);
-          link.remove();
-          text.textContent = texts[lang][key];
-          text.appendChild(link);
-          parent.replaceWith(text);
+      Object.keys(texts[lang]).forEach(key => {
+        if (key === 'emailPlaceholder') {
+          elements.emailInput.placeholder = texts[lang][key];
+        } else if (key === 'passwordPlaceholder') {
+          elements.passwordInput.placeholder = texts[lang][key];
+        } else if (key === 'noAccountText') {
+          elements.noAccountText.textContent = texts[lang][key];
         } else {
           elements[key].textContent = texts[lang][key];
         }
       });
 
-      if (lang === 'fa') {
-        body.setAttribute('dir', 'rtl');
-      } else {
-        body.removeAttribute('dir');
-      }
+      body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
+      document.documentElement.lang = lang;
     }
 
     // Load saved preferences
@@ -512,8 +554,8 @@
     applyLanguage(savedLang);
 
     // Language change handler
-    languageSelect.addEventListener('change', () => {
-      const selectedLang = languageSelect.value;
+    languageSelect.addEventListener('change', (e) => {
+      const selectedLang = e.target.value;
       applyLanguage(selectedLang);
       localStorage.setItem('uiLanguage', selectedLang);
     });
