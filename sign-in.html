@@ -26,6 +26,7 @@
       --social-hover: #f3f4f6;
       --social-hover-border: #3b82f6;
       --error-color: #ef4444;
+      --success-color: #10b981;
     }
 
     body.dark-mode {
@@ -46,6 +47,7 @@
       --social-hover: #4b5563;
       --social-hover-border: #60a5fa;
       --error-color: #f87171;
+      --success-color: #34d399;
     }
 
     * {
@@ -319,6 +321,27 @@
     button[type="submit"]:hover {
       background-color: var(--accent-hover);
     }
+    button[type="submit"]:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Message Styles */
+    .message {
+      padding: 12px;
+      margin: 16px 0;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .message.success {
+      background-color: var(--success-color);
+      color: white;
+    }
+    .message.error {
+      background-color: var(--error-color);
+      color: white;
+    }
 
     /* Divider */
     .divider {
@@ -545,7 +568,11 @@
   <main>
     <div class="form-container">
       <h1 id="title">Sign in to your account</h1>
-      <form aria-labelledby="title">
+      
+      <!-- Message Container -->
+      <div id="messageContainer"></div>
+      
+      <form id="loginForm">
         <div class="form-group">
           <label for="usernameEmail" id="emailLabel">Email / Username</label>
           <input type="text" id="usernameEmail" placeholder="you@example.com or username" required aria-required="true" />
@@ -572,7 +599,7 @@
       </div>
 
       <p class="signup-link" id="signupLink">
-        <span id="noAccountText">Don't have an account?</span> <a href="sign-up.html" id="signUpLink">Sign up</a>
+        <span id="noAccountText">Don't have an account?</span> <a href="sign-up.html" id="signUpLinkText">Sign up</a>
       </p>
     </div>
   </main>
@@ -598,6 +625,8 @@
       const body = document.body;
       const togglePassword = document.getElementById('togglePassword');
       const passwordInput = document.getElementById('password');
+      const loginForm = document.getElementById('loginForm');
+      const messageContainer = document.getElementById('messageContainer');
 
       const langWrapper = document.getElementById('languageWrapper');
       const langDropdown = document.getElementById('languageDropdown');
@@ -618,13 +647,17 @@
           signInButton: "Sign in",
           orText: "or continue with",
           noAccountText: "Don't have an account?",
-          signUpLink: "Sign up",
+          signUpLinkText: "Sign up",
           contactTitle: "Contact Us",
           emailPlaceholder: "you@example.com or username",
           passwordPlaceholder: "••••••••",
           emailRequired: "Email or username is required",
-          emailInvalid: "Please enter a valid email address or username",
-          passwordRequired: "Password is required"
+          passwordRequired: "Password is required",
+          signingIn: "Signing in...",
+          loginSuccess: "Login successful! Redirecting...",
+          loginFailed: "Login failed",
+          networkError: "Network error",
+          invalidCredentials: "Invalid username or password"
         },
         fa: {
           logo: "Smartify24",
@@ -640,13 +673,17 @@
           signInButton: "ورود",
           orText: "یا ادامه با",
           noAccountText: "حساب کاربری ندارید؟",
-          signUpLink: "ثبت‌نام",
+          signUpLinkText: "ثبت‌نام",
           contactTitle: "تماس با ما",
           emailPlaceholder: "you@example.com یا نام کاربری",
           passwordPlaceholder: "••••••••",
           emailRequired: "ایمیل یا نام کاربری الزامی است",
-          emailInvalid: "لطفاً یک آدرس ایمیل معتبر یا نام کاربری وارد کنید",
-          passwordRequired: "رمز عبور الزامی است"
+          passwordRequired: "رمز عبور الزامی است",
+          signingIn: "در حال ورود...",
+          loginSuccess: "ورود موفقیت‌آمیز بود! در حال انتقال...",
+          loginFailed: "خطا در ورود",
+          networkError: "خطا در ارتباط با سرور",
+          invalidCredentials: "نام کاربری یا رمز عبور نامعتبر است"
         }
       };
 
@@ -664,7 +701,7 @@
         signInButton: document.getElementById('signInButton'),
         orText: document.getElementById('orText'),
         noAccountText: document.getElementById('noAccountText'),
-        signUpLinkText: document.getElementById('signUpLink'),
+        signUpLinkText: document.getElementById('signUpLinkText'),
         contactTitle: document.getElementById('contactTitle'),
         usernameEmailInput: document.getElementById('usernameEmail'),
         passwordInput: document.getElementById('password'),
@@ -678,7 +715,7 @@
             elements.usernameEmailInput.placeholder = texts[lang][key];
           } else if (key === 'passwordPlaceholder') {
             elements.passwordInput.placeholder = texts[lang][key];
-          } else if (key === 'signUpLink') {
+          } else if (key === 'signUpLinkText') {
             elements.signUpLinkText.textContent = texts[lang][key];
           } else if (elements[key]) {
             elements[key].textContent = texts[lang][key];
@@ -687,6 +724,20 @@
 
         body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
         document.documentElement.lang = lang;
+      }
+
+      // تابع نمایش پیام
+      function showMessage(message, type = 'info') {
+        messageContainer.innerHTML = `
+          <div class="message ${type}">${message}</div>
+        `;
+        
+        // پاک کردن خودکار پیام بعد از 5 ثانیه (برای پیام‌های info)
+        if (type !== 'success') {
+          setTimeout(() => {
+            messageContainer.innerHTML = '';
+          }, 5000);
+        }
       }
 
       // Toggle password visibility
@@ -731,11 +782,10 @@
       });
 
       // Form submission
-      const form = document.querySelector('form');
-      form.addEventListener('submit', (event) => {
+      loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        // Clear previous errors
+        // پاک کردن خطاهای قبلی
         document.querySelectorAll('.error-message').forEach(el => {
           el.classList.remove('visible');
           el.textContent = '';
@@ -743,40 +793,18 @@
         document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
 
         let isValid = true;
-        const currentLang = body.getAttribute('dir') === 'rtl' ? 'fa' : 'en';
+        const currentLang = localStorage.getItem('uiLanguage') || 'en';
 
-        // Validate username/email
+        // اعتبارسنجی username/email
         const usernameEmailValue = elements.usernameEmailInput.value.trim();
         if (!usernameEmailValue) {
           isValid = false;
           elements.usernameEmailError.textContent = texts[currentLang].emailRequired;
           elements.usernameEmailError.classList.add('visible');
           elements.usernameEmailInput.classList.add('invalid');
-        } else {
-          // Check if it's an email (contains @)
-          if (usernameEmailValue.includes('@')) {
-            // Validate email format
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(usernameEmailValue)) {
-              isValid = false;
-              elements.usernameEmailError.textContent = texts[currentLang].emailInvalid;
-              elements.usernameEmailError.classList.add('visible');
-              elements.usernameEmailInput.classList.add('invalid');
-            }
-          } else {
-            // It's a username - just check if it's not empty (already checked above)
-            // You can add additional username validation rules here if needed
-            // For example: minimum length, allowed characters, etc.
-            if (usernameEmailValue.length < 3) {
-              isValid = false;
-              elements.usernameEmailError.textContent = texts[currentLang].emailInvalid;
-              elements.usernameEmailError.classList.add('visible');
-              elements.usernameEmailInput.classList.add('invalid');
-            }
-          }
         }
 
-        // Validate password
+        // اعتبارسنجی password
         const passwordValue = elements.passwordInput.value.trim();
         if (!passwordValue) {
           isValid = false;
@@ -785,12 +813,79 @@
           elements.passwordInput.classList.add('invalid');
         }
 
-        // If form is valid, you would submit it
-        if (isValid) {
-          alert('Form submitted successfully!');
-          // Here you would typically send the data to your server
+        if (!isValid) return;
+
+        // نمایش حالت loading
+        const submitButton = elements.signInButton;
+        const originalText = submitButton.textContent;
+        submitButton.textContent = texts[currentLang].signingIn;
+        submitButton.disabled = true;
+
+        try {
+          console.log('ارسال درخواست ورود به API...');
+          
+          // ارسال درخواست به API
+          const response = await fetch('api.php?action=signin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: usernameEmailValue,
+              password: passwordValue
+            })
+          });
+
+          console.log('پاسخ API:', response.status);
+
+          const data = await response.json();
+          console.log('داده‌های پاسخ:', data);
+
+          if (response.ok && data.userId) {
+            console.log('ورود موفق - ذخیره اطلاعات در localStorage');
+            
+            // ذخیره اطلاعات کاربر در localStorage
+            localStorage.setItem('user_id', data.userId);
+            localStorage.setItem('username', data.username);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loginTime', new Date().getTime());
+            
+            // نمایش پیام موفقیت
+            showMessage(texts[currentLang].loginSuccess, 'success');
+            
+            console.log('انجام ریدایرکت به داشبورد...');
+            
+            // ریدایرکت به داشبورد بعد از 1 ثانیه
+            setTimeout(() => {
+              window.location.href = 'dashboard.html';
+            }, 1000);
+            
+          } else {
+            // خطا در ورود
+            const errorMessage = data.error || texts[currentLang].invalidCredentials;
+            console.log('خطا در ورود:', errorMessage);
+            showMessage(errorMessage, 'error');
+          }
+
+        } catch (error) {
+          console.error('خطای شبکه:', error);
+          showMessage(texts[currentLang].networkError, 'error');
+        } finally {
+          // بازگرداندن حالت عادی دکمه
+          submitButton.textContent = originalText;
+          submitButton.disabled = false;
         }
       });
+
+      // بررسی اگر کاربر قبلاً لاگین کرده است
+      const isLoggedIn = localStorage.getItem('isLoggedIn');
+      if (isLoggedIn === 'true') {
+        const currentLang = localStorage.getItem('uiLanguage') || 'en';
+        showMessage(
+          currentLang === 'fa' ? 'شما قبلاً وارد شده‌اید!' : 'You are already logged in!', 
+          'info'
+        );
+      }
     });
   </script>
 </body>
