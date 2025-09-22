@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --bg-primary: #f9fafb;
+            --bg-secondary: white;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --border-primary: #d1d5db;
+            --border-focus: #3b82f6;
+            --accent-primary: #111827;
+            --accent-hover: #1f2937;
+            --shadow-primary: rgba(0, 0, 0, 0.1);
+            --shadow-focus: rgba(59, 130, 246, 0.1);
+            --divider: #e5e7eb;
+            --social-bg: white;
+            --social-border: #d1d5db;
+            --social-hover: #f3f4f6;
+            --social-hover-border: #3b82f6;
+            --error-color: #ef4444;
+        }
+        body.dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-primary: #4b5563;
+            --border-focus: #60a5fa;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-focus: rgba(96, 165, 250, 0.1);
+            --divider: #374151;
+            --social-bg: #374151;
+            --social-border: #4b5563;
+            --social-hover: #4b5563;
+            --social-hover-border: #60a5fa;
+            --error-color: #f87171;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body.dark-mode .sun-icon { display: none; }
+        body.dark-mode .moon-icon { display: block; }
+        .sun-icon { display: block; }
+        .moon-icon { display: none; }
+        header {
+            background: var(--bg-secondary);
+            box-shadow: 0 2px 4px var(--shadow-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .logo a { text-decoration: none; color: inherit; }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--border-focus);
+        }
+        .nav-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease;
+        }
+        .nav-icon:hover { fill: var(--border-focus); }
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .language-select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .language-dropdown-icon {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .language-dropdown-icon:hover {
+            background-color: var(--social-hover);
+            transform: scale(1.05);
+        }
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 12px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-primary);
+            z-index: 10;
+            padding: 8px 0;
+            min-width: 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+        }
+        .language-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            transition-delay: 0s;
+        }
+        .language-dropdown-item {
+            display: block;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .language-dropdown-item:hover {
+            background-color: var(--social-hover);
+            color: var(--text-primary);
+        }
+        main {
+            flex: 1 0 auto;
+            display: flex;
+            justify-content: center;
+            padding: 32px 16px;
+        }
+        .content-container {
+            width: 100%;
+            max-width: 800px;
+            padding: 32px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px var(--shadow-primary);
+            line-height: 1.8;
+            text-align: justify;
+        }
+        h1, h2, h3 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+        h1 { font-size: 28px; margin-bottom: 24px; }
+        h2 { font-size: 24px; margin-top: 24px; }
+        h3 { font-size: 20px; margin-top: 20px; }
+        p, li {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+        ul, ol {
+            margin-bottom: 16px;
+            padding-right: 20px;
+        }
+        strong { color: var(--text-primary); }
+        .designed-by {
+            margin-top: 40px;
+            font-size: 14px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .designed-by span { font-weight: 500; }
+        .designed-by img { width: 16px; height: 16px; }
+        footer {
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            box-shadow: 0 -2px 4px var(--shadow-primary);
+            padding: 5px 32px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        .social-links { display: flex; justify-content: center; gap: 24px; }
+        .social-link img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.2s ease;
+        }
+        .social-link:hover img { transform: scale(1.1); }
+        body[dir="rtl"] { font-family: 'Vazirmatn', sans-serif; }
+        body[dir="rtl"] nav, body[dir="rtl"] .content-container, body[dir="rtl"] footer {
+            text-align: right;
+            direction: rtl;
+        }
+        body[dir="rtl"] .nav-links { flex-direction: row; }
+        body[dir="rtl"] .language-dropdown { left: auto; right: 0; }
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 16px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+            .content-container { padding: 24px; }
+        }
+        @media (max-width: 480px) {
+            nav { padding: 16px; }
+            .logo { font-size: 20px; }
+            .nav-links a { font-size: 14px; }
+            h1 { font-size: 24px; }
+            h2 { font-size: 20px; }
+            p, li { font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html" id="logo">Smartify24</a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" id="homeLink">Home</a>
+                <a href="about.html" id="aboutLink">About</a>
+                <a href="contact.html" id="contactLink">Contact</a>
+                <a href="sign-in.html" id="signInLink">Sign in</a>
+                <a href="sign-up.html" id="signUpLink">Sign up</a>
+                <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
+                        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" viewBox="0 0 16 16">
+                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z" />
+                    </svg>
+                </button>
+                <div class="language-select-wrapper" id="languageWrapper">
+                    <div class="language-dropdown-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h1v1.93h-1zm6.93-2.52c-.42 1.42-1.63 2.49-3.09 2.82V19h-1V6.16c3.16.78 5.61 3.53 5.61 6.84 0 1.25-.37 2.41-1.03 3.41zM11 4.07V5h1v-1.93c.96-.06 1.9-.06 2.8-.02l-6.84 3.39c-.11-.02-.23-.04-.34-.07C7.63 6.07 7 7.01 7 8.01c0 .4.07.79.2 1.16L4.21 11.2C4.08 10.62 4 10.01 4 9.38c0-2.85 1.66-5.32 4.07-6.53zM18.8 14.8C18.42 13.9 18 12.98 18 12c0-.5-.03-.99-.08-1.48l-5.74 5.74v-1.95c.57-.22 1.07-.5 1.5-.83l-2.67-2.67c-.24-.24-.39-.56-.39-.91 0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25c0 .35-.15.67-.39.91l-2.67 2.67c-.33-.43-.61-.93-.83-1.5L9.52 4.08C9.03 4.14 8.53 4.17 8.04 4.17c-1.12 0-2.18-.28-3.12-.76L16.09 3.01c2.09.52 3.73 2.22 3.91 4.34-.14.28-.27.57-.4.86L18.8 14.8z" />
+                        </svg>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <a href="#" class="language-dropdown-item" data-lang="en">English</a>
+                        <a href="#" class="language-dropdown-item" data-lang="fa">فارسی</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="content-container">
+            <h1 id="proposalTitle">Smartify24 - A Cloud-Based Smart Home Solution</h1>
+            <p id="proposalIntro">A comprehensive smart home system aimed at providing users with intuitive and powerful control over their home devices. The project focuses on a cost-effective, scalable solution that leverages existing web and IoT technologies.</p>
+            
+            <h2 id="section1Title">Project Overview and Objectives</h2>
+            <p id="section1Text">The core objective of Smartify24 is to enable users to control their home appliances remotely and intelligently. By integrating a secure web platform with a custom-programmed microcontroller, we provide a seamless experience for managing smart devices. This initial phase focuses on lighting control, with a clear roadmap for future expansion to other devices.</p>
+            
+            <h2 id="section2Title">Minimum Viable Product (MVP)</h2>
+            <p id="section2Intro">The MVP for Smartify24 is a functional prototype that demonstrates the core features of the system. It will include:</p>
+            <ul>
+                <li id="mvpPoint1"><strong>User Authentication:</strong> A secure login and registration system, allowing users to create an account and manage their devices.</li>
+                <li id="mvpPoint2"><strong>Web-Based Control Panel:</strong> A user-friendly dashboard where authenticated users can view the status of their connected devices.</li>
+                <li id="mvpPoint3"><strong>Real-time Control:</strong> The ability to instantly turn a light bulb ON or OFF with a single click from the web interface.</li>
+                <li id="mvpPoint4"><strong>Timer and Scheduling:</strong> Functionality to set a duration for the light to remain ON (e.g., "keep ON for 15 minutes") or to schedule a specific time for it to turn ON/OFF (e.g., "turn ON at 7:00 PM").</li>
+                <li id="mvpPoint5"><strong>Device Status Check:</strong> The ability to query the current ON/OFF status of the light bulb at any time from the dashboard.</li>
+            </ul>
+            
+            <h2 id="section3Title">Technical Architecture</h2>
+            <p id="section3Intro">The system is divided into two primary components: the **Web Application** and the **IoT Hardware**. They communicate seamlessly to provide a reliable user experience.</p>
+            <h3>Web Application</h3>
+            <p id="section3WebText">The front-end of the web application is built with a modern, responsive design using **HTML, CSS, and JavaScript**. The backend, which handles user authentication, device state management, and scheduling logic, will be developed using a robust framework to ensure security and scalability. The communication between the web server and the IoT hardware will be handled via a secure API.</p>
+            <h3>IoT Hardware</h3>
+            <p id="section3HardwareText">The hardware component is built around the versatile **ESP8266 microcontroller**. This low-cost, Wi-Fi-enabled chip acts as the brain of the device, communicating with the web application over a secure connection. A **relay module** is used to safely switch the 220V power supply to the **9W light bulb**. The ESP8266 is custom-programmed to listen for commands from the server and execute them, as well as to report its current status back to the web application. This firmware is optimized for efficiency and reliability.</p>
+
+            <div class="designed-by">
+                <span id="designedByText">Designed with</span> 
+                <span role="img" aria-label="Coffee mug">☕️</span>
+                <span id="designerName">by Mahmoud Sadrian</span>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3 class="footer-title" id="footerContactTitle">Contact Us</h3>
+            <div class="social-links">
+                <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+                </a>
+                <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const langWrapper = document.getElementById('languageWrapper');
+            const langDropdown = document.getElementById('languageDropdown');
+            const langItems = document.querySelectorAll('.language-dropdown-item');
+
+            const texts = {
+                en: {
+                    logo: "Smartify24",
+                    homeLink: "Home",
+                    aboutLink: "About",
+                    contactLink: "Contact",
+                    signInLink: "Sign in",
+                    signUpLink: "Sign up",
+                    proposalTitle: "Smartify24 - A Cloud-Based Smart Home Solution",
+                    proposalIntro: "A comprehensive smart home system aimed at providing users with intuitive and powerful control over their home devices. The project focuses on a cost-effective, scalable solution that leverages existing web and IoT technologies.",
+                    section1Title: "Project Overview and Objectives",
+                    section1Text: "The core objective of Smartify24 is to enable users to control their home appliances remotely and intelligently. By integrating a secure web platform with a custom-programmed microcontroller, we provide a seamless experience for managing smart devices. This initial phase focuses on lighting control, with a clear roadmap for future expansion to other devices.",
+                    section2Title: "Minimum Viable Product (MVP)",
+                    section2Intro: "The MVP for Smartify24 is a functional prototype that demonstrates the core features of the system. It will include:",
+                    mvpPoint1: "User Authentication: A secure login and registration system, allowing users to create an account and manage their devices.",
+                    mvpPoint2: "Web-Based Control Panel: A user-friendly dashboard where authenticated users can view the status of their connected devices.",
+                    mvpPoint3: "Real-time Control: The ability to instantly turn a light bulb ON or OFF with a single click from the web interface.",
+                    mvpPoint4: "Timer and Scheduling: Functionality to set a duration for the light to remain ON (e.g., 'keep ON for 15 minutes') or to schedule a specific time for it to turn ON/OFF (e.g., 'turn ON at 7:00 PM').",
+                    mvpPoint5: "Device Status Check: The ability to query the current ON/OFF status of the light bulb at any time from the dashboard.",
+                    section3Title: "Technical Architecture",
+                    section3Intro: "The system is divided into two primary components: the Web Application and the IoT Hardware. They communicate seamlessly to provide a reliable user experience.",
+                    section3WebText: "The front-end of the web application is built with a modern, responsive design using HTML, CSS, and JavaScript. The backend, which handles user authentication, device state management, and scheduling logic, will be developed using a robust framework to ensure security and scalability. The communication between the web server and the IoT hardware will be handled via a secure API.",
+                    section3HardwareText: "The hardware component is built around the versatile ESP8266 microcontroller. This low-cost, Wi-Fi-enabled chip acts as the brain of the device, communicating with the web application over a secure connection. A relay module is used to safely switch the 220V power supply to the 9W light bulb. The ESP8266 is custom-programmed to listen for commands from the server and execute them, as well as to report its current status back to the web application. This firmware is optimized for efficiency and reliability.",
+                    designedByText: "Designed with",
+                    designerName: "by Mahmoud Sadrian",
+                    footerContactTitle: "Contact Us"
+                },
+                fa: {
+                    logo: "Smartify24",
+                    homeLink: "خانه",
+                    aboutLink: "درباره",
+                    contactLink: "تماس",
+                    signInLink: "ورود",
+                    signUpLink: "ثبت‌نام",
+                    proposalTitle: "Smartify24 - یک راه‌حل خانه هوشمند مبتنی بر cloud",
+                    proposalIntro: "یک سیستم جامع خانه هوشمند با هدف فراهم کردن کنترل بصری و قدرتمند برای کاربران بر روی دستگاه‌های خانگی خود. این پروژه بر روی یک راه‌حل مقرون‌به‌صرفه و مقیاس‌پذیر تمرکز دارد که از فناوری‌های موجود وب و اینترنت اشیا (IoT) بهره می‌برد.",
+                    section1Title: "مرور کلی و اهداف پروژه",
+                    section1Text: "هدف اصلی Smartify24، فعال‌سازی کاربران برای کنترل از راه دور و هوشمندانه لوازم خانگی‌شان است. با یکپارچه‌سازی یک پلتفرم وب امن با یک میکروکنترلر برنامه‌نویسی‌شده‌ی سفارشی، ما تجربه‌ای بی‌نقص را برای مدیریت دستگاه‌های هوشمند فراهم می‌کنیم. این فاز اولیه بر کنترل روشنایی تمرکز دارد و نقشه راهی واضح برای گسترش آینده به سایر دستگاه‌ها دارد.",
+                    section2Title: "حداقل محصول قابل ارائه (MVP)",
+                    section2Intro: "MVP برای Smartify24 یک نمونه اولیه عملکردی است که ویژگی‌های اصلی سیستم را نشان می‌دهد. این MVP شامل موارد زیر خواهد بود:",
+                    mvpPoint1: "<strong>احراز هویت کاربر:</strong> یک سیستم امن برای ورود و ثبت‌نام، که به کاربران اجازه می‌دهد حساب کاربری ایجاد کرده و دستگاه‌های خود را مدیریت کنند.",
+                    mvpPoint2: "<strong>پنل کنترل مبتنی بر وب:</strong> یک داشبورد کاربرپسند که کاربران احراز هویت شده می‌توانند وضعیت دستگاه‌های متصل خود را مشاهده کنند.",
+                    mvpPoint3: "<strong>کنترل لحظه‌ای:</strong> قابلیت روشن یا خاموش کردن فوری یک لامپ با یک کلیک از طریق رابط وب.",
+                    mvpPoint4: "<strong>تایمر و زمان‌بندی:</strong> قابلیت تنظیم مدت زمان روشن ماندن لامپ (به عنوان مثال، '۱۵ دقیقه روشن بمان') یا زمان‌بندی برای روشن/خاموش شدن در یک زمان و تاریخ مشخص (به عنوان مثال، 'ساعت ۷:۰۰ شب روشن شود').",
+                    mvpPoint5: "<strong>بررسی وضعیت دستگاه:</strong> قابلیت پرس‌وجو از وضعیت فعلی (روشن/خاموش) لامپ در هر لحظه از طریق داشبورد.",
+                    section3Title: "معماری فنی",
+                    section3Intro: "سیستم به دو بخش اصلی تقسیم می‌شود: اپلیکیشن وب و سخت‌افزار IoT. این دو بخش به صورت یکپارچه با هم ارتباط برقرار می‌کنند تا تجربه‌ای قابل اعتماد برای کاربر فراهم کنند.",
+                    section3WebText: "بخش فرانت‌اند اپلیکیشن وب با استفاده از HTML، CSS و JavaScript با یک طراحی مدرن و واکنش‌گرا ساخته شده است. بخش بک‌اند که وظیفه احراز هویت کاربر، مدیریت وضعیت دستگاه و منطق زمان‌بندی را بر عهده دارد، با استفاده از یک فریم‌ورک قدرتمند برای تضمین امنیت و مقیاس‌پذیری توسعه خواهد یافت. ارتباط بین وب‌سرور و سخت‌افزار IoT از طریق یک API امن انجام خواهد شد.",
+                    section3HardwareText: "بخش سخت‌افزاری حول میکروکنترلر چندکاره ESP8266 ساخته شده است. این تراشه کم‌هزینه و دارای Wi-Fi، به عنوان مغز دستگاه عمل می‌کند و از طریق یک اتصال امن با اپلیکیشن وب ارتباط می‌گیرد. یک ماژول رله برای سوئیچینگ ایمن برق ۲۲۰ ولت به لامپ ۹ وات استفاده می‌شود. ESP8266 به صورت سفارشی برنامه‌نویسی شده تا به دستورات از سرور گوش دهد و آن‌ها را اجرا کند، و همچنین وضعیت فعلی خود را به اپلیکیشن وب گزارش دهد. این فریم‌ورک برای کارایی و قابلیت اطمینان بهینه شده است.",
+                    designedByText: "طراحی شده با",
+                    designerName: "توسط محمود صدریان",
+                    footerContactTitle: "تماس با ما"
+                }
+            };
+            
+            const elements = {
+                logo: document.getElementById('logo'),
+                homeLink: document.getElementById('homeLink'),
+                aboutLink: document.getElementById('aboutLink'),
+                contactLink: document.getElementById('contactLink'),
+                signInLink: document.getElementById('signInLink'),
+                signUpLink: document.getElementById('signUpLink'),
+                proposalTitle: document.getElementById('proposalTitle'),
+                proposalIntro: document.getElementById('proposalIntro'),
+                section1Title: document.getElementById('section1Title'),
+                section1Text: document.getElementById('section1Text'),
+                section2Title: document.getElementById('section2Title'),
+                section2Intro: document.getElementById('section2Intro'),
+                mvpPoint1: document.getElementById('mvpPoint1'),
+                mvpPoint2: document.getElementById('mvpPoint2'),
+                mvpPoint3: document.getElementById('mvpPoint3'),
+                mvpPoint4: document.getElementById('mvpPoint4'),
+                mvpPoint5: document.getElementById('mvpPoint5'),
+                section3Title: document.getElementById('section3Title'),
+                section3Intro: document.getElementById('section3Intro'),
+                section3WebText: document.getElementById('section3WebText'),
+                section3HardwareText: document.getElementById('section3HardwareText'),
+                designedByText: document.getElementById('designedByText'),
+                designerName: document.getElementById('designerName'),
+                footerContactTitle: document.getElementById('footerContactTitle')
+            };
+
+            function applyLanguage(lang) {
+                Object.keys(elements).forEach(key => {
+                    if (texts[lang][key]) {
+                        elements[key].innerHTML = texts[lang][key];
+                    }
+                });
+                body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
+                document.documentElement.lang = lang;
+            }
+
+            const savedLang = localStorage.getItem('uiLanguage') || 'en';
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+            if (isDarkMode) body.classList.add('dark-mode');
+            applyLanguage(savedLang);
+
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            });
+
+            langWrapper.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdown.classList.toggle('active');
+            });
+
+            langItems.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const selectedLang = item.getAttribute('data-lang');
+                    applyLanguage(selectedLang);
+                    localStorage.setItem('uiLanguage', selectedLang);
+                    langDropdown.classList.remove('active');
+                });
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!langWrapper.contains(event.target)) {
+                    langDropdown.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
