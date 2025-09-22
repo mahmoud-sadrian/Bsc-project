@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Sign Up</title>
+    <title>Smartify24</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
@@ -463,10 +463,10 @@
     <header>
         <nav>
             <div class="logo">
-                <a href="#" id="logo">Smartify24</a>
+                <a href="index.html" id="logo">Smartify24</a>
             </div>
             <div class="nav-links">
-                <a href="#" id="homeLink">Home</a>
+                <a href="index.html" id="homeLink">Home</a>
                 <a href="#" id="aboutLink">About</a>
                 <a href="#" id="contactLink">Contact</a>
                 <a href="sign-in.html" id="signInLink">Sign in</a>
@@ -532,7 +532,7 @@
                     <label for="terms" id="termsLabel">I agree to the terms and conditions</label>
                 </div>
                 <span class="error-message" id="termsError"></span>
-                <button type="submit" id="signUpButton">Sign up</button>
+                <button type="submit" id="submitButton">Sign up</button>
             </form>
 
             <div class="divider"><span id="orText">or continue with</span></div>
@@ -542,7 +542,7 @@
             </div>
 
             <p class="signin-link" id="signinLink">
-                <span id="haveAccountText">Already have an account?</span> <a href="#" id="signInLink">Sign in</a>
+                <span id="haveAccountText">Already have an account?</span> <a href="sign-in.html" id="signInLinkFooter">Sign in</a>
             </p>
         </div>
     </main>
@@ -573,99 +573,6 @@
             const passwordInput = document.getElementById('password');
             const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
             const confirmPasswordInput = document.getElementById('confirmPassword');
-            const allNavLinks = document.querySelectorAll('.nav-links a');
-            const navLinks = {
-                homeLink: document.getElementById('homeLink'),
-                aboutLink: document.getElementById('aboutLink'),
-                contactLink: document.getElementById('contactLink'),
-                signInLink: document.getElementById('signInLink'),
-                signUpLink: document.getElementById('signUpLink')
-            };
-            const signUpButtonForm = document.getElementById('signUpButton');
-            const socialLoginGoogle = document.querySelector('.social-btn');
-            const footerSignInLink = document.querySelector('.signin-link a');
-            const controlsContainer = document.querySelector('.controls-container');
-
-            // Toggle password visibility
-            togglePassword.addEventListener('click', () => {
-                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                passwordInput.setAttribute('type', type);
-                togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
-            });
-
-            toggleConfirmPassword.addEventListener('click', () => {
-                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                confirmPasswordInput.setAttribute('type', type);
-                toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
-            });
-
-            // Form validation
-            signupForm.addEventListener('submit', (e) => {
-                let valid = true;
-
-                document.querySelectorAll('.error-message').forEach(el => {
-                    el.classList.remove('visible');
-                    el.textContent = '';
-                });
-                document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
-
-                const emailUsername = document.getElementById('emailUsername').value.trim();
-                const emailUsernameError = document.getElementById('emailUsernameError');
-                if (!emailUsername) {
-                    valid = false;
-                    emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorRequired || 'Email or Username is required';
-                    emailUsernameError.classList.add('visible');
-                    document.getElementById('emailUsername').classList.add('invalid');
-                } else if (emailUsername.includes('@')) {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(emailUsername)) {
-                        valid = false;
-                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidEmail || 'Invalid email format';
-                        emailUsernameError.classList.add('visible');
-                        document.getElementById('emailUsername').classList.add('invalid');
-                    }
-                } else {
-                    const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
-                    if (!usernameRegex.test(emailUsername)) {
-                        valid = false;
-                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidUsername || 'Username must start with a letter';
-                        emailUsernameError.classList.add('visible');
-                        document.getElementById('emailUsername').classList.add('invalid');
-                    }
-                }
-
-                const password = passwordInput.value;
-                const passwordError = document.getElementById('passwordError');
-                const alphanumericRegex = /^[a-zA-Z0-9]+$/;
-                if (password.length < 4 || !alphanumericRegex.test(password)) {
-                    valid = false;
-                    passwordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].passwordError || 'Password must be at least 4 letters or numbers';
-                    passwordError.classList.add('visible');
-                    passwordInput.classList.add('invalid');
-                }
-
-                const confirmPassword = confirmPasswordInput.value;
-                const confirmPasswordError = document.getElementById('confirmPasswordError');
-                if (confirmPassword !== password) {
-                    valid = false;
-                    confirmPasswordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].confirmPasswordError || 'Passwords do not match';
-                    confirmPasswordError.classList.add('visible');
-                    confirmPasswordInput.classList.add('invalid');
-                }
-
-                const terms = document.getElementById('terms');
-                const termsError = document.getElementById('termsError');
-                if (!terms.checked) {
-                    valid = false;
-                    termsError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].termsError || 'You must agree to the terms';
-                    termsError.classList.add('visible');
-                    terms.classList.add('invalid');
-                }
-
-                if (!valid) {
-                    e.preventDefault();
-                }
-            });
 
             // Text mappings for languages
             const texts = {
@@ -684,7 +591,7 @@
                     passwordLabel: "Password *",
                     confirmPasswordLabel: "Confirm Password *",
                     termsLabel: "I agree to the terms and conditions",
-                    signUpButton: "Sign up",
+                    submitButton: "Sign up",
                     orText: "or continue with",
                     haveAccountText: "Already have an account?",
                     signInLinkFooter: "Sign in",
@@ -715,7 +622,7 @@
                     passwordLabel: "رمز عبور *",
                     confirmPasswordLabel: "تایید رمز عبور *",
                     termsLabel: "با شرایط و قوانین موافقم",
-                    signUpButton: "ثبت‌نام",
+                    submitButton: "ثبت‌نام",
                     orText: "یا ادامه با",
                     haveAccountText: "حساب کاربری دارید؟",
                     signInLinkFooter: "ورود",
@@ -749,10 +656,10 @@
                 passwordLabel: document.getElementById('passwordLabel'),
                 confirmPasswordLabel: document.getElementById('confirmPasswordLabel'),
                 termsLabel: document.getElementById('termsLabel'),
-                signUpButton: document.getElementById('signUpButton'),
+                submitButton: document.getElementById('submitButton'),
                 orText: document.getElementById('orText'),
                 haveAccountText: document.getElementById('haveAccountText'),
-                signInLinkFooter: document.getElementById('signInLink'),
+                signInLinkFooter: document.getElementById('signInLinkFooter'),
                 firstNameInput: document.getElementById('firstName'),
                 lastNameInput: document.getElementById('lastName'),
                 emailUsernameInput: document.getElementById('emailUsername'),
@@ -766,10 +673,6 @@
                     const elementKey = key.replace('Placeholder', 'Input');
                     if (key.endsWith('Placeholder') && elements[elementKey]) {
                         elements[elementKey].placeholder = texts[lang][key];
-                    } else if (key === 'haveAccountText') {
-                        elements.haveAccountText.textContent = texts[lang][key];
-                    } else if (key === 'signInLinkFooter') {
-                        elements.signInLinkFooter.textContent = texts[lang][key];
                     } else if (elements[key]) {
                         elements[key].textContent = texts[lang][key];
                     }
@@ -813,31 +716,84 @@
                 }
             });
 
-            // Handle navigation links (prevent default behavior)
-            allNavLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    // This is to prevent the links from redirecting and demonstrate the fix.
-                    // In a real application, you'd remove this.
-                    e.preventDefault(); 
-                    console.log(`Mapsd to: ${e.target.id}`);
+            // Toggle password visibility
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+            });
+
+            toggleConfirmPassword.addEventListener('click', () => {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
+            });
+
+            // Form validation
+            signupForm.addEventListener('submit', (e) => {
+                let valid = true;
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.remove('visible');
+                    el.textContent = '';
                 });
-            });
-            // Handle form buttons (for demonstration)
-            signUpButtonForm.addEventListener('click', (e) => {
-                // The form's submit event listener handles the primary logic,
-                // but this is a fallback for testing.
-                console.log('Form submit button clicked');
-            });
-            socialLoginGoogle.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log('Social login with Google clicked');
-            });
-            if (footerSignInLink) {
-                footerSignInLink.addEventListener('click', (e) => {
+                document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
+
+                const emailUsername = document.getElementById('emailUsername').value.trim();
+                const emailUsernameError = document.getElementById('emailUsernameError');
+                if (!emailUsername) {
+                    valid = false;
+                    emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorRequired;
+                    emailUsernameError.classList.add('visible');
+                    document.getElementById('emailUsername').classList.add('invalid');
+                } else if (emailUsername.includes('@')) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(emailUsername)) {
+                        valid = false;
+                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidEmail;
+                        emailUsernameError.classList.add('visible');
+                        document.getElementById('emailUsername').classList.add('invalid');
+                    }
+                } else {
+                    const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
+                    if (!usernameRegex.test(emailUsername)) {
+                        valid = false;
+                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidUsername;
+                        emailUsernameError.classList.add('visible');
+                        document.getElementById('emailUsername').classList.add('invalid');
+                    }
+                }
+
+                const password = passwordInput.value;
+                const passwordError = document.getElementById('passwordError');
+                const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+                if (password.length < 4 || !alphanumericRegex.test(password)) {
+                    valid = false;
+                    passwordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].passwordError;
+                    passwordError.classList.add('visible');
+                    passwordInput.classList.add('invalid');
+                }
+
+                const confirmPassword = confirmPasswordInput.value;
+                const confirmPasswordError = document.getElementById('confirmPasswordError');
+                if (confirmPassword !== password) {
+                    valid = false;
+                    confirmPasswordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].confirmPasswordError;
+                    confirmPasswordError.classList.add('visible');
+                    confirmPasswordInput.classList.add('invalid');
+                }
+
+                const terms = document.getElementById('terms');
+                const termsError = document.getElementById('termsError');
+                if (!terms.checked) {
+                    valid = false;
+                    termsError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].termsError;
+                    termsError.classList.add('visible');
+                }
+
+                if (!valid) {
                     e.preventDefault();
-                    console.log('Footer Sign In link clicked');
-                });
-            }
+                }
+            });
         });
     </script>
 </body>
