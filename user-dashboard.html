@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard - Smartify24</title>
+    <title>Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
@@ -365,18 +365,41 @@
             color: var(--text-secondary);
         }
         .log-item:last-child { border-bottom: none; }
-        .designed-by {
-            margin-top: 40px;
-            font-size: 14px;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
+        
+        footer {
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            box-shadow: 0 -2px 4px var(--shadow-primary);
+            padding: 5px 32px;
+            text-align: center;
+            width: 100%;
         }
-        .designed-by span { font-weight: 500; }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .footer-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+        .social-link img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.2s ease;
+        }
+        .social-link:hover img {
+            transform: scale(1.1);
+        }
+
         body[dir="rtl"] { font-family: 'Vazirmatn', sans-serif; }
-        body[dir="rtl"] nav, body[dir="rtl"] .dashboard-container { text-align: right; direction: rtl; }
+        body[dir="rtl"] nav, body[dir="rtl"] .dashboard-container, body[dir="rtl"] footer { text-align: right; direction: rtl; }
         body[dir="rtl"] .nav-links { flex-direction: row; }
         body[dir="rtl"] .language-dropdown { left: auto; right: 0; }
         body[dir="rtl"] .sidebar input, body[dir="rtl"] .control-row input {
@@ -477,7 +500,7 @@
 
     <footer>
         <div class="footer-content">
-            <h3 class="footer-title" id="footerContactTitle">Contact Us</h3>
+            <h3 class="footer-title" id="contactTitle">Contact Us</h3>
             <div class="social-links">
                 <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
                     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
@@ -593,7 +616,7 @@
                 setScheduleBtn: document.getElementById('setScheduleBtn'),
                 logTitle: document.getElementById('logTitle'),
                 logList: document.getElementById('logList'),
-                footerContactTitle: document.getElementById('footerContactTitle'),
+                footerContactTitle: document.getElementById('contactTitle'),
             };
 
             const lightBulb = document.getElementById('lightBulb');
