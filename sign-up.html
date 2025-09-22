@@ -602,8 +602,8 @@
                     confirmPasswordPlaceholder: "••••••••",
                     emailUsernameErrorRequired: "Email or Username is required",
                     emailUsernameErrorInvalidEmail: "Invalid email format",
-                    emailUsernameErrorInvalidUsername: "Username must start with a letter",
-                    passwordError: "Password must be at least 4 letters or numbers",
+                    emailUsernameErrorInvalidUsername: "Username must be at least 3 characters long and contain only letters, numbers, underscores, or hyphens",
+                    passwordError: "Password must be at least 4 characters long",
                     confirmPasswordError: "Passwords do not match",
                     termsError: "You must agree to the terms"
                 },
@@ -633,8 +633,8 @@
                     confirmPasswordPlaceholder: "••••••••",
                     emailUsernameErrorRequired: "ایمیل یا نام کاربری الزامی است",
                     emailUsernameErrorInvalidEmail: "فرمت ایمیل نامعتبر است",
-                    emailUsernameErrorInvalidUsername: "نام کاربری باید با حرف شروع شود",
-                    passwordError: "رمز عبور باید حداقل ۴ حرف یا عدد باشد",
+                    emailUsernameErrorInvalidUsername: "نام کاربری باید حداقل ۳ کاراکتر داشته باشد و فقط شامل حروف، اعداد، زیرخط یا خط تیره باشد",
+                    passwordError: "رمز عبور باید حداقل ۴ کاراکتر داشته باشد",
                     confirmPasswordError: "رمزهای عبور مطابقت ندارند",
                     termsError: "باید با شرایط موافقت کنید"
                 }
@@ -740,33 +740,38 @@
 
                 const emailUsername = document.getElementById('emailUsername').value.trim();
                 const emailUsernameError = document.getElementById('emailUsernameError');
+                
                 if (!emailUsername) {
                     valid = false;
                     emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorRequired;
                     emailUsernameError.classList.add('visible');
                     document.getElementById('emailUsername').classList.add('invalid');
-                } else if (emailUsername.includes('@')) {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(emailUsername)) {
-                        valid = false;
-                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidEmail;
-                        emailUsernameError.classList.add('visible');
-                        document.getElementById('emailUsername').classList.add('invalid');
-                    }
                 } else {
-                    const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
-                    if (!usernameRegex.test(emailUsername)) {
-                        valid = false;
-                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidUsername;
-                        emailUsernameError.classList.add('visible');
-                        document.getElementById('emailUsername').classList.add('invalid');
+                    // Check if it's an email (contains @)
+                    if (emailUsername.includes('@')) {
+                        // Validate email format
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(emailUsername)) {
+                            valid = false;
+                            emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidEmail;
+                            emailUsernameError.classList.add('visible');
+                            document.getElementById('emailUsername').classList.add('invalid');
+                        }
+                    } else {
+                        // It's a username - validate username rules
+                        const usernameRegex = /^[a-zA-Z0-9_-]{3,}$/;
+                        if (!usernameRegex.test(emailUsername)) {
+                            valid = false;
+                            emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidUsername;
+                            emailUsernameError.classList.add('visible');
+                            document.getElementById('emailUsername').classList.add('invalid');
+                        }
                     }
                 }
 
                 const password = passwordInput.value;
                 const passwordError = document.getElementById('passwordError');
-                const alphanumericRegex = /^[a-zA-Z0-9]+$/;
-                if (password.length < 4 || !alphanumericRegex.test(password)) {
+                if (password.length < 4) {
                     valid = false;
                     passwordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].passwordError;
                     passwordError.classList.add('visible');
