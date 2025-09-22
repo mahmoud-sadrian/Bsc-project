@@ -175,54 +175,11 @@
         .dashboard-container {
             flex: 1;
             display: flex;
-            flex-direction: row;
             justify-content: center;
             padding: 24px;
             gap: 24px;
         }
-        .sidebar {
-            background-color: var(--bg-secondary);
-            border-radius: 16px;
-            padding: 24px;
-            width: 300px;
-            box-shadow: 0 10px 25px var(--shadow-primary);
-            height: fit-content;
-        }
-        .sidebar h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 24px;
-        }
-        .sidebar input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border-primary);
-            border-radius: 8px;
-            font-size: 16px;
-            color: var(--text-primary);
-            background-color: var(--bg-primary);
-            outline: none;
-        }
-        .sidebar input:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px var(--shadow-focus);
-        }
-        .sidebar button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-primary);
-            color: var(--bg-secondary);
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .sidebar button:hover { background-color: var(--accent-hover); }
         .main-dashboard {
-            flex: 1;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -379,14 +336,11 @@
         body[dir="rtl"] nav, body[dir="rtl"] .dashboard-container { text-align: right; direction: rtl; }
         body[dir="rtl"] .nav-links { flex-direction: row; }
         body[dir="rtl"] .language-dropdown { left: auto; right: 0; }
-        body[dir="rtl"] .sidebar input, body[dir="rtl"] .control-row input {
-            text-align: right;
-        }
+        body[dir="rtl"] .control-row input { text-align: right; }
         body[dir="rtl"] ul { padding-right: 0; padding-left: 20px; }
         
         @media (max-width: 992px) {
             .dashboard-container { flex-direction: column; align-items: center; }
-            .sidebar { width: 100%; max-width: 600px; }
             .main-dashboard { width: 100%; max-width: 600px; }
         }
 
@@ -427,16 +381,9 @@
     </header>
 
     <div class="dashboard-container">
-        <div class="sidebar">
-            <h2 id="sidebarTitle">Select Device</h2>
-            <input type="text" id="deviceIdInput" placeholder="Enter Device ID" />
-            <button id="connectDeviceBtn">Connect</button>
-            <p id="connectionStatus" style="margin-top: 12px; font-size: 14px; text-align: center; color: var(--text-muted);"></p>
-        </div>
-
-        <div class="main-dashboard" id="mainDashboard" style="display: none;">
+        <div class="main-dashboard" id="mainDashboard">
             <div class="device-card">
-                <h2 id="deviceName">Lamp 1</h2>
+                <h2 id="deviceName">My Smart Lamp</h2>
                 <div class="device-status">
                     <svg id="lightBulb" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="light-bulb-icon off" viewBox="0 0 16 16">
                         <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.178-.415.348-.652.502L12 11.499V12a2 2 0 1 1-4 0v-.758l-.208-.08a2 2 0 0 0-.847-.35zM14 6a7 7 0 1 0-14 0h14zm-9.354.55a.5.5 0 1 1-.708-.708l.707-.707a.5.5 0 0 1 .708.707zM11.656 5.845a.5.5 0 1 1 .708.708l-.707.707a.5.5 0 0 1-.708-.707z" />
@@ -491,7 +438,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Theme and Language logic from previous pages
+            // Theme and Language logic
             const darkModeToggle = document.getElementById('darkModeToggle');
             const body = document.body;
             const langWrapper = document.getElementById('languageWrapper');
@@ -506,11 +453,7 @@
                     contactLink: "Contact",
                     signInLink: "Sign in",
                     signUpLink: "Sign up",
-                    sidebarTitle: "Select Device",
-                    deviceIdInput: "Enter Device ID",
-                    connectDeviceBtn: "Connect",
-                    connectionStatus: "",
-                    deviceName: "Lamp 1",
+                    deviceName: "My Smart Lamp",
                     deviceStatusTextOff: "Current Status: OFF",
                     deviceStatusTextOn: "Current Status: ON",
                     toggleBtnOff: "Turn ON",
@@ -530,7 +473,6 @@
                     log_timer_set: (minutes) => `Timer set for ${minutes} minutes.`,
                     log_schedule_set: (dateTime, duration) => `Scheduled to turn ON at ${dateTime} for ${duration} minutes.`,
                     log_connected: (id) => `Successfully connected to device ${id}.`,
-                    log_connection_failed: "Failed to connect. Please check the Device ID."
                 },
                 fa: {
                     logo: "Smartify24",
@@ -539,11 +481,7 @@
                     contactLink: "تماس",
                     signInLink: "ورود",
                     signUpLink: "ثبت‌نام",
-                    sidebarTitle: "انتخاب دستگاه",
-                    deviceIdInput: "شناسه دستگاه را وارد کنید",
-                    connectDeviceBtn: "اتصال",
-                    connectionStatus: "",
-                    deviceName: "لامپ ۱",
+                    deviceName: "لامپ هوشمند من",
                     deviceStatusTextOff: "وضعیت فعلی: خاموش",
                     deviceStatusTextOn: "وضعیت فعلی: روشن",
                     toggleBtnOff: "روشن کردن",
@@ -563,7 +501,6 @@
                     log_timer_set: (minutes) => `تایمر برای ${minutes} دقیقه تنظیم شد.`,
                     log_schedule_set: (dateTime, duration) => `برای روشن شدن در تاریخ و ساعت ${dateTime} به مدت ${duration} دقیقه زمان‌بندی شد.`,
                     log_connected: (id) => `با موفقیت به دستگاه ${id} متصل شد.`,
-                    log_connection_failed: "اتصال ناموفق بود. لطفاً شناسه دستگاه را بررسی کنید."
                 }
             };
             
@@ -574,11 +511,6 @@
                 contactLink: document.getElementById('contactLink'),
                 signInLink: document.getElementById('signInLink'),
                 signUpLink: document.getElementById('signUpLink'),
-                sidebarTitle: document.getElementById('sidebarTitle'),
-                deviceIdInput: document.getElementById('deviceIdInput'),
-                connectDeviceBtn: document.getElementById('connectDeviceBtn'),
-                connectionStatus: document.getElementById('connectionStatus'),
-                mainDashboard: document.getElementById('mainDashboard'),
                 deviceName: document.getElementById('deviceName'),
                 deviceStatusText: document.getElementById('deviceStatusText'),
                 toggleBtn: document.getElementById('toggleBtn'),
@@ -683,20 +615,9 @@
                 }
             });
 
-            // Dashboard Logic
-            elements.connectDeviceBtn.addEventListener('click', () => {
-                const deviceId = elements.deviceIdInput.value.trim();
-                if (deviceId === '123') { // This is a mock check for demonstration
-                    elements.mainDashboard.style.display = 'flex';
-                    elements.connectionStatus.textContent = texts[currentLang].log_connected(deviceId);
-                    elements.connectionStatus.style.color = '#16a34a';
-                    updateLightStatus(false);
-                } else {
-                    elements.mainDashboard.style.display = 'none';
-                    elements.connectionStatus.textContent = texts[currentLang].log_connection_failed;
-                    elements.connectionStatus.style.color = 'var(--error-color)';
-                }
-            });
+            // Dashboard Logic - No Device ID selection
+            updateLightStatus(false);
+            addLog(`Connected to 'My Smart Lamp' device.`);
 
             elements.toggleBtn.addEventListener('click', () => {
                 const newStatus = !isLightOn;
@@ -708,7 +629,6 @@
                 const minutes = elements.timerMinutes.value;
                 if (minutes > 0) {
                     addLog(texts[currentLang].log_timer_set(minutes));
-                    // In a real application, you would send this command to your backend
                 }
             });
 
@@ -717,7 +637,6 @@
                 const duration = elements.scheduleDuration.value;
                 if (dateTime && duration > 0) {
                     addLog(texts[currentLang].log_schedule_set(dateTime, duration));
-                    // In a real application, you would send this command to your backend
                 }
             });
         });
