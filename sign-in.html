@@ -275,6 +275,20 @@
       outline-offset: 2px;
     }
 
+    /* Error Messages */
+    .error-message {
+      display: none;
+      font-size: 12px;
+      color: var(--error-color);
+      margin-top: 4px;
+    }
+    .error-message.visible {
+      display: block;
+    }
+    input.invalid {
+      border-color: var(--error-color);
+    }
+
     /* Links & Buttons */
     .forgot-password {
       text-align: right;
@@ -533,8 +547,9 @@
       <h1 id="title">Sign in to your account</h1>
       <form aria-labelledby="title">
         <div class="form-group">
-          <label for="email" id="emailLabel">Email / Username</label>
-          <input type="email" id="email" placeholder="you@example.com" required aria-required="true" />
+          <label for="usernameEmail" id="emailLabel">Email / Username</label>
+          <input type="text" id="usernameEmail" placeholder="you@example.com or username" required aria-required="true" />
+          <span class="error-message" id="usernameEmailError"></span>
         </div>
         <div class="form-group">
           <label for="password" id="passwordLabel">Password</label>
@@ -542,6 +557,7 @@
             <input type="password" id="password" placeholder="••••••••" required aria-required="true" />
             <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
           </div>
+          <span class="error-message" id="passwordError"></span>
         </div>
         <div class="forgot-password">
           <a href="#" id="forgotLink">Forgot password?</a>
@@ -604,8 +620,11 @@
           noAccountText: "Don't have an account?",
           signUpLink: "Sign up",
           contactTitle: "Contact Us",
-          emailPlaceholder: "you@example.com",
-          passwordPlaceholder: "••••••••"
+          emailPlaceholder: "you@example.com or username",
+          passwordPlaceholder: "••••••••",
+          emailRequired: "Email or username is required",
+          emailInvalid: "Please enter a valid email address or username",
+          passwordRequired: "Password is required"
         },
         fa: {
           logo: "Smartify24",
@@ -623,8 +642,11 @@
           noAccountText: "حساب کاربری ندارید؟",
           signUpLink: "ثبت‌نام",
           contactTitle: "تماس با ما",
-          emailPlaceholder: "you@example.com",
-          passwordPlaceholder: "••••••••"
+          emailPlaceholder: "you@example.com یا نام کاربری",
+          passwordPlaceholder: "••••••••",
+          emailRequired: "ایمیل یا نام کاربری الزامی است",
+          emailInvalid: "لطفاً یک آدرس ایمیل معتبر یا نام کاربری وارد کنید",
+          passwordRequired: "رمز عبور الزامی است"
         }
       };
 
@@ -644,14 +666,16 @@
         noAccountText: document.getElementById('noAccountText'),
         signUpLinkText: document.getElementById('signUpLink'),
         contactTitle: document.getElementById('contactTitle'),
-        emailInput: document.getElementById('email'),
-        passwordInput: document.getElementById('password')
+        usernameEmailInput: document.getElementById('usernameEmail'),
+        passwordInput: document.getElementById('password'),
+        usernameEmailError: document.getElementById('usernameEmailError'),
+        passwordError: document.getElementById('passwordError')
       };
 
       function applyLanguage(lang) {
         Object.keys(texts[lang]).forEach(key => {
           if (key === 'emailPlaceholder') {
-            elements.emailInput.placeholder = texts[lang][key];
+            elements.usernameEmailInput.placeholder = texts[lang][key];
           } else if (key === 'passwordPlaceholder') {
             elements.passwordInput.placeholder = texts[lang][key];
           } else if (key === 'signUpLink') {
@@ -710,8 +734,62 @@
       const form = document.querySelector('form');
       form.addEventListener('submit', (event) => {
         event.preventDefault();
-        // Add your form submission logic here
-        alert('Form submission would happen here in a real application');
+        
+        // Clear previous errors
+        document.querySelectorAll('.error-message').forEach(el => {
+          el.classList.remove('visible');
+          el.textContent = '';
+        });
+        document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
+
+        let isValid = true;
+        const currentLang = body.getAttribute('dir') === 'rtl' ? 'fa' : 'en';
+
+        // Validate username/email
+        const usernameEmailValue = elements.usernameEmailInput.value.trim();
+        if (!usernameEmailValue) {
+          isValid = false;
+          elements.usernameEmailError.textContent = texts[currentLang].emailRequired;
+          elements.usernameEmailError.classList.add('visible');
+          elements.usernameEmailInput.classList.add('invalid');
+        } else {
+          // Check if it's an email (contains @)
+          if (usernameEmailValue.includes('@')) {
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(usernameEmailValue)) {
+              isValid = false;
+              elements.usernameEmailError.textContent = texts[currentLang].emailInvalid;
+              elements.usernameEmailError.classList.add('visible');
+              elements.usernameEmailInput.classList.add('invalid');
+            }
+          } else {
+            // It's a username - just check if it's not empty (already checked above)
+            // You can add additional username validation rules here if needed
+            // For example: minimum length, allowed characters, etc.
+            if (usernameEmailValue.length < 3) {
+              isValid = false;
+              elements.usernameEmailError.textContent = texts[currentLang].emailInvalid;
+              elements.usernameEmailError.classList.add('visible');
+              elements.usernameEmailInput.classList.add('invalid');
+            }
+          }
+        }
+
+        // Validate password
+        const passwordValue = elements.passwordInput.value.trim();
+        if (!passwordValue) {
+          isValid = false;
+          elements.passwordError.textContent = texts[currentLang].passwordRequired;
+          elements.passwordError.classList.add('visible');
+          elements.passwordInput.classList.add('invalid');
+        }
+
+        // If form is valid, you would submit it
+        if (isValid) {
+          alert('Form submitted successfully!');
+          // Here you would typically send the data to your server
+        }
       });
     });
   </script>
