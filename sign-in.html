@@ -726,13 +726,11 @@
         document.documentElement.lang = lang;
       }
 
-      // تابع نمایش پیام
       function showMessage(message, type = 'info') {
         messageContainer.innerHTML = `
           <div class="message ${type}">${message}</div>
         `;
         
-        // پاک کردن خودکار پیام بعد از 5 ثانیه (برای پیام‌های info)
         if (type !== 'success') {
           setTimeout(() => {
             messageContainer.innerHTML = '';
@@ -785,7 +783,6 @@
       loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         
-        // پاک کردن خطاهای قبلی
         document.querySelectorAll('.error-message').forEach(el => {
           el.classList.remove('visible');
           el.textContent = '';
@@ -795,7 +792,6 @@
         let isValid = true;
         const currentLang = localStorage.getItem('uiLanguage') || 'en';
 
-        // اعتبارسنجی username/email
         const usernameEmailValue = elements.usernameEmailInput.value.trim();
         if (!usernameEmailValue) {
           isValid = false;
@@ -804,7 +800,6 @@
           elements.usernameEmailInput.classList.add('invalid');
         }
 
-        // اعتبارسنجی password
         const passwordValue = elements.passwordInput.value.trim();
         if (!passwordValue) {
           isValid = false;
@@ -815,7 +810,6 @@
 
         if (!isValid) return;
 
-        // نمایش حالت loading
         const submitButton = elements.signInButton;
         const originalText = submitButton.textContent;
         submitButton.textContent = texts[currentLang].signingIn;
@@ -824,7 +818,6 @@
         try {
           console.log('ارسال درخواست ورود به API...');
           
-          // ارسال درخواست به API
           const response = await fetch('api.php?action=signin', {
             method: 'POST',
             headers: {
@@ -844,24 +837,20 @@
           if (response.ok && data.userId) {
             console.log('ورود موفق - ذخیره اطلاعات در localStorage');
             
-            // ذخیره اطلاعات کاربر در localStorage
             localStorage.setItem('user_id', data.userId);
             localStorage.setItem('username', data.username);
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('loginTime', new Date().getTime());
             
-            // نمایش پیام موفقیت
             showMessage(texts[currentLang].loginSuccess, 'success');
             
             console.log('انجام ریدایرکت به داشبورد...');
             
-            // ریدایرکت به داشبورد بعد از 1 ثانیه
             setTimeout(() => {
               window.location.href = 'dashboard.html';
             }, 1000);
             
           } else {
-            // خطا در ورود
             const errorMessage = data.error || texts[currentLang].invalidCredentials;
             console.log('خطا در ورود:', errorMessage);
             showMessage(errorMessage, 'error');
@@ -871,13 +860,11 @@
           console.error('خطای شبکه:', error);
           showMessage(texts[currentLang].networkError, 'error');
         } finally {
-          // بازگرداندن حالت عادی دکمه
           submitButton.textContent = originalText;
           submitButton.disabled = false;
         }
       });
 
-      // بررسی اگر کاربر قبلاً لاگین کرده است
       const isLoggedIn = localStorage.getItem('isLoggedIn');
       if (isLoggedIn === 'true') {
         const currentLang = localStorage.getItem('uiLanguage') || 'en';
