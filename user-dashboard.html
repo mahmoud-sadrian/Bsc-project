@@ -251,20 +251,19 @@
             align-items: center;
             gap: 16px;
         }
-        .light-bulb-icon {
-            width: 120px;
-            height: 120px;
-            transition: fill 0.3s ease;
+        
+        /* Updated bulb style to match the PHP version */
+        .light-bulb {
+            font-size: 120px;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            color: #888;
+            text-shadow: none;
         }
-        .light-bulb-icon.on {
-            fill: #f59e0b; /* Yellow color */
+        .light-bulb.on {
+            color: #ffcc00;
+            text-shadow: 0 0 20px #ffcc00;
         }
-        .light-bulb-icon.off {
-            fill: #d1d5db; /* Gray color */
-        }
-        body.dark-mode .light-bulb-icon.off {
-            fill: #6b7280;
-        }
+        
         .device-status p {
             font-size: 18px;
             font-weight: 500;
@@ -461,9 +460,8 @@
             <div class="device-card">
                 <h2 id="deviceName">Lamp 1</h2>
                 <div class="device-status">
-                    <svg id="lightBulb" xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="light-bulb-icon off" viewBox="0 0 16 16">
-                        <path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.178-.415.348-.652.502L12 11.499V12a2 2 0 1 1-4 0v-.758l-.208-.08a2 2 0 0 0-.847-.35zM14 6a7 7 0 1 0-14 0h14zm-9.354.55a.5.5 0 1 1-.708-.708l.707-.707a.5.5 0 0 1 .708.707zM11.656 5.845a.5.5 0 1 1 .708.708l-.707.707a.5.5 0 0 1-.708-.707z" />
-                    </svg>
+                    <!-- Replaced SVG with emoji bulb -->
+                    <div id="lightBulb" class="light-bulb">💡</div>
                     <p id="deviceStatusText">Current Status: OFF</p>
                     <button id="toggleBtn" class="toggle-btn off">Turn ON</button>
                 </div>
