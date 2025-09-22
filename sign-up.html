@@ -1,722 +1,844 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sign Up</title>
-  <!-- Inter Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-  <!-- Vazirmatn (Persian Font) -->
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <style>
-    /* CSS Variables for Theming */
-    :root {
-      --bg-primary: #f9fafb;
-      --bg-secondary: white;
-      --text-primary: #111827;
-      --text-secondary: #374151;
-      --text-muted: #6b7280;
-      --border-primary: #d1d5db;
-      --border-focus: #3b82f6;
-      --accent-primary: #111827;
-      --accent-hover: #1f2937;
-      --shadow-primary: rgba(0, 0, 0, 0.1);
-      --shadow-focus: rgba(59, 130, 246, 0.1);
-      --divider: #e5e7eb;
-      --social-bg: white;
-      --social-border: #d1d5db;
-      --social-hover: #f3f4f6;
-      --social-hover-border: #3b82f6;
-      --error-color: #ef4444;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Smartify24</title>
 
-    body.dark-mode {
-      --bg-primary: #111827;
-      --bg-secondary: #1f2937;
-      --text-primary: #f9fafb;
-      --text-secondary: #f9fafb;
-      --text-muted: #9ca3af;
-      --border-primary: #4b5563;
-      --border-focus: #60a5fa;
-      --accent-primary: #3b82f6;
-      --accent-hover: #2563eb;
-      --shadow-primary: rgba(0, 0, 0, 0.3);
-      --shadow-focus: rgba(96, 165, 250, 0.1);
-      --divider: #374151;
-      --social-bg: #374151;
-      --social-border: #4b5563;
-      --social-hover: #4b5563;
-      --social-hover-border: #60a5fa;
-      --error-color: #f87171;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 
-    /* Reset & Base */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 16px;
-    }
+    <style>
+        :root {
+            --bg-primary: #f9fafb;
+            --bg-secondary: white;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --border-primary: #d1d5db;
+            --border-focus: #3b82f6;
+            --accent-primary: #111827;
+            --accent-hover: #1f2937;
+            --shadow-primary: rgba(0, 0, 0, 0.1);
+            --shadow-focus: rgba(59, 130, 246, 0.1);
+            --divider: #e5e7eb;
+            --social-bg: white;
+            --social-border: #d1d5db;
+            --social-hover: #f3f4f6;
+            --social-hover-border: #3b82f6;
+            --error-color: #ef4444;
+        }
 
-    /* Controls Container (Top Right) */
-    .controls-container {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-      display: flex;
-      gap: 16px;
-      z-index: 100;
-      align-items: center;
-    }
-    .control-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
+        body.dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-primary: #4b5563;
+            --border-focus: #60a5fa;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-focus: rgba(96, 165, 250, 0.1);
+            --divider: #374151;
+            --social-bg: #374151;
+            --social-border: #4b5563;
+            --social-hover: #4b5563;
+            --social-hover-border: #60a5fa;
+            --error-color: #f87171;
+        }
 
-    /* Dark Mode Toggle */
-    .theme-toggle {
-      width: 44px;
-      height: 24px;
-      position: relative;
-      cursor: pointer;
-    }
-    .theme-toggle input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
-    .slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: var(--border-primary);
-      border: 1px solid var(--divider);
-      border-radius: 24px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .slider:before {
-      content: "";
-      position: absolute;
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: var(--bg-secondary);
-      border-radius: 50%;
-      box-shadow: 0 2px 4px var(--shadow-primary);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    input:checked + .slider {
-      background-color: var(--border-focus);
-      border-color: var(--border-focus);
-    }
-    input:checked + .slider:before {
-      transform: translateX(18px);
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        body.dark-mode .sun-icon { display: none; }
+        body.dark-mode .moon-icon { display: block; }
+        .sun-icon { display: block; }
+        .moon-icon { display: none; }
 
-    /* Language Selector */
-    .language-select {
-      padding: 6px 12px;
-      border: 1px solid var(--border-primary);
-      border-radius: 8px;
-      font-size: 14px;
-      background: var(--bg-secondary);
-      color: var(--text-primary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 120px;
-      box-shadow: 0 1px 2px var(--shadow-primary);
-      transition: all 0.2s ease;
-    }
-    .language-select:hover {
-      border-color: var(--border-focus);
-      box-shadow: 0 2px 4px var(--shadow-primary);
-    }
-    .language-select:focus-visible {
-      outline: 2px solid var(--border-focus);
-      outline-offset: 2px;
-    }
+        header {
+            background: var(--bg-secondary);
+            box-shadow: 0 2px 4px var(--shadow-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--border-focus);
+        }
+        .nav-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease;
+        }
+        .nav-icon:hover {
+            fill: var(--border-focus);
+        }
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        
+        .language-select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .language-dropdown-icon {
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .language-dropdown-icon:hover {
+            background-color: var(--social-hover);
+            transform: scale(1.05);
+        }
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 12px;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px var(--shadow-primary);
+            z-index: 10;
+            padding: 8px 0;
+            min-width: 120px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+        }
+        .language-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            transition-delay: 0s;
+        }
+        .language-dropdown-item {
+            display: block;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .language-dropdown-item:hover {
+            background-color: var(--social-hover);
+            color: var(--text-primary);
+        }
 
-    /* Flag Icons */
-    .flag {
-      width: 16px;
-      height: 12px;
-      background-size: cover;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    .flag-en {
-      background-image: url('/image/flag-united-kingdom.svg');
-    }
-    .flag-fa {
-      background-image: url('/image/flag-iran.svg');
-    }
+        main {
+            flex: 1 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 32px 16px;
+        }
+        .content-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 32px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px var(--shadow-primary);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
+        p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
 
-    /* Form Container */
-    .form-container {
-      width: 100%;
-      max-width: 400px;
-      padding: 32px;
-      background: var(--bg-secondary);
-      border-radius: 16px;
-      box-shadow: 0 10px 25px var(--shadow-primary);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(0, 0, 0, 0.05); /* Kept light for consistency, adjust if needed */
-    }
-    h1 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 24px;
-      text-align: center;
-      letter-spacing: -0.02em;
-      line-height: 1.3;
-    }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-primary);
+            color: var(--bg-secondary);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow-primary);
+        }
+        .action-btn:hover {
+            background-color: var(--accent-hover);
+        }
+        .secondary-btn {
+            background-color: transparent;
+            border: 1px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+        .secondary-btn:hover {
+            background-color: var(--social-hover);
+            border-color: var(--border-focus);
+        }
+        
+        /* Form Container */
+        .form-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 32px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px var(--shadow-primary);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-align: center;
+            letter-spacing: -0.02em;
+            line-height: 1.3;
+        }
 
-    /* Form Fields */
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 8px;
-      color: var(--text-secondary);
-    }
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 12px 40px 12px 16px;
-      border: 1px solid var(--border-primary);
-      border-radius: 8px;
-      font-size: 16px;
-      background-color: var(--bg-secondary);
-      color: var(--text-primary);
-      outline: none;
-      transition: all 0.2s ease;
-    }
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="password"]:focus {
-      border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px var(--shadow-focus);
-    }
-    input::placeholder {
-      color: var(--text-muted);
-    }
+        /* Form Fields */
+        .form-group { margin-bottom: 20px; }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px 40px 12px 16px;
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--shadow-focus);
+        }
+        input::placeholder { color: var(--text-muted); }
 
-    /* Password Wrapper */
-    .password-wrapper {
-      position: relative;
-    }
-    .toggle-password {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--text-muted);
-      font-size: 16px;
-      padding: 0;
-      transition: color 0.2s ease;
-    }
-    .toggle-password:hover {
-      color: var(--text-primary);
-    }
-    .toggle-password:focus {
-      outline: 2px solid var(--border-focus);
-      outline-offset: 2px;
-    }
+        /* Password Wrapper */
+        .password-wrapper { position: relative; }
+        .toggle-password {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 16px;
+            padding: 0;
+            transition: color 0.2s ease;
+        }
+        .toggle-password:hover { color: var(--text-primary); }
+        .toggle-password:focus { outline: 2px solid var(--border-focus); outline-offset: 2px; }
 
-    /* Error Messages */
-    .error-message {
-      display: none;
-      font-size: 12px;
-      color: var(--error-color);
-      margin-top: 4px;
-    }
-    .error-message.visible {
-      display: block;
-    }
-    input.invalid {
-      border-color: var(--error-color);
-    }
+        /* Error Messages */
+        .error-message {
+            display: none;
+            font-size: 12px;
+            color: var(--error-color);
+            margin-top: 4px;
+        }
+        .error-message.visible { display: block; }
+        input.invalid { border-color: var(--error-color); }
 
-    /* Checkbox */
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .checkbox-group input {
-      margin-right: 8px;
-    }
-    .checkbox-group label {
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
-    body[dir="rtl"] .checkbox-group input {
-      margin-right: 0;
-      margin-left: 8px;
-    }
+        /* Checkbox */
+        .checkbox-group { display: flex; align-items: center; margin-bottom: 20px; }
+        .checkbox-group input { margin-right: 8px; }
+        .checkbox-group label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+        body[dir="rtl"] .checkbox-group input {
+            margin-right: 0;
+            margin-left: 8px;
+        }
 
-    /* Links & Buttons */
-    button[type="submit"] {
-      width: 100%;
-      padding: 12px;
-      background-color: var(--accent-primary);
-      color: var(--bg-secondary);
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      box-shadow: 0 2px 4px var(--shadow-primary);
-    }
-    button[type="submit"]:hover {
-      background-color: var(--accent-hover);
-    }
+        /* Links & Buttons */
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-primary);
+            color: var(--bg-secondary);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            box-shadow: 0 2px 4px var(--shadow-primary);
+        }
+        button[type="submit"]:hover { background-color: var(--accent-hover); }
 
-    /* Divider */
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 24px 0;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background-color: var(--divider);
-    }
-    .divider span {
-      padding: 0 12px;
-    }
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 24px 0;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--divider);
+        }
+        .divider span { padding: 0 12px; }
 
-    /* Social Login */
-    .social-login {
-      display: flex;
-      gap: 12px;
-    }
-    .social-btn {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid var(--social-border);
-      background: var(--social-bg);
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: var(--text-primary);
-      transition: all 0.2s ease;
-    }
-    .social-btn:hover {
-      background-color: var(--social-hover);
-      border-color: var(--social-hover-border);
-    }
+        /* Social Login */
+        .social-login { display: flex; gap: 12px; }
+        .social-btn {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--social-border);
+            background: var(--social-bg);
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+        .social-btn:hover {
+            background-color: var(--social-hover);
+            border-color: var(--social-hover-border);
+        }
 
-    /* Sign In Link */
-    .signin-link {
-      text-align: center;
-      margin-top: 24px;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-    .signin-link a {
-      color: var(--border-focus);
-      text-decoration: none;
-    }
-    .signin-link a:hover {
-      text-decoration: underline;
-    }
+        /* Sign In Link */
+        .signin-link { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); }
+        .signin-link a { color: var(--border-focus); text-decoration: none; }
+        .signin-link a:hover { text-decoration: underline; }
 
-    /* Persian Font & RTL */
-    body[dir="rtl"] {
-      font-family: 'Vazirmatn', sans-serif;
-    }
-    body[dir="rtl"] .form-container,
-    body[dir="rtl"] .divider,
-    body[dir="rtl"] .social-login,
-    body[dir="rtl"] .signin-link {
-      text-align: right;
-      direction: rtl;
-    }
-    body[dir="rtl"] .social-login {
-      flex-direction: row-reverse;
-    }
-    body[dir="rtl"] .toggle-password {
-      right: auto;
-      left: 16px;
-    }
-    body[dir="rtl"] input[type="text"],
-    body[dir="rtl"] input[type="email"],
-    body[dir="rtl"] input[type="password"] {
-      padding: 12px 16px 12px 40px;
-    }
+        footer {
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            box-shadow: 0 -2px 4px var(--shadow-primary);
+            padding: 5px 32px;
+            text-align: center;
+            width: 100%;
+        }
+        .footer-content { max-width: 1200px; margin: 0 auto; }
+        .footer-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+        .social-links { display: flex; justify-content: center; gap: 24px; }
+        .social-link img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.2s ease;
+        }
+        .social-link:hover img { transform: scale(1.1); }
+        
+        body[dir="rtl"] { font-family: 'Vazirmatn', sans-serif; }
+        body[dir="rtl"] nav,
+        body[dir="rtl"] .form-container,
+        body[dir="rtl"] .divider,
+        body[dir="rtl"] .social-login,
+        body[dir="rtl"] .signin-link,
+        body[dir="rtl"] footer {
+            text-align: right;
+            direction: rtl;
+        }
+        body[dir="rtl"] .social-login { flex-direction: row-reverse; }
+        body[dir="rtl"] .toggle-password { right: auto; left: 16px; }
+        body[dir="rtl"] input[type="text"],
+        body[dir="rtl"] input[type="email"],
+        body[dir="rtl"] input[type="password"] {
+            padding: 12px 16px 12px 40px;
+        }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 480px) {
-      .controls-container {
-        top: 16px;
-        right: 16px;
-      }
-      .form-container {
-        padding: 24px;
-        margin: 0 8px;
-      }
-      h1 {
-        font-size: 22px;
-        margin-bottom: 20px;
-      }
-      .form-group {
-        margin-bottom: 16px;
-      }
-      label {
-        font-size: 14px;
-      }
-      input[type="text"],
-      input[type="email"],
-      input[type="password"] {
-        padding: 12px 40px 12px 16px;
-        font-size: 16px;
-      }
-      button[type="submit"] {
-        padding: 12px;
-        font-size: 16px;
-      }
-      .social-login {
-        gap: 8px;
-      }
-      .social-btn {
-        padding: 12px;
-        font-size: 15px;
-      }
-      .divider {
-        margin: 20px 0;
-        font-size: 13px;
-      }
-      .signin-link {
-        font-size: 14px;
-        margin-top: 20px;
-      }
-    }
-  </style>
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 16px; }
+            .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
+            .content-container { max-width: 400px; }
+        }
+        @media (max-width: 480px) {
+            nav { padding: 16px; }
+            .logo { font-size: 20px; }
+            .nav-links a { font-size: 14px; }
+            .content-container { padding: 24px; }
+            h1 { font-size: 24px; }
+            p { font-size: 15px; }
+            .form-container { padding: 24px; margin: 0 8px; }
+            h1 { font-size: 22px; margin-bottom: 20px; }
+            .form-group { margin-bottom: 16px; }
+            label { font-size: 14px; }
+            input[type="text"], input[type="email"], input[type="password"] { padding: 12px 40px 12px 16px; font-size: 16px; }
+            button[type="submit"] { padding: 12px; font-size: 16px; }
+            .social-login { gap: 8px; }
+            .social-btn { padding: 12px; font-size: 15px; }
+            .divider { margin: 20px 0; font-size: 13px; }
+            .signin-link { font-size: 14px; margin-top: 20px; }
+        }
+    </style>
 </head>
 <body>
-  <div class="controls-container">
-    <div class="control-group">
-      <span class="theme-label" id="darkModeLabel">Dark Mode</span>
-    </div>
-    <label class="theme-toggle">
-      <input type="checkbox" id="darkModeToggle" aria-label="Toggle dark mode"/>
-      <span class="slider"></span>
-    </label>
-    <div class="control-group">
-      <span id="languageLabel">Language</span>
-      <select id="languageSelect" class="language-select" aria-label="Select language">
-        <option value="en" selected><span class="flag flag-en"></span> English</option>
-        <option value="fa"><span class="flag flag-fa"></span> فارسی</option>
-      </select>
-    </div>
-  </div>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="#" id="logo">Smartify24</a>
+            </div>
+            <div class="nav-links">
+                <a href="#" id="homeLink">Home</a>
+                <a href="#" id="aboutLink">About</a>
+                <a href="#" id="contactLink">Contact</a>
+                <a href="sign-in.html" id="signInLink">Sign in</a>
+                <a href="sign-up.html" id="signUpLink">Sign up</a>
+                <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
+                        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" viewBox="0 0 16 16">
+                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z"/>
+                    </svg>
+                </button>
+                <div class="language-select-wrapper" id="languageWrapper">
+                    <div class="language-dropdown-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h1v1.93h-1zm6.93-2.52c-.42 1.42-1.63 2.49-3.09 2.82V19h-1V6.16c3.16.78 5.61 3.53 5.61 6.84 0 1.25-.37 2.41-1.03 3.41zM11 4.07V5h1v-1.93c.96-.06 1.9-.06 2.8-.02l-6.84 3.39c-.11-.02-.23-.04-.34-.07C7.63 6.07 7 7.01 7 8.01c0 .4.07.79.2 1.16L4.21 11.2C4.08 10.62 4 10.01 4 9.38c0-2.85 1.66-5.32 4.07-6.53zM18.8 14.8C18.42 13.9 18 12.98 18 12c0-.5-.03-.99-.08-1.48l-5.74 5.74v-1.95c.57-.22 1.07-.5 1.5-.83l-2.67-2.67c-.24-.24-.39-.56-.39-.91 0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25c0 .35-.15.67-.39.91l-2.67 2.67c-.33-.43-.61-.93-.83-1.5L9.52 4.08C9.03 4.14 8.53 4.17 8.04 4.17c-1.12 0-2.18-.28-3.12-.76L16.09 3.01c2.09.52 3.73 2.22 3.91 4.34-.14.28-.27.57-.4.86L18.8 14.8z"/>
+                        </svg>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <a href="#" class="language-dropdown-item" data-lang="en">English</a>
+                        <a href="#" class="language-dropdown-item" data-lang="fa">فارسی</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-  <div class="form-container">
-    <h1 id="title">Create an account</h1>
-    <form id="signupForm" aria-labelledby="title">
-      <div class="form-group">
-        <label for="firstName" id="firstNameLabel">First name</label>
-        <input type="text" id="firstName" placeholder="John" aria-required="false" />
-      </div>
-      <div class="form-group">
-        <label for="lastName" id="lastNameLabel">Last name</label>
-        <input type="text" id="lastName" placeholder="Doe" aria-required="false" />
-      </div>
-      <div class="form-group">
-        <label for="emailUsername" id="emailUsernameLabel">Email / Username *</label>
-        <input type="text" id="emailUsername" placeholder="you@example.com or username" required aria-required="true" />
-        <span class="error-message" id="emailUsernameError"></span>
-      </div>
-      <div class="form-group">
-        <label for="password" id="passwordLabel">Password *</label>
-        <div class="password-wrapper">
-          <input type="password" id="password" placeholder="••••••••" required aria-required="true" />
-          <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
+    <main>
+        <div class="form-container">
+            <h1 id="title">Create an account</h1>
+            <form id="signupForm" aria-labelledby="title">
+                <div class="form-group">
+                    <label for="firstName" id="firstNameLabel">First name</label>
+                    <input type="text" id="firstName" placeholder="John" aria-required="false" />
+                </div>
+                <div class="form-group">
+                    <label for="lastName" id="lastNameLabel">Last name</label>
+                    <input type="text" id="lastName" placeholder="Doe" aria-required="false" />
+                </div>
+                <div class="form-group">
+                    <label for="emailUsername" id="emailUsernameLabel">Email / Username *</label>
+                    <input type="text" id="emailUsername" placeholder="you@example.com or username" required aria-required="true" />
+                    <span class="error-message" id="emailUsernameError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="password" id="passwordLabel">Password *</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" placeholder="••••••••" required aria-required="true" />
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Toggle password visibility">👁️</button>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword" id="confirmPasswordLabel">Confirm Password *</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="confirmPassword" placeholder="••••••••" required aria-required="true" />
+                        <button type="button" class="toggle-password" id="toggleConfirmPassword" aria-label="Toggle confirm password visibility">👁️</button>
+                    </div>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required aria-required="true" />
+                    <label for="terms" id="termsLabel">I agree to the terms and conditions</label>
+                </div>
+                <span class="error-message" id="termsError"></span>
+                <button type="submit" id="signUpButton">Sign up</button>
+            </form>
+
+            <div class="divider"><span id="orText">or continue with</span></div>
+
+            <div class="social-login">
+                <button class="social-btn" aria-label="Sign up with Google">Google</button>
+            </div>
+
+            <p class="signin-link" id="signinLink">
+                <span id="haveAccountText">Already have an account?</span> <a href="#" id="signInLink">Sign in</a>
+            </p>
         </div>
-        <span class="error-message" id="passwordError"></span>
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword" id="confirmPasswordLabel">Confirm Password *</label>
-        <div class="password-wrapper">
-          <input type="password" id="confirmPassword" placeholder="••••••••" required aria-required="true" />
-          <button type="button" class="toggle-password" id="toggleConfirmPassword" aria-label="Toggle confirm password visibility">👁️</button>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <h3 class="footer-title" id="contactTitle">Contact Us</h3>
+            <div class="social-links">
+                <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+                </a>
+                <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+                </a>
+            </div>
         </div>
-        <span class="error-message" id="confirmPasswordError"></span>
-      </div>
-      <div class="checkbox-group">
-        <input type="checkbox" id="terms" required aria-required="true" />
-        <label for="terms" id="termsLabel">I agree to the terms and conditions</label>
-      </div>
-      <span class="error-message" id="termsError"></span>
-      <button type="submit" id="signUpButton">Sign up</button>
-    </form>
+    </footer>
 
-    <div class="divider"><span id="orText">or continue with</span></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const langWrapper = document.getElementById('languageWrapper');
+            const langDropdown = document.getElementById('languageDropdown');
+            const langItems = document.querySelectorAll('.language-dropdown-item');
+            const signupForm = document.getElementById('signupForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const allNavLinks = document.querySelectorAll('.nav-links a');
+            const navLinks = {
+                homeLink: document.getElementById('homeLink'),
+                aboutLink: document.getElementById('aboutLink'),
+                contactLink: document.getElementById('contactLink'),
+                signInLink: document.getElementById('signInLink'),
+                signUpLink: document.getElementById('signUpLink')
+            };
+            const signUpButtonForm = document.getElementById('signUpButton');
+            const socialLoginGoogle = document.querySelector('.social-btn');
+            const footerSignInLink = document.querySelector('.signin-link a');
+            const controlsContainer = document.querySelector('.controls-container');
 
-    <div class="social-login">
-      <button class="social-btn" aria-label="Sign up with Google">Google</button>
-    </div>
+            // Toggle password visibility
+            togglePassword.addEventListener('click', () => {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
+            });
 
-    <p class="signin-link" id="signinLink">
-      <span id="haveAccountText">Already have an account?</span> <a href="#" id="signInLink">Sign in</a>
-    </p>
-  </div>
+            toggleConfirmPassword.addEventListener('click', () => {
+                const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPasswordInput.setAttribute('type', type);
+                toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
+            });
 
-  <script>
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    const languageSelect = document.getElementById('languageSelect');
-    const body = document.body;
-    const signupForm = document.getElementById('signupForm');
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
+            // Form validation
+            signupForm.addEventListener('submit', (e) => {
+                let valid = true;
 
-    // Toggle password visibility
-    togglePassword.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      togglePassword.textContent = type === 'password' ? '👁️' : '🙈';
-    });
+                document.querySelectorAll('.error-message').forEach(el => {
+                    el.classList.remove('visible');
+                    el.textContent = '';
+                });
+                document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
 
-    toggleConfirmPassword.addEventListener('click', () => {
-      const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      confirmPasswordInput.setAttribute('type', type);
-      toggleConfirmPassword.textContent = type === 'password' ? '👁️' : '🙈';
-    });
+                const emailUsername = document.getElementById('emailUsername').value.trim();
+                const emailUsernameError = document.getElementById('emailUsernameError');
+                if (!emailUsername) {
+                    valid = false;
+                    emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorRequired || 'Email or Username is required';
+                    emailUsernameError.classList.add('visible');
+                    document.getElementById('emailUsername').classList.add('invalid');
+                } else if (emailUsername.includes('@')) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(emailUsername)) {
+                        valid = false;
+                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidEmail || 'Invalid email format';
+                        emailUsernameError.classList.add('visible');
+                        document.getElementById('emailUsername').classList.add('invalid');
+                    }
+                } else {
+                    const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
+                    if (!usernameRegex.test(emailUsername)) {
+                        valid = false;
+                        emailUsernameError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].emailUsernameErrorInvalidUsername || 'Username must start with a letter';
+                        emailUsernameError.classList.add('visible');
+                        document.getElementById('emailUsername').classList.add('invalid');
+                    }
+                }
 
-    // Form validation
-    signupForm.addEventListener('submit', (e) => {
-      let valid = true;
+                const password = passwordInput.value;
+                const passwordError = document.getElementById('passwordError');
+                const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+                if (password.length < 4 || !alphanumericRegex.test(password)) {
+                    valid = false;
+                    passwordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].passwordError || 'Password must be at least 4 letters or numbers';
+                    passwordError.classList.add('visible');
+                    passwordInput.classList.add('invalid');
+                }
 
-      // Clear previous errors
-      document.querySelectorAll('.error-message').forEach(el => {
-        el.classList.remove('visible');
-        el.textContent = '';
-      });
-      document.querySelectorAll('input').forEach(el => el.classList.remove('invalid'));
+                const confirmPassword = confirmPasswordInput.value;
+                const confirmPasswordError = document.getElementById('confirmPasswordError');
+                if (confirmPassword !== password) {
+                    valid = false;
+                    confirmPasswordError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].confirmPasswordError || 'Passwords do not match';
+                    confirmPasswordError.classList.add('visible');
+                    confirmPasswordInput.classList.add('invalid');
+                }
 
-      // Email/Username validation
-      const emailUsername = document.getElementById('emailUsername').value.trim();
-      const emailUsernameError = document.getElementById('emailUsernameError');
-      if (!emailUsername) {
-        valid = false;
-        emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorRequired || 'Email or Username is required';
-        emailUsernameError.classList.add('visible');
-        document.getElementById('emailUsername').classList.add('invalid');
-      } else if (emailUsername.includes('@')) {
-        // Validate as email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailUsername)) {
-          valid = false;
-          emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorInvalidEmail || 'Invalid email format';
-          emailUsernameError.classList.add('visible');
-          document.getElementById('emailUsername').classList.add('invalid');
-        }
-      } else {
-        // Validate as username: starts with letter (a-z, A-Z, or Persian letters)
-        const usernameRegex = /^[a-zA-Z\u0600-\u06FF]/;
-        if (!usernameRegex.test(emailUsername)) {
-          valid = false;
-          emailUsernameError.textContent = texts[languageSelect.value].emailUsernameErrorInvalidUsername || 'Username must start with a letter';
-          emailUsernameError.classList.add('visible');
-          document.getElementById('emailUsername').classList.add('invalid');
-        }
-      }
+                const terms = document.getElementById('terms');
+                const termsError = document.getElementById('termsError');
+                if (!terms.checked) {
+                    valid = false;
+                    termsError.textContent = texts[body.getAttribute('dir') === 'rtl' ? 'fa' : 'en'].termsError || 'You must agree to the terms';
+                    termsError.classList.add('visible');
+                    terms.classList.add('invalid');
+                }
 
-      // Password validation
-      const password = passwordInput.value;
-      const passwordError = document.getElementById('passwordError');
-      const alphanumericRegex = /^[a-zA-Z0-9]+$/;
-      if (password.length < 4 || !alphanumericRegex.test(password)) {
-        valid = false;
-        passwordError.textContent = texts[languageSelect.value].passwordError || 'Password must be at least 4 letters or numbers';
-        passwordError.classList.add('visible');
-        passwordInput.classList.add('invalid');
-      }
+                if (!valid) {
+                    e.preventDefault();
+                }
+            });
 
-      // Confirm password
-      const confirmPassword = confirmPasswordInput.value;
-      const confirmPasswordError = document.getElementById('confirmPasswordError');
-      if (confirmPassword !== password) {
-        valid = false;
-        confirmPasswordError.textContent = texts[languageSelect.value].confirmPasswordError || 'Passwords do not match';
-        confirmPasswordError.classList.add('visible');
-        confirmPasswordInput.classList.add('invalid');
-      }
+            // Text mappings for languages
+            const texts = {
+                en: {
+                    logo: "Smartify24",
+                    homeLink: "Home",
+                    aboutLink: "About",
+                    contactLink: "Contact",
+                    signInLink: "Sign in",
+                    signUpLink: "Sign up",
+                    contactTitle: "Contact Us",
+                    title: "Create an account",
+                    firstNameLabel: "First name",
+                    lastNameLabel: "Last name",
+                    emailUsernameLabel: "Email / Username *",
+                    passwordLabel: "Password *",
+                    confirmPasswordLabel: "Confirm Password *",
+                    termsLabel: "I agree to the terms and conditions",
+                    signUpButton: "Sign up",
+                    orText: "or continue with",
+                    haveAccountText: "Already have an account?",
+                    signInLinkFooter: "Sign in",
+                    firstNamePlaceholder: "John",
+                    lastNamePlaceholder: "Doe",
+                    emailUsernamePlaceholder: "you@example.com or username",
+                    passwordPlaceholder: "••••••••",
+                    confirmPasswordPlaceholder: "••••••••",
+                    emailUsernameErrorRequired: "Email or Username is required",
+                    emailUsernameErrorInvalidEmail: "Invalid email format",
+                    emailUsernameErrorInvalidUsername: "Username must start with a letter",
+                    passwordError: "Password must be at least 4 letters or numbers",
+                    confirmPasswordError: "Passwords do not match",
+                    termsError: "You must agree to the terms"
+                },
+                fa: {
+                    logo: "Smartify24",
+                    homeLink: "خانه",
+                    aboutLink: "درباره",
+                    contactLink: "تماس",
+                    signInLink: "ورود",
+                    signUpLink: "ثبت‌نام",
+                    contactTitle: "تماس با ما",
+                    title: "ایجاد حساب کاربری",
+                    firstNameLabel: "نام",
+                    lastNameLabel: "نام خانوادگی",
+                    emailUsernameLabel: "ایمیل / نام کاربری *",
+                    passwordLabel: "رمز عبور *",
+                    confirmPasswordLabel: "تایید رمز عبور *",
+                    termsLabel: "با شرایط و قوانین موافقم",
+                    signUpButton: "ثبت‌نام",
+                    orText: "یا ادامه با",
+                    haveAccountText: "حساب کاربری دارید؟",
+                    signInLinkFooter: "ورود",
+                    firstNamePlaceholder: "علی",
+                    lastNamePlaceholder: "درباری",
+                    emailUsernamePlaceholder: "you@example.com یا نام کاربری",
+                    passwordPlaceholder: "••••••••",
+                    confirmPasswordPlaceholder: "••••••••",
+                    emailUsernameErrorRequired: "ایمیل یا نام کاربری الزامی است",
+                    emailUsernameErrorInvalidEmail: "فرمت ایمیل نامعتبر است",
+                    emailUsernameErrorInvalidUsername: "نام کاربری باید با حرف شروع شود",
+                    passwordError: "رمز عبور باید حداقل ۴ حرف یا عدد باشد",
+                    confirmPasswordError: "رمزهای عبور مطابقت ندارند",
+                    termsError: "باید با شرایط موافقت کنید"
+                }
+            };
+            
+            // Elements to update
+            const elements = {
+                logo: document.getElementById('logo'),
+                homeLink: document.getElementById('homeLink'),
+                aboutLink: document.getElementById('aboutLink'),
+                contactLink: document.getElementById('contactLink'),
+                signInLink: document.getElementById('signInLink'),
+                signUpLink: document.getElementById('signUpLink'),
+                contactTitle: document.getElementById('contactTitle'),
+                title: document.getElementById('title'),
+                firstNameLabel: document.getElementById('firstNameLabel'),
+                lastNameLabel: document.getElementById('lastNameLabel'),
+                emailUsernameLabel: document.getElementById('emailUsernameLabel'),
+                passwordLabel: document.getElementById('passwordLabel'),
+                confirmPasswordLabel: document.getElementById('confirmPasswordLabel'),
+                termsLabel: document.getElementById('termsLabel'),
+                signUpButton: document.getElementById('signUpButton'),
+                orText: document.getElementById('orText'),
+                haveAccountText: document.getElementById('haveAccountText'),
+                signInLinkFooter: document.getElementById('signInLink'),
+                firstNameInput: document.getElementById('firstName'),
+                lastNameInput: document.getElementById('lastName'),
+                emailUsernameInput: document.getElementById('emailUsername'),
+                passwordInput: document.getElementById('password'),
+                confirmPasswordInput: document.getElementById('confirmPassword')
+            };
 
-      // Terms checkbox
-      const terms = document.getElementById('terms');
-      const termsError = document.getElementById('termsError');
-      if (!terms.checked) {
-        valid = false;
-        termsError.textContent = texts[languageSelect.value].termsError || 'You must agree to the terms';
-        termsError.classList.add('visible');
-        terms.classList.add('invalid');
-      }
+            // Apply translations and styling
+            function applyLanguage(lang) {
+                Object.keys(texts[lang]).forEach(key => {
+                    const elementKey = key.replace('Placeholder', 'Input');
+                    if (key.endsWith('Placeholder') && elements[elementKey]) {
+                        elements[elementKey].placeholder = texts[lang][key];
+                    } else if (key === 'haveAccountText') {
+                        elements.haveAccountText.textContent = texts[lang][key];
+                    } else if (key === 'signInLinkFooter') {
+                        elements.signInLinkFooter.textContent = texts[lang][key];
+                    } else if (elements[key]) {
+                        elements[key].textContent = texts[lang][key];
+                    }
+                });
+                body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
+                document.documentElement.lang = lang;
+            }
 
-      if (!valid) {
-        e.preventDefault();
-      }
-    });
+            // Load saved preferences
+            const savedLang = localStorage.getItem('uiLanguage') || 'en';
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
-    // Text mappings including placeholders and additional labels
-    const texts = {
-      en: {
-        title: "Create an account",
-        firstNameLabel: "First name",
-        lastNameLabel: "Last name",
-        emailUsernameLabel: "Email / Username *",
-        passwordLabel: "Password *",
-        confirmPasswordLabel: "Confirm Password *",
-        termsLabel: "I agree to the terms and conditions",
-        signUpButton: "Sign up",
-        orText: "or continue with",
-        haveAccountText: "Already have an account?",
-        signInLink: "Sign in",
-        darkModeLabel: "Dark Mode",
-        languageLabel: "Language",
-        firstNamePlaceholder: "John",
-        lastNamePlaceholder: "Doe",
-        emailUsernamePlaceholder: "you@example.com or username",
-        passwordPlaceholder: "••••••••",
-        confirmPasswordPlaceholder: "••••••••",
-        emailUsernameErrorRequired: "Email or Username is required",
-        emailUsernameErrorInvalidEmail: "Invalid email format",
-        emailUsernameErrorInvalidUsername: "Username must start with a letter",
-        passwordError: "Password must be at least 4 letters or numbers",
-        confirmPasswordError: "Passwords do not match",
-        termsError: "You must agree to the terms"
-      },
-      fa: {
-        title: "ایجاد حساب کاربری",
-        firstNameLabel: "نام",
-        lastNameLabel: "نام خانوادگی",
-        emailUsernameLabel: "ایمیل / نام کاربری *",
-        passwordLabel: "رمز عبور *",
-        confirmPasswordLabel: "تایید رمز عبور *",
-        termsLabel: "با شرایط و قوانین موافقم",
-        signUpButton: "ثبت‌نام",
-        orText: "یا ادامه با",
-        haveAccountText: "حساب کاربری دارید؟",
-        signInLink: "ورود",
-        darkModeLabel: "حالت تاریک",
-        languageLabel: "زبان",
-        firstNamePlaceholder: "علی",
-        lastNamePlaceholder: "درباری",
-        emailUsernamePlaceholder: "you@example.com یا نام کاربری",
-        passwordPlaceholder: "••••••••",
-        confirmPasswordPlaceholder: "••••••••",
-        emailUsernameErrorRequired: "ایمیل یا نام کاربری الزامی است",
-        emailUsernameErrorInvalidEmail: "فرمت ایمیل نامعتبر است",
-        emailUsernameErrorInvalidUsername: "نام کاربری باید با حرف شروع شود",
-        passwordError: "رمز عبور باید حداقل ۴ حرف یا عدد باشد",
-        confirmPasswordError: "رمزهای عبور مطابقت ندارند",
-        termsError: "باید با شرایط موافقت کنید"
-      }
-    };
+            if (isDarkMode) body.classList.add('dark-mode');
+            applyLanguage(savedLang);
 
-    // Elements to update
-    const elements = {
-      title: document.getElementById('title'),
-      firstNameLabel: document.getElementById('firstNameLabel'),
-      lastNameLabel: document.getElementById('lastNameLabel'),
-      emailUsernameLabel: document.getElementById('emailUsernameLabel'),
-      passwordLabel: document.getElementById('passwordLabel'),
-      confirmPasswordLabel: document.getElementById('confirmPasswordLabel'),
-      termsLabel: document.getElementById('termsLabel'),
-      signUpButton: document.getElementById('signUpButton'),
-      orText: document.getElementById('orText'),
-      haveAccountText: document.getElementById('haveAccountText'),
-      signInLink: document.getElementById('signInLink'),
-      darkModeLabel: document.getElementById('darkModeLabel'),
-      languageLabel: document.getElementById('languageLabel'),
-      firstNameInput: document.getElementById('firstName'),
-      lastNameInput: document.getElementById('lastName'),
-      emailUsernameInput: document.getElementById('emailUsername'),
-      passwordInput: document.getElementById('password'),
-      confirmPasswordInput: document.getElementById('confirmPassword')
-    };
+            // Dark mode toggle
+            darkModeToggle.addEventListener('click', () => {
+                body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+            });
 
-    // Apply translations and styling
-    function applyLanguage(lang) {
-      Object.keys(texts[lang]).forEach(key => {
-        if (key.endsWith('Placeholder')) {
-          const inputKey = key.replace('Placeholder', 'Input');
-          if (elements[inputKey]) {
-            elements[inputKey].placeholder = texts[lang][key];
-          }
-        } else if (key === 'haveAccountText') {
-          elements.haveAccountText.textContent = texts[lang][key];
-        } else if (elements[key]) {
-          elements[key].textContent = texts[lang][key];
-        }
-      });
+            // Language dropdown
+            langWrapper.addEventListener('click', (event) => {
+                event.stopPropagation();
+                langDropdown.classList.toggle('active');
+            });
 
-      body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
-      document.documentElement.lang = lang;
-    }
+            langItems.forEach(item => {
+                item.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const selectedLang = item.getAttribute('data-lang');
+                    applyLanguage(selectedLang);
+                    localStorage.setItem('uiLanguage', selectedLang);
+                    langDropdown.classList.remove('active');
+                });
+            });
 
-    // Load saved preferences
-    const savedLang = localStorage.getItem('uiLanguage') || 'en';
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            document.addEventListener('click', (event) => {
+                if (!langWrapper.contains(event.target)) {
+                    langDropdown.classList.remove('active');
+                }
+            });
 
-    languageSelect.value = savedLang;
-    darkModeToggle.checked = isDarkMode;
-    if (isDarkMode) body.classList.add('dark-mode');
-
-    // Apply initial language
-    applyLanguage(savedLang);
-
-    // Language change handler
-    languageSelect.addEventListener('change', (e) => {
-      const selectedLang = e.target.value;
-      applyLanguage(selectedLang);
-      localStorage.setItem('uiLanguage', selectedLang);
-    });
-
-    // Dark mode toggle
-    darkModeToggle.addEventListener('change', () => {
-      body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', darkModeToggle.checked);
-    });
-  </script>
+            // Handle navigation links (prevent default behavior)
+            allNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    // This is to prevent the links from redirecting and demonstrate the fix.
+                    // In a real application, you'd remove this.
+                    e.preventDefault(); 
+                    console.log(`Mapsd to: ${e.target.id}`);
+                });
+            });
+            // Handle form buttons (for demonstration)
+            signUpButtonForm.addEventListener('click', (e) => {
+                // The form's submit event listener handles the primary logic,
+                // but this is a fallback for testing.
+                console.log('Form submit button clicked');
+            });
+            socialLoginGoogle.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Social login with Google clicked');
+            });
+            if (footerSignInLink) {
+                footerSignInLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Footer Sign In link clicked');
+                });
+            }
+        });
+    </script>
 </body>
 </html>
