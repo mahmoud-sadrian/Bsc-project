@@ -1,9 +1,7 @@
 <?php
-// فعال کردن error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// حل مشکل CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -13,20 +11,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-// Config
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'smartify24');
 
-// Start session با تنظیمات امنیتی
 session_start([
     'cookie_httponly' => true,
     'cookie_secure' => false,
     'use_strict_mode' => true
 ]);
 
-// تابع اتصال به دیتابیس
 function getDb() {
     static $db = null;
     if ($db === null) {
@@ -41,14 +36,12 @@ function getDb() {
     return $db;
 }
 
-// تابع ارسال پاسخ JSON
 function sendJson($data, $status = 200) {
     http_response_code($status);
     echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     exit;
 }
 
-// تابع احراز هویت
 function authenticate() {
     if (!isset($_SESSION['user_id'])) {
         sendJson(['error' => 'Authentication required. Please login first.'], 401);
@@ -56,7 +49,6 @@ function authenticate() {
     return $_SESSION['user_id'];
 }
 
-// تابع اعتبارسنجی دستگاه (بررسی مالکیت)
 function validateDeviceOwnership($deviceId, $userId) {
     $db = getDb();
     $stmt = $db->prepare("SELECT id FROM devices WHERE id = ? AND user_id = ?");
@@ -64,7 +56,6 @@ function validateDeviceOwnership($deviceId, $userId) {
     return $stmt->fetch() !== false;
 }
 
-// تابع لاگ فعالیت
 function logActivity($deviceId, $action) {
     try {
         $db = getDb();
@@ -75,15 +66,13 @@ function logActivity($deviceId, $action) {
     }
 }
 
-// دریافت داده‌های ورودی
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true) ?: [];
 $action = $_GET['action'] ?? '';
 $deviceId = $_GET['device_id'] ?? null;
 $subAction = $_GET['sub_action'] ?? '';
 
-// صفحه اصلی API
-if ($method === 'GET' && empty($action)) {
+=if ($method === 'GET' && empty($action)) {
     sendJson([
         'message' => 'Smartify24 API 🚀',
         'version' => '1.0',
@@ -106,7 +95,6 @@ if ($method === 'GET' && empty($action)) {
     ]);
 }
 
-// ثبت نام کاربر
 if ($method === 'POST' && $action === 'signup') {
     if (!isset($input['username'], $input['password'], $input['agreed_to_terms'])) {
         sendJson(['error' => 'Username, password, and terms agreement are required'], 400);
@@ -130,7 +118,6 @@ if ($method === 'POST' && $action === 'signup') {
     
     $db = getDb();
     try {
-        // بررسی وجود username
         $checkStmt = $db->prepare("SELECT id FROM users WHERE username = ?");
         $checkStmt->execute([$input['username']]);
         if ($checkStmt->fetch()) {
@@ -151,7 +138,6 @@ if ($method === 'POST' && $action === 'signup') {
     }
 }
 
-// ورود کاربر
 if ($method === 'POST' && $action === 'signin') {
     if (!isset($input['username'], $input['password'])) {
         sendJson(['error' => 'Username and password are required'], 400);
@@ -179,17 +165,14 @@ if ($method === 'POST' && $action === 'signin') {
     ]);
 }
 
-// خروج کاربر
 if ($method === 'POST' && $action === 'logout') {
     session_destroy();
     sendJson(['message' => 'Logout successful']);
 }
 
-// مدیریت دستگاه‌ها
 if ($action === 'devices') {
     $userId = authenticate();
     
-    // دریافت لیست دستگاه‌ها
     if ($method === 'GET' && empty($subAction)) {
         $db = getDb();
         $stmt = $db->prepare("SELECT * FROM devices WHERE user_id = ? ORDER BY name");
@@ -202,7 +185,6 @@ if ($action === 'devices') {
         ]);
     }
     
-    // کنترل دستگاه
     if ($method === 'POST' && $subAction === 'control' && $deviceId) {
         if (!isset($input['status']) || !in_array($input['status'], ['ON', 'OFF'])) {
             sendJson(['error' => 'Valid status (ON or OFF) is required'], 400);
@@ -225,7 +207,6 @@ if ($action === 'devices') {
         ]);
     }
     
-    // تنظیم تایمر
     if ($method === 'POST' && $subAction === 'timer' && $deviceId) {
         if (!isset($input['duration_minutes']) || !is_numeric($input['duration_minutes']) || $input['duration_minutes'] <= 0) {
             sendJson(['error' => 'Valid duration in minutes is required'], 400);
@@ -237,15 +218,12 @@ if ($action === 'devices') {
         
         $db = getDb();
         
-        // غیرفعال کردن تایمرهای قبلی
         $stmt = $db->prepare("UPDATE schedules SET active = 0 WHERE device_id = ? AND type = 'TIMER'");
         $stmt->execute([$deviceId]);
         
-        // ایجاد تایمر جدید
         $stmt = $db->prepare("INSERT INTO schedules (device_id, type, duration_minutes, active, created_at) VALUES (?, 'TIMER', ?, 1, NOW())");
         $stmt->execute([$deviceId, intval($input['duration_minutes'])]);
         
-        // روشن کردن دستگاه
         $stmt = $db->prepare("UPDATE devices SET status = 'ON', last_updated = NOW() WHERE id = ?");
         $stmt->execute([$deviceId]);
         
@@ -259,7 +237,6 @@ if ($action === 'devices') {
         ]);
     }
     
-    // دریافت لاگ‌های دستگاه
     if ($method === 'GET' && $subAction === 'logs' && $deviceId) {
         if (!validateDeviceOwnership($deviceId, $userId)) {
             sendJson(['error' => 'Device not found or access denied'], 404);
@@ -277,11 +254,9 @@ if ($action === 'devices') {
         ]);
     }
     
-    // دریافت وضعیت دستگاه
     if ($method === 'GET' && $subAction === 'status' && $deviceId) {
         $db = getDb();
         
-        // بررسی مالکیت (اختیاری برای ESP)
         $stmt = $db->prepare("SELECT status FROM devices WHERE id = ?");
         $stmt->execute([$deviceId]);
         $device = $stmt->fetch();
@@ -298,6 +273,5 @@ if ($action === 'devices') {
     }
 }
 
-// اگر action شناخته شده نبود
 sendJson(['error' => 'Invalid action or endpoint not found'], 404);
 ?>
