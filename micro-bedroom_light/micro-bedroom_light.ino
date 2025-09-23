@@ -14,9 +14,8 @@ const char* serverHost = "smartify24.ir";
 const String serverURL = "https://smartify24.ir/api.php";
 const int deviceId = 3;
 
-// User Credentials for ESP device (create a dedicated user in DB)
-const char* apiUsername = "esp_user";   
-const char* apiPassword = "secure_password_123";
+// API Key for authentication (generated on server)
+const char* apiKey = "t9taq56ccbp0fb31a4cg0wcpwg3zzqw7";
 
 // Hardware Configuration
 const int relayPin = D1;
@@ -34,8 +33,6 @@ unsigned long timerCheckInterval = 1000;
 int timerDuration = 0;
 unsigned long timerStartTime = 0;
 bool timerActive = false;
-bool isAuthenticated = false;
-String sessionCookie = "";
 
 // SSL Client
 WiFiClientSecure *client = nullptr;
@@ -45,7 +42,7 @@ void setup() {
   
   pinMode(relayPin, OUTPUT);
   pinMode(statusLed, OUTPUT);
-  digitalWrite(relayPin, HIGH); // Start OFF (LOW = ON if relay is active-low)
+  digitalWrite(relayPin, HIGH); // Start OFF
   digitalWrite(statusLed, LOW);
 
   // Connect to WiFi
@@ -74,97 +71,40 @@ void setup() {
     client->setInsecure(); // For Let's Encrypt SSL
   }
 
-  // First: Login and get session
-  if (login()) {
-    Serial.println("Login successful! Ready to sync.");
-    isAuthenticated = true;
-    syncDeviceStatus(); // Sync immediately after login
-  } else {
-    Serial.println("Login failed! Will retry later.");
-    blinkError(5);
-  }
+  // Sync immediately
+  syncDeviceStatus();
 }
 
 void loop() {
   timeClient.update();
   unsigned long currentMillis = millis();
 
-  // Re-login if session expired
-  if (!isAuthenticated && currentMillis % 300000UL == 0) { // Every 5 minutes try login
-    if (login()) {
-      isAuthenticated = true;
-      Serial.println("Re-authenticated successfully");
-    }
+  // Sync device status periodically
+  if (currentMillis - lastStatusCheck >= statusCheckInterval) {
+    syncDeviceStatus();
+    lastStatusCheck = currentMillis;
   }
 
-  // Only sync if authenticated
-  if (isAuthenticated) {
-    if (currentMillis - lastStatusCheck >= statusCheckInterval) {
-      if (!syncDeviceStatus()) {
-        isAuthenticated = false; // Session might be invalid
-        Serial.println("Session expired or error. Will re-login.");
-      }
-      lastStatusCheck = currentMillis;
-    }
+  // Handle timer
+  if (timerActive) {
+    handleTimer();
+  }
 
-    if (timerActive) {
-      handleTimer();
-    }
-
-    if (currentMillis - lastTimerCheck >= timerCheckInterval) {
-      checkTimer();
-      lastTimerCheck = currentMillis;
-    }
+  // Check timer every second
+  if (currentMillis - lastTimerCheck >= timerCheckInterval) {
+    checkTimer();
+    lastTimerCheck = currentMillis;
   }
 
   delay(100);
 }
 
-// --- Authentication ---
-bool login() {
-  if (WiFi.status() != WL_CONNECTED || client == nullptr) {
-    return false;
-  }
-
-  HTTPClient http;
-  String url = serverURL + "?action=signin";
-  http.begin(*client, url);
-  http.addHeader("Content-Type", "application/json");
-
-  DynamicJsonDocument doc(200);
-  doc["username"] = apiUsername;
-  doc["password"] = apiPassword;
-  String payload;
-  serializeJson(doc, payload);
-
-  int httpCode = http.POST(payload);
-
-  if (httpCode == HTTP_CODE_OK) {
-    // Extract session cookie from headers
-    String setCookie = http.header("Set-Cookie");
-    if (setCookie.length() > 0) {
-      int start = setCookie.indexOf("PHPSESSID=");
-      if (start != -1) {
-        int end = setCookie.indexOf(";", start);
-        sessionCookie = "PHPSESSID=" + setCookie.substring(start + 10, end == -1 ? setCookie.length() : end);
-        Serial.println("Session cookie stored: " + sessionCookie);
-        http.end();
-        return true;
-      }
-    }
-  }
-
-  Serial.print("Login failed. HTTP Code: ");
-  Serial.println(httpCode);
-  http.end();
-  return false;
-}
-
 // --- Sync Device Status ---
-bool syncDeviceStatus() {
-  if (WiFi.status() != WL_CONNECTED || client == nullptr || sessionCookie.isEmpty()) {
-    Serial.println("Cannot sync: not connected or no session");
-    return false;
+void syncDeviceStatus() {
+  if (WiFi.status() != WL_CONNECTED || client == nullptr) {
+    Serial.println("Cannot sync: WiFi not connected");
+    blinkError(5);
+    return;
   }
 
   HTTPClient http;
@@ -173,7 +113,7 @@ bool syncDeviceStatus() {
   Serial.println("Checking status from: " + url);
 
   http.begin(*client, url);
-  http.addHeader("Cookie", sessionCookie.c_str());
+  http.addHeader("Authorization", "Bearer " + String(apiKey));
 
   int httpCode = http.GET();
 
@@ -187,7 +127,7 @@ bool syncDeviceStatus() {
       Serial.print("Device status: ");
       Serial.println(status);
 
-      // Control relay (assuming LOW = ON)
+      // Control relay (LOW = ON if active-low)
       if (strcmp(status, "ON") == 0) {
         digitalWrite(relayPin, LOW);
       } else {
@@ -203,18 +143,11 @@ bool syncDeviceStatus() {
       digitalWrite(statusLed, LOW);
       delay(100);
       digitalWrite(statusLed, HIGH);
-      
-      http.end();
-      return true;
     } else {
       Serial.print("JSON parsing failed: ");
       Serial.println(error.c_str());
       blinkError(4);
     }
-  } else if (httpCode == 401) {
-    Serial.println("Unauthorized! Session likely expired.");
-    http.end();
-    return false;
   } else {
     Serial.print("HTTP Error: ");
     Serial.println(httpCode);
@@ -222,7 +155,6 @@ bool syncDeviceStatus() {
   }
 
   http.end();
-  return false;
 }
 
 // --- Handle Timer ---
@@ -249,15 +181,13 @@ void checkTimer() {
 
 // --- Update Device Status ---
 void updateDeviceStatus(String status, String action) {
-  if (WiFi.status() != WL_CONNECTED || client == nullptr || sessionCookie.isEmpty()) {
-    return;
-  }
+  if (WiFi.status() != WL_CONNECTED || client == nullptr) return;
 
   HTTPClient http;
   String url = serverURL + "?action=devices&sub_action=control&device_id=" + String(deviceId);
   http.begin(*client, url);
   http.addHeader("Content-Type", "application/json");
-  http.addHeader("Cookie", sessionCookie.c_str());
+  http.addHeader("Authorization", "Bearer " + String(apiKey));
 
   DynamicJsonDocument doc(256);
   doc["status"] = status;
@@ -297,25 +227,5 @@ void blinkError(int times) {
     delay(200);
     digitalWrite(statusLed, HIGH);
     delay(200);
-  }
-}
-
-// --- Manual Control (Optional) ---
-void manualControl(String command) {
-  if (command == "ON") {
-    digitalWrite(relayPin, LOW);
-    updateDeviceStatus("ON", "Manual ON");
-  } else if (command == "OFF") {
-    digitalWrite(relayPin, HIGH);
-    updateDeviceStatus("OFF", "Manual OFF");
-    if (timerActive) {
-      timerActive = false;
-      timerDuration = 0;
-    }
-  } else if (command.startsWith("TIMER:")) {
-    int minutes = command.substring(6).toInt();
-    if (minutes > 0) {
-      startTimer(minutes);
-    }
   }
 }
