@@ -13,12 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/../includes/config.php';
 
-// session_start([
-//     'cookie_httponly' => true,
-//     'cookie_secure' => false,
-//     'use_strict_mode' => true
-// ]);
-
 function getDb() {
     static $db = null;
     if ($db === null) {
@@ -39,16 +33,61 @@ function sendJson($data, $status = 200) {
     exit;
 }
 
-// Legacy session-based auth (commented out for now)
-// function authenticate() {
-//     if (!isset($_SESSION['user_id'])) {
-//         sendJson(['error' => 'Authentication required. Please login first.'], 401);
-//     }
-//     return $_SESSION['user_id'];
-// }
+// --- AUTHENTICATION FUNCTIONS ---
 
+/**
+ * Authenticate using Bearer API Key
+ * Supports Apache, Nginx, and CGI environments
+ */
+function authenticateApiKey() {
+    $authHeader = null;
+
+    // Method 1: Apache with mod_php (getallheaders)
+    if (function_exists('getallheaders')) {
+        $headers = getallheaders();
+        if (isset($headers['Authorization'])) {
+            $authHeader = $headers['Authorization'];
+        }
+    }
+
+    // Method 2: Nginx or FastCGI (HTTP_AUTHORIZATION)
+    if (!$authHeader && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+    }
+
+    // Method 3: Some PHP-CGI setups
+    if (!$authHeader && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+        $authHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+    }
+
+    // No Authorization header found
+    if (!$authHeader) {
+        sendJson(['error' => 'API Key required'], 401);
+    }
+
+    // Must start with "Bearer "
+    if (strpos($authHeader, 'Bearer ') !== 0) {
+        sendJson(['error' => 'Invalid Authorization header format'], 401);
+    }
+
+    $apiKey = substr($authHeader, 7); // Remove "Bearer "
+
+    $db = getDb();
+    $stmt = $db->prepare("SELECT id, username FROM users WHERE api_key = ?");
+    $stmt->execute([$apiKey]);
+    $user = $stmt->fetch();
+
+    if (!$user) {
+        sendJson(['error' => 'Invalid API Key'], 401);
+    }
+
+    return $user['id'];
+}
+
+/**
+ * Admin authentication: First authenticate via API key, then check role
+ */
 function authenticateAdmin() {
-    // First authenticate as regular user via API key
     $userId = authenticateApiKey();
     
     $db = getDb();
@@ -63,6 +102,9 @@ function authenticateAdmin() {
     return $userId;
 }
 
+/**
+ * Check if user owns the device
+ */
 function validateDeviceOwnership($deviceId, $userId) {
     $db = getDb();
     $stmt = $db->prepare("SELECT id FROM devices WHERE id = ? AND user_id = ?");
@@ -70,6 +112,9 @@ function validateDeviceOwnership($deviceId, $userId) {
     return $stmt->fetch() !== false;
 }
 
+/**
+ * Log device activity
+ */
 function logActivity($deviceId, $action) {
     try {
         $db = getDb();
@@ -80,31 +125,7 @@ function logActivity($deviceId, $action) {
     }
 }
 
-function authenticateApiKey() {
-    $headers = getallheaders();
-    
-    if (!isset($headers['Authorization'])) {
-        sendJson(['error' => 'API Key required'], 401);
-    }
-    
-    $authHeader = $headers['Authorization'];
-    if (strpos($authHeader, 'Bearer ') !== 0) {
-        sendJson(['error' => 'Invalid Authorization header format'], 401);
-    }
-    
-    $apiKey = substr($authHeader, 7); // Remove "Bearer "
-    
-    $db = getDb();
-    $stmt = $db->prepare("SELECT id, username FROM users WHERE api_key = ?");
-    $stmt->execute([$apiKey]);
-    $user = $stmt->fetch();
-    
-    if (!$user) {
-        sendJson(['error' => 'Invalid API Key'], 401);
-    }
-    
-    return $user['id'];
-}
+// --- MAIN REQUEST HANDLING ---
 
 $method = $_SERVER['REQUEST_METHOD'];
 $input = json_decode(file_get_contents('php://input'), true) ?: [];
@@ -112,6 +133,7 @@ $action = $_GET['action'] ?? '';
 $deviceId = $_GET['device_id'] ?? null;
 $subAction = $_GET['sub_action'] ?? '';
 
+// Root endpoint
 if ($method === 'GET' && empty($action)) {
     sendJson([
         'message' => 'Smartify24 API 🚀',
@@ -140,6 +162,7 @@ if ($method === 'GET' && empty($action)) {
     ]);
 }
 
+// User Registration
 if ($method === 'POST' && $action === 'signup') {
     if (!isset($input['username'], $input['password'], $input['agreed_to_terms'])) {
         sendJson(['error' => 'Username, password, and terms agreement are required'], 400);
@@ -183,6 +206,7 @@ if ($method === 'POST' && $action === 'signup') {
     }
 }
 
+// User Login (returns info but no session)
 if ($method === 'POST' && $action === 'signin') {
     if (!isset($input['username'], $input['password'])) {
         sendJson(['error' => 'Username and password are required'], 400);
@@ -197,11 +221,6 @@ if ($method === 'POST' && $action === 'signin') {
         sendJson(['error' => 'Invalid username or password'], 401);
     }
     
-    // Session based login disabled in favor of API key
-    // $_SESSION['user_id'] = $user['id'];
-    // $_SESSION['username'] = $user['username'];
-    // $_SESSION['login_time'] = time();
-    
     sendJson([
         'message' => 'Login successful',
         'userId' => $user['id'],
@@ -213,6 +232,7 @@ if ($method === 'POST' && $action === 'signin') {
     ]);
 }
 
+// Admin Login
 if ($method === 'POST' && $action === 'admin_signin') {
     if (!isset($input['username'], $input['password'])) {
         sendJson(['error' => 'Username and password are required'], 400);
@@ -231,12 +251,6 @@ if ($method === 'POST' && $action === 'admin_signin') {
         sendJson(['error' => 'Access denied. Admin privileges required.'], 403);
     }
     
-    // Session based admin login disabled
-    // $_SESSION['user_id'] = $user['id'];
-    // $_SESSION['username'] = $user['username'];
-    // $_SESSION['login_time'] = time();
-    // $_SESSION['is_admin'] = true;
-    
     sendJson([
         'message' => 'Admin login successful',
         'userId' => $user['id'],
@@ -246,15 +260,16 @@ if ($method === 'POST' && $action === 'admin_signin') {
     ]);
 }
 
+// Logout (stateless - no session to destroy)
 if ($method === 'POST' && $action === 'logout') {
-    // No session to destroy - using stateless API keys
     sendJson(['message' => 'Logout successful. API Key should be revoked on client side']);
 }
 
-// Main devices endpoint using API Key authentication
+// --- DEVICES ENDPOINT (Protected by API Key) ---
 if ($action === 'devices') {
     $userId = authenticateApiKey();
     
+    // Get user devices
     if ($method === 'GET' && empty($subAction)) {
         $db = getDb();
         $stmt = $db->prepare("SELECT * FROM devices WHERE user_id = ? ORDER BY name");
@@ -267,6 +282,7 @@ if ($action === 'devices') {
         ]);
     }
     
+    // Control device
     if ($method === 'POST' && $subAction === 'control' && $deviceId) {
         if (!isset($input['status']) || !in_array($input['status'], ['ON', 'OFF'])) {
             sendJson(['error' => 'Valid status (ON or OFF) is required'], 400);
@@ -289,6 +305,7 @@ if ($action === 'devices') {
         ]);
     }
     
+    // Set timer
     if ($method === 'POST' && $subAction === 'timer' && $deviceId) {
         if (!isset($input['duration_minutes']) || !is_numeric($input['duration_minutes']) || $input['duration_minutes'] <= 0) {
             sendJson(['error' => 'Valid duration in minutes is required'], 400);
@@ -319,6 +336,7 @@ if ($action === 'devices') {
         ]);
     }
     
+    // Get device logs
     if ($method === 'GET' && $subAction === 'logs' && $deviceId) {
         if (!validateDeviceOwnership($deviceId, $userId)) {
             sendJson(['error' => 'Device not found or access denied'], 404);
@@ -336,6 +354,7 @@ if ($action === 'devices') {
         ]);
     }
     
+    // Get device status
     if ($method === 'GET' && $subAction === 'status' && $deviceId) {
         $db = getDb();
         
@@ -355,7 +374,7 @@ if ($action === 'devices') {
     }
 }
 
-// Admin endpoints with API key + role check
+// Admin: Get all users
 if ($action === 'users') {
     authenticateAdmin();
     
@@ -370,6 +389,7 @@ if ($action === 'users') {
     ]);
 }
 
+// Admin: Get all logs
 if ($action === 'logs') {
     authenticateAdmin();
     
@@ -384,5 +404,6 @@ if ($action === 'logs') {
     ]);
 }
 
+// Invalid endpoint
 sendJson(['error' => 'Invalid action or endpoint not found'], 404);
 ?>
