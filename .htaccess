@@ -1,0 +1,32 @@
+Options -Indexes
+
+<FilesMatch "\.(env|config|ini|conf|php\.bak|sql|log|htaccess|git|svn)$">
+    Require all denied
+</FilesMatch>
+
+<Files "config.php">
+    Require all denied
+</Files>
+
+<Files "config.example.php">
+    Require all denied
+</Files>
+
+<Files ~ "^\.">
+    Require all denied
+</Files>
+
+<FilesMatch "\.(sql|sql\.gz|tar\.gz|zip|backup)$">
+    Require all denied
+</FilesMatch>
+
+AddDefaultCharset UTF-8
+
+<Directory "uploads">
+    php_flag engine off
+</Directory>
+
+<IfModule mod_php.c>
+    php_flag allow_url_fopen off
+    php_flag allow_url_include off
+</IfModule>
