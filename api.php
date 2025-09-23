@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 require_once __DIR__ . '/../includes/config.php';
 
-session_start([
-    'cookie_httponly' => true,
-    'cookie_secure' => false,
-    'use_strict_mode' => true
-]);
+// session_start([
+//     'cookie_httponly' => true,
+//     'cookie_secure' => false,
+//     'use_strict_mode' => true
+// ]);
 
 function getDb() {
     static $db = null;
@@ -39,28 +39,28 @@ function sendJson($data, $status = 200) {
     exit;
 }
 
-function authenticate() {
-    if (!isset($_SESSION['user_id'])) {
-        sendJson(['error' => 'Authentication required. Please login first.'], 401);
-    }
-    return $_SESSION['user_id'];
-}
+// Legacy session-based auth (commented out for now)
+// function authenticate() {
+//     if (!isset($_SESSION['user_id'])) {
+//         sendJson(['error' => 'Authentication required. Please login first.'], 401);
+//     }
+//     return $_SESSION['user_id'];
+// }
 
 function authenticateAdmin() {
-    if (!isset($_SESSION['user_id'])) {
-        sendJson(['error' => 'Authentication required. Please login first.'], 401);
-    }
+    // First authenticate as regular user via API key
+    $userId = authenticateApiKey();
     
     $db = getDb();
     $stmt = $db->prepare("SELECT role FROM users WHERE id = ?");
-    $stmt->execute([$_SESSION['user_id']]);
+    $stmt->execute([$userId]);
     $user = $stmt->fetch();
     
     if (!$user || $user['role'] !== 'admin') {
         sendJson(['error' => 'Access denied. Admin privileges required.'], 403);
     }
     
-    return $_SESSION['user_id'];
+    return $userId;
 }
 
 function validateDeviceOwnership($deviceId, $userId) {
@@ -78,6 +78,32 @@ function logActivity($deviceId, $action) {
     } catch (PDOException $e) {
         error_log("Activity log error: " . $e->getMessage());
     }
+}
+
+function authenticateApiKey() {
+    $headers = getallheaders();
+    
+    if (!isset($headers['Authorization'])) {
+        sendJson(['error' => 'API Key required'], 401);
+    }
+    
+    $authHeader = $headers['Authorization'];
+    if (strpos($authHeader, 'Bearer ') !== 0) {
+        sendJson(['error' => 'Invalid Authorization header format'], 401);
+    }
+    
+    $apiKey = substr($authHeader, 7); // Remove "Bearer "
+    
+    $db = getDb();
+    $stmt = $db->prepare("SELECT id, username FROM users WHERE api_key = ?");
+    $stmt->execute([$apiKey]);
+    $user = $stmt->fetch();
+    
+    if (!$user) {
+        sendJson(['error' => 'Invalid API Key'], 401);
+    }
+    
+    return $user['id'];
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -171,9 +197,10 @@ if ($method === 'POST' && $action === 'signin') {
         sendJson(['error' => 'Invalid username or password'], 401);
     }
     
-    $_SESSION['user_id'] = $user['id'];
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['login_time'] = time();
+    // Session based login disabled in favor of API key
+    // $_SESSION['user_id'] = $user['id'];
+    // $_SESSION['username'] = $user['username'];
+    // $_SESSION['login_time'] = time();
     
     sendJson([
         'message' => 'Login successful',
@@ -181,7 +208,8 @@ if ($method === 'POST' && $action === 'signin') {
         'username' => $user['username'],
         'firstName' => $user['first_name'],
         'lastName' => $user['last_name'],
-        'role' => $user['role'] ?? 'user'
+        'role' => $user['role'] ?? 'user',
+        'note' => 'API Key authentication is now required for future requests'
     ]);
 }
 
@@ -203,26 +231,29 @@ if ($method === 'POST' && $action === 'admin_signin') {
         sendJson(['error' => 'Access denied. Admin privileges required.'], 403);
     }
     
-    $_SESSION['user_id'] = $user['id'];
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['login_time'] = time();
-    $_SESSION['is_admin'] = true;
+    // Session based admin login disabled
+    // $_SESSION['user_id'] = $user['id'];
+    // $_SESSION['username'] = $user['username'];
+    // $_SESSION['login_time'] = time();
+    // $_SESSION['is_admin'] = true;
     
     sendJson([
         'message' => 'Admin login successful',
         'userId' => $user['id'],
         'username' => $user['username'],
-        'role' => 'admin'
+        'role' => 'admin',
+        'note' => 'Use API Key for authenticated requests'
     ]);
 }
 
 if ($method === 'POST' && $action === 'logout') {
-    session_destroy();
-    sendJson(['message' => 'Logout successful']);
+    // No session to destroy - using stateless API keys
+    sendJson(['message' => 'Logout successful. API Key should be revoked on client side']);
 }
 
+// Main devices endpoint using API Key authentication
 if ($action === 'devices') {
-    $userId = authenticate();
+    $userId = authenticateApiKey();
     
     if ($method === 'GET' && empty($subAction)) {
         $db = getDb();
@@ -324,6 +355,7 @@ if ($action === 'devices') {
     }
 }
 
+// Admin endpoints with API key + role check
 if ($action === 'users') {
     authenticateAdmin();
     
