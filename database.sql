@@ -5,7 +5,8 @@ CREATE TABLE users (
   username VARCHAR(255) UNIQUE NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
   agreed_to_terms TINYINT(1) DEFAULT 0,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  role ENUM('user', 'admin') DEFAULT 'user'
 );
 
 CREATE TABLE devices (
@@ -14,8 +15,7 @@ CREATE TABLE devices (
   name VARCHAR(255) NOT NULL,
   status ENUM('ON', 'OFF') DEFAULT 'OFF',
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  role ENUM('user', 'admin') DEFAULT 'user'
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE schedules (
