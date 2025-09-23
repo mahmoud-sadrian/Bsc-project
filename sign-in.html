@@ -609,11 +609,11 @@
     <div class="footer-content">
       <h3 class="footer-title" id="contactTitle">Contact Us</h3>
       <div class="social-links">
-        <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+        <a href="  https://github.com/mahmoud-sadrian  " class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png  " alt="GitHub" width="32" height="32">
         </a>
-        <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+        <a href="https://www.linkedin.com/in/mahmood-sadriyan/  " class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png  " alt="LinkedIn" width="32" height="32">
         </a>
       </div>
     </div>
@@ -657,7 +657,8 @@
           loginSuccess: "Login successful! Redirecting...",
           loginFailed: "Login failed",
           networkError: "Network error",
-          invalidCredentials: "Invalid username or password"
+          invalidCredentials: "Invalid username or password",
+          redirectingAdmin: "Admin detected! Redirecting to admin dashboard..."
         },
         fa: {
           logo: "Smartify24",
@@ -683,7 +684,8 @@
           loginSuccess: "ورود موفقیت‌آمیز بود! در حال انتقال...",
           loginFailed: "خطا در ورود",
           networkError: "خطا در ارتباط با سرور",
-          invalidCredentials: "نام کاربری یا رمز عبور نامعتبر است"
+          invalidCredentials: "نام کاربری یا رمز عبور نامعتبر است",
+          redirectingAdmin: "کاربر ادمین شناسایی شد! در حال انتقال به پنل مدیریت..."
         }
       };
 
@@ -842,13 +844,22 @@
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('loginTime', new Date().getTime());
             
-            showMessage(texts[currentLang].loginSuccess, 'success');
-            
-            console.log('انجام ریدایرکت به داشبورد...');
-            
-            setTimeout(() => {
-              window.location.href = 'dashboard.html';
-            }, 1000);
+            // بررسی نقش کاربر
+            if (data.role === 'admin') {
+              localStorage.setItem('isAdmin', 'true');
+              showMessage(texts[currentLang].redirectingAdmin, 'success');
+              
+              setTimeout(() => {
+                window.location.href = 'admin_dashboard.html';
+              }, 1500);
+            } else {
+              localStorage.setItem('isAdmin', 'false');
+              showMessage(texts[currentLang].loginSuccess, 'success');
+              
+              setTimeout(() => {
+                window.location.href = 'dashboard.html';
+              }, 1000);
+            }
             
           } else {
             const errorMessage = data.error || texts[currentLang].invalidCredentials;
