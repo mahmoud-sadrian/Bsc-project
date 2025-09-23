@@ -690,6 +690,7 @@
             let currentDevice = null;
             let devices = [];
             let isLoggedIn = false;
+            let pollingInterval = null;
             
             // Initialize authentication state
             function initAuthState() {
@@ -725,6 +726,12 @@
                 isLoggedIn = false;
                 
                 showStatus(texts[currentLang].signedOut, 'success');
+                
+                // Clear any existing polling
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                    pollingInterval = null;
+                }
                 
                 // Redirect to sign in page after a short delay
                 setTimeout(() => {
@@ -969,6 +976,61 @@
                 
                 // Clear logs
                 logList.innerHTML = `<li class="log-item">${texts[currentLang].selectDeviceLogs}</li>`;
+                
+                // Start polling for device status updates
+                startPolling();
+            }
+            
+            // Start polling for device status
+            function startPolling() {
+                // Clear any existing polling
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                }
+                
+                // Poll every 3 seconds
+                pollingInterval = setInterval(async () => {
+                    if (!currentDevice) return;
+                    
+                    const apiKey = localStorage.getItem('api_key');
+                    if (!apiKey) return;
+                    
+                    try {
+                        const response = await fetch(`api.php?action=devices&sub_action=status&device_id=${currentDevice.id}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': 'Bearer ' + apiKey
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.status && currentDevice.status !== data.status) {
+                                currentDevice.status = data.status;
+                                updateDeviceStatus(data.status === 'ON');
+                                
+                                // Update device item in list
+                                const deviceItem = document.querySelector(`[data-device-id="${currentDevice.id}"]`);
+                                if (deviceItem) {
+                                    deviceItem.querySelector('small').textContent = 
+                                        `ID: ${currentDevice.id} | Status: ${currentDevice.status}`;
+                                }
+                                
+                                console.log(`Device status updated from server: ${data.status}`);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error polling device status:', error);
+                    }
+                }, 3000);
+            }
+            
+            // Stop polling
+            function stopPolling() {
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                    pollingInterval = null;
+                }
             }
             
             // Update device status display
@@ -1009,6 +1071,7 @@
                     });
                     
                     if (response.ok) {
+                        // Immediately update UI
                         currentDevice.status = newStatus;
                         updateDeviceStatus(newStatus === 'ON');
                         showStatus(texts[currentLang].deviceUpdated, 'success');
@@ -1019,12 +1082,53 @@
                             deviceItem.querySelector('small').textContent = 
                                 `ID: ${currentDevice.id} | Status: ${currentDevice.status}`;
                         }
+                        
+                        console.log(`Successfully sent command to ${newStatus.toLowerCase()} device ${currentDevice.id}`);
                     } else {
-                        throw new Error('Failed to update device');
+                        const errorData = await response.json().catch(() => ({}));
+                        console.error('Server response:', response.status, errorData);
+                        throw new Error(`Failed to update device: ${response.status}`);
                     }
                 } catch (error) {
                     console.error('Error toggling device:', error);
                     showStatus(texts[currentLang].error, 'error');
+                    
+                    // Try to refresh the status from server
+                    refreshDeviceStatus();
+                }
+            }
+            
+            // Refresh device status from server
+            async function refreshDeviceStatus() {
+                if (!currentDevice) return;
+                
+                const apiKey = localStorage.getItem('api_key');
+                if (!apiKey) return;
+                
+                try {
+                    const response = await fetch(`api.php?action=devices&sub_action=status&device_id=${currentDevice.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + apiKey
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.status) {
+                            currentDevice.status = data.status;
+                            updateDeviceStatus(data.status === 'ON');
+                            
+                            // Update device item in list
+                            const deviceItem = document.querySelector(`[data-device-id="${currentDevice.id}"]`);
+                            if (deviceItem) {
+                                deviceItem.querySelector('small').textContent = 
+                                    `ID: ${currentDevice.id} | Status: ${currentDevice.status}`;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error refreshing device status:', error);
                 }
             }
             
@@ -1099,6 +1203,13 @@
                     </li>
                 `).join('');
             }
+            
+            // Cleanup on page unload
+            window.addEventListener('beforeunload', function() {
+                if (pollingInterval) {
+                    clearInterval(pollingInterval);
+                }
+            });
             
             // Initialize dark mode
             const isDarkMode = localStorage.getItem('darkMode') === 'true';
