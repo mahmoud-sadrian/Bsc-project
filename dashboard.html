@@ -4,10 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-
     <style>
         :root {
             --bg-primary: #f9fafb;
@@ -29,7 +27,6 @@
             --error-color: #ef4444;
             --success-color: #16a34a;
         }
-
         body.dark-mode {
             --bg-primary: #111827;
             --bg-secondary: #1f2937;
@@ -50,14 +47,12 @@
             --error-color: #f87171;
             --success-color: #4ade80;
         }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-primary);
@@ -66,12 +61,10 @@
             display: flex;
             flex-direction: column;
         }
-
         body.dark-mode .sun-icon { display: none; }
         body.dark-mode .moon-icon { display: block; }
         .sun-icon { display: block; }
         .moon-icon { display: none; }
-
         header {
             background: var(--bg-secondary);
             box-shadow: 0 2px 4px var(--shadow-primary);
@@ -79,7 +72,6 @@
             top: 0;
             z-index: 100;
         }
-
         nav {
             max-width: 1200px;
             margin: 0 auto;
@@ -88,24 +80,20 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .logo {
             font-size: 24px;
             font-weight: 600;
             color: var(--text-primary);
         }
-
         .logo a { 
             text-decoration: none; 
             color: inherit; 
         }
-
         .nav-links {
             display: flex;
             align-items: center;
             gap: 24px;
         }
-
         .nav-links a {
             text-decoration: none;
             color: var(--text-muted);
@@ -113,52 +101,43 @@
             font-weight: 500;
             transition: color 0.2s ease;
         }
-
         .nav-links a:hover { 
             color: var(--border-focus); 
         }
-
         .nav-control {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-
         .nav-icon {
             width: 24px;
             height: 24px;
             fill: var(--text-muted);
             transition: fill 0.2s ease;
         }
-
         .nav-icon:hover { 
             fill: var(--border-focus); 
         }
-
         .theme-toggle {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
         }
-
         .language-select-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
-
         .language-dropdown-icon {
             cursor: pointer;
             padding: 4px;
             border-radius: 8px;
             transition: background-color 0.2s ease;
         }
-
         .language-dropdown-icon:hover {
             background-color: var(--social-hover);
         }
-
         .language-dropdown {
             position: absolute;
             top: 100%;
@@ -176,13 +155,11 @@
             transform: translateY(10px);
             transition: all 0.2s ease;
         }
-
         .language-dropdown.active {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-
         .language-dropdown-item {
             display: block;
             padding: 8px 16px;
@@ -192,11 +169,9 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
-
         .language-dropdown-item:hover {
             background-color: var(--social-hover);
         }
-
         /* Dashboard Styles */
         .dashboard-wrapper {
             flex: 1;
@@ -209,7 +184,6 @@
             margin: 0 auto;
             width: 100%;
         }
-
         .sidebar {
             background-color: var(--bg-secondary);
             border-radius: 16px;
@@ -218,19 +192,16 @@
             box-shadow: 0 10px 25px var(--shadow-primary);
             height: fit-content;
         }
-
         .sidebar h2 {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 24px;
         }
-
         .devices-list {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .device-item {
             background-color: var(--bg-primary);
             border-radius: 8px;
@@ -239,27 +210,22 @@
             transition: all 0.2s ease;
             border: 1px solid var(--divider);
         }
-
         .device-item:hover {
             background-color: var(--social-hover);
             border-color: var(--border-primary);
         }
-
         .device-item.active {
             border-color: var(--border-focus);
             background-color: var(--shadow-focus);
         }
-
         .device-item strong {
             display: block;
             margin-bottom: 4px;
         }
-
         .device-item small {
             color: var(--text-muted);
             font-size: 12px;
         }
-
         .main-dashboard {
             flex: 1;
             display: none;
@@ -267,21 +233,18 @@
             gap: 24px;
             min-width: 0;
         }
-
         .device-card {
             background-color: var(--bg-secondary);
             border-radius: 16px;
             padding: 32px;
             box-shadow: 0 10px 25px var(--shadow-primary);
         }
-
         .device-card h2 {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 24px;
             text-align: center;
         }
-
         .device-status {
             margin-bottom: 32px;
             display: flex;
@@ -289,24 +252,20 @@
             align-items: center;
             gap: 16px;
         }
-
         .light-bulb {
             font-size: 80px;
             transition: all 0.3s ease;
             color: #888;
         }
-
         .light-bulb.on {
             color: #ffcc00;
             filter: drop-shadow(0 0 20px #ffcc00);
         }
-
         .device-status p {
             font-size: 18px;
             font-weight: 500;
             color: var(--text-secondary);
         }
-
         .toggle-btn {
             width: 200px;
             padding: 12px;
@@ -318,54 +277,44 @@
             transition: background 0.2s ease;
             color: white;
         }
-
         .toggle-btn.on { 
             background-color: var(--success-color); 
         }
-
         .toggle-btn.on:hover { 
             background-color: #15803d; 
         }
-
         .toggle-btn.off { 
             background-color: var(--error-color); 
         }
-
         .toggle-btn.off:hover { 
             background-color: #dc2626; 
         }
-
         .controls {
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
-
         .control-group {
             background-color: var(--bg-primary);
             border-radius: 12px;
             padding: 20px;
             border: 1px solid var(--divider);
         }
-
         .control-group h3 {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
         }
-
         .control-group p {
             font-size: 14px;
             color: var(--text-muted);
             margin-bottom: 16px;
         }
-
         .control-row {
             display: flex;
             gap: 12px;
             align-items: center;
         }
-
         .control-row input {
             flex: 1;
             padding: 10px;
@@ -376,12 +325,10 @@
             color: var(--text-primary);
             outline: none;
         }
-
         .control-row input:focus {
             border-color: var(--border-focus);
             box-shadow: 0 0 0 3px var(--shadow-focus);
         }
-
         .control-row button {
             padding: 10px 20px;
             background-color: var(--accent-primary);
@@ -394,24 +341,20 @@
             transition: background 0.2s ease;
             white-space: nowrap;
         }
-
         .control-row button:hover {
             background-color: var(--accent-hover);
         }
-
         .log-card {
             background-color: var(--bg-secondary);
             border-radius: 16px;
             padding: 24px;
             box-shadow: 0 10px 25px var(--shadow-primary);
         }
-
         .log-card h2 {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 16px;
         }
-
         .log-list {
             list-style: none;
             padding: 0;
@@ -422,7 +365,6 @@
             border-radius: 8px;
             padding: 12px;
         }
-
         .log-item {
             padding: 8px 0;
             border-bottom: 1px solid var(--divider);
@@ -430,11 +372,9 @@
             color: var(--text-secondary);
             line-height: 1.4;
         }
-
         .log-item:last-child {
             border-bottom: none;
         }
-
         .connection-status {
             margin-top: 12px;
             font-size: 14px;
@@ -442,17 +382,14 @@
             padding: 8px;
             border-radius: 6px;
         }
-
         .status-success {
             background-color: var(--success-color);
             color: white;
         }
-
         .status-error {
             background-color: var(--error-color);
             color: white;
         }
-
         footer {
             background: var(--bg-secondary);
             box-shadow: 0 -2px 4px var(--shadow-primary);
@@ -460,56 +397,46 @@
             text-align: center;
             margin-top: auto;
         }
-
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
         }
-
         .footer-title {
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 16px;
             color: var(--text-secondary);
         }
-
         .social-links {
             display: flex;
             justify-content: center;
             gap: 24px;
         }
-
         .social-link img {
             width: 32px;
             height: 32px;
             transition: transform 0.2s ease;
         }
-
         .social-link:hover img {
             transform: scale(1.1);
         }
-
         /* RTL Support */
         body[dir="rtl"] { 
             font-family: 'Vazirmatn', sans-serif; 
         }
-
         body[dir="rtl"] .nav-links,
         body[dir="rtl"] .sidebar,
         body[dir="rtl"] .device-card,
         body[dir="rtl"] .log-card {
             text-align: right;
         }
-
         body[dir="rtl"] .language-dropdown {
             left: auto;
             right: 0;
         }
-
         body[dir="rtl"] .control-row {
             flex-direction: row-reverse;
         }
-
         /* Responsive Design */
         @media (max-width: 768px) {
             .dashboard-wrapper {
@@ -517,46 +444,37 @@
                 padding: 16px;
                 gap: 16px;
             }
-
             .sidebar {
                 width: 100%;
             }
-
             .main-dashboard {
                 width: 100%;
             }
-
             nav {
                 flex-direction: column;
                 gap: 16px;
                 padding: 16px;
             }
-
             .nav-links {
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 16px;
             }
-
             .control-row {
                 flex-direction: column;
             }
-
             .control-row button {
                 width: 100%;
             }
         }
-
         @media (max-width: 480px) {
             .device-card,
             .log-card {
                 padding: 20px;
             }
-
             .light-bulb {
                 font-size: 60px;
             }
-
             .toggle-btn {
                 width: 100%;
             }
@@ -574,8 +492,9 @@
                 <a href="about.html" id="aboutLink">About</a>
                 <a href="contact.html" id="contactLink">Contact</a>
                 <a href="dashboard.html" id="dashboardLink">Dashboard</a>
-                <a href="sign-in.html" id="signInLink">Sign in</a>
-                <a href="sign-up.html" id="signUpLink">Sign up</a>
+                <div id="authLinksContainer">
+                    <!-- Authentication links will be added here dynamically -->
+                </div>
                 <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
                         <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
@@ -598,7 +517,6 @@
             </div>
         </nav>
     </header>
-
     <div class="dashboard-wrapper">
         <div class="sidebar">
             <h2 id="sidebarTitle">Your Devices</h2>
@@ -607,7 +525,6 @@
             </div>
             <div id="connectionStatus" class="connection-status" style="display: none;"></div>
         </div>
-
         <div class="main-dashboard" id="mainDashboard">
             <div class="device-card">
                 <h2 id="deviceName">Select a Device</h2>
@@ -616,7 +533,6 @@
                     <p id="deviceStatusText">Please select a device from the list</p>
                     <button id="toggleBtn" class="toggle-btn off" style="display: none;">Turn ON</button>
                 </div>
-
                 <div class="controls">
                     <div class="control-group">
                         <h3 id="timerControlTitle">Set Timer</h3>
@@ -626,7 +542,6 @@
                             <button id="setTimerBtn">Set Timer</button>
                         </div>
                     </div>
-
                     <div class="control-group">
                         <h3 id="scheduleControlTitle">Device Logs</h3>
                         <p id="scheduleControlDesc">View recent activity logs for this device</p>
@@ -636,7 +551,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="log-card">
                 <h2 id="logTitle">Activity Log</h2>
                 <ul id="logList" class="log-list">
@@ -645,7 +559,6 @@
             </div>
         </div>
     </div>
-
     <footer>
         <div class="footer-content">
             <h3 class="footer-title" id="contactTitle">Contact Us</h3>
@@ -659,7 +572,6 @@
             </div>
         </div>
     </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Elements
@@ -679,7 +591,8 @@
             const getLogsBtn = document.getElementById('getLogsBtn');
             const logList = document.getElementById('logList');
             const connectionStatus = document.getElementById('connectionStatus');
-
+            const authLinksContainer = document.getElementById('authLinksContainer');
+            
             // Texts
             const texts = {
                 en: {
@@ -690,19 +603,17 @@
                     dashboardLink: "Dashboard",
                     signInLink: "Sign in",
                     signUpLink: "Sign up",
-                    
+                    signOutLink: "Sign out",
                     // Sidebar
                     sidebarTitle: "Your Devices",
                     noDevices: "No devices found",
                     loadingDevices: "Loading devices...",
-                    
                     // Device Card
                     selectDevice: "Select a Device",
                     deviceStatusOff: "Status: OFF",
                     deviceStatusOn: "Status: ON",
                     turnOn: "Turn ON",
                     turnOff: "Turn OFF",
-                    
                     // Controls
                     timerTitle: "Set Timer",
                     timerDesc: "Set a timer to automatically turn off the device",
@@ -711,19 +622,17 @@
                     logsTitle: "Device Logs",
                     logsDesc: "View recent activity logs for this device",
                     getLogs: "Get Logs",
-                    
                     // Logs
                     logTitle: "Activity Log",
                     noLogs: "No activity logs found",
                     selectDeviceLogs: "Select a device to view activity logs",
-                    
                     // Status Messages
                     connected: "Connected to device",
                     connectionFailed: "Failed to connect to device",
                     deviceUpdated: "Device status updated",
                     timerSet: "Timer set successfully",
                     logsLoaded: "Logs loaded successfully",
-                    
+                    signedOut: "Signed out successfully",
                     // Errors
                     error: "Error",
                     authError: "Please sign in to access dashboard",
@@ -738,19 +647,17 @@
                     dashboardLink: "داشبورد",
                     signInLink: "ورود",
                     signUpLink: "ثبت‌نام",
-                    
+                    signOutLink: "خروج",
                     // Sidebar
                     sidebarTitle: "دستگاه‌های شما",
                     noDevices: "هیچ دستگاهی یافت نشد",
                     loadingDevices: "در حال بارگذاری دستگاه‌ها...",
-                    
                     // Device Card
                     selectDevice: "انتخاب دستگاه",
                     deviceStatusOff: "وضعیت: خاموش",
                     deviceStatusOn: "وضعیت: روشن",
                     turnOn: "روشن کردن",
                     turnOff: "خاموش کردن",
-                    
                     // Controls
                     timerTitle: "تنظیم تایمر",
                     timerDesc: "تنظیم تایمر برای خاموش کردن خودکار دستگاه",
@@ -759,19 +666,17 @@
                     logsTitle: "لاگ‌های دستگاه",
                     logsDesc: "مشاهده تاریخچه فعالیت‌های دستگاه",
                     getLogs: "دریافت لاگ‌ها",
-                    
                     // Logs
                     logTitle: "تاریخچه فعالیت",
                     noLogs: "هیچ فعالیتی ثبت نشده",
                     selectDeviceLogs: "برای مشاهده لاگ‌ها یک دستگاه انتخاب کنید",
-                    
                     // Status Messages
                     connected: "اتصال به دستگاه برقرار شد",
                     connectionFailed: "اتصال به دستگاه ناموفق بود",
                     deviceUpdated: "وضعیت دستگاه به روز شد",
                     timerSet: "تایمر با موفقیت تنظیم شد",
                     logsLoaded: "لاگ‌ها با موفقیت بارگذاری شدند",
-                    
+                    signedOut: "با موفقیت خارج شدید",
                     // Errors
                     error: "خطا",
                     authError: "لطفاً برای دسترسی به داشبورد وارد شوید",
@@ -779,30 +684,91 @@
                     genericError: "مشکلی پیش آمده است"
                 }
             };
-
+            
             // State
             let currentLang = localStorage.getItem('uiLanguage') || 'en';
             let currentDevice = null;
             let devices = [];
-
+            let isLoggedIn = false;
+            
+            // Initialize authentication state
+            function initAuthState() {
+                const apiKey = localStorage.getItem('api_key');
+                const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
+                
+                isLoggedIn = !!(apiKey && storedIsLoggedIn === 'true');
+                
+                updateAuthLinks();
+            }
+            
+            // Update authentication links in navbar
+            function updateAuthLinks() {
+                if (isLoggedIn) {
+                    authLinksContainer.innerHTML = `
+                        <a href="#" id="signOutLink">${texts[currentLang].signOutLink}</a>
+                    `;
+                    document.getElementById('signOutLink').addEventListener('click', signOut);
+                } else {
+                    authLinksContainer.innerHTML = `
+                        <a href="sign-in.html" id="signInLink">${texts[currentLang].signInLink}</a>
+                        <a href="sign-up.html" id="signUpLink">${texts[currentLang].signUpLink}</a>
+                    `;
+                }
+            }
+            
+            // Sign out function
+            function signOut(e) {
+                if (e) e.preventDefault();
+                
+                localStorage.removeItem('api_key');
+                localStorage.removeItem('isLoggedIn');
+                isLoggedIn = false;
+                
+                showStatus(texts[currentLang].signedOut, 'success');
+                
+                // Redirect to sign in page after a short delay
+                setTimeout(() => {
+                    window.location.href = 'sign-in.html';
+                }, 1000);
+            }
+            
             // Initialize
             function init() {
+                initAuthState();
                 applyLanguage(currentLang);
                 setupEventListeners();
-                checkAuthAndLoadDevices();
+                
+                // Only load devices if user is logged in
+                if (isLoggedIn) {
+                    checkAuthAndLoadDevices();
+                } else {
+                    showError(texts[currentLang].authError);
+                    // Redirect to sign in page after showing error
+                    setTimeout(() => {
+                        window.location.href = 'sign-in.html';
+                    }, 2000);
+                }
             }
-
+            
             // Apply language
             function applyLanguage(lang) {
                 currentLang = lang;
-                
                 // Update navigation
                 document.getElementById('homeLink').textContent = texts[lang].homeLink;
                 document.getElementById('aboutLink').textContent = texts[lang].aboutLink;
                 document.getElementById('contactLink').textContent = texts[lang].contactLink;
                 document.getElementById('dashboardLink').textContent = texts[lang].dashboardLink;
-                document.getElementById('signInLink').textContent = texts[lang].signInLink;
-                document.getElementById('signUpLink').textContent = texts[lang].signUpLink;
+                
+                // Update auth links if they exist
+                if (document.getElementById('signInLink')) {
+                    document.getElementById('signInLink').textContent = texts[lang].signInLink;
+                }
+                if (document.getElementById('signUpLink')) {
+                    document.getElementById('signUpLink').textContent = texts[lang].signUpLink;
+                }
+                if (document.getElementById('signOutLink')) {
+                    document.getElementById('signOutLink').textContent = texts[lang].signOutLink;
+                }
                 
                 // Update sidebar
                 document.getElementById('sidebarTitle').textContent = texts[lang].sidebarTitle;
@@ -818,7 +784,6 @@
                 document.getElementById('timerControlDesc').textContent = texts[lang].timerDesc;
                 timerMinutes.placeholder = texts[lang].timerPlaceholder;
                 setTimerBtn.textContent = texts[lang].setTimer;
-                
                 document.getElementById('scheduleControlTitle').textContent = texts[lang].logsTitle;
                 document.getElementById('scheduleControlDesc').textContent = texts[lang].logsDesc;
                 getLogsBtn.textContent = texts[lang].getLogs;
@@ -832,8 +797,11 @@
                 // Update body direction
                 body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
                 document.documentElement.lang = lang;
+                
+                // Update auth links with new language
+                updateAuthLinks();
             }
-
+            
             // Event listeners
             function setupEventListeners() {
                 // Dark mode toggle
@@ -861,41 +829,38 @@
                     }
                 });
             }
-
+            
             // Dark mode
             function toggleDarkMode() {
                 body.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
             }
-
+            
             // Language dropdown
             function toggleLanguageDropdown(e) {
                 e.stopPropagation();
                 langDropdown.classList.toggle('active');
             }
-
+            
             function switchLanguage(lang) {
                 localStorage.setItem('uiLanguage', lang);
                 applyLanguage(lang);
                 langDropdown.classList.remove('active');
+                
                 // Reload devices to update their names in the new language
                 if (devices.length > 0) {
                     renderDevicesList();
                 }
             }
-
+            
             // Authentication and device loading
             async function checkAuthAndLoadDevices() {
-
                 const apiKey = localStorage.getItem('api_key');
                 if (!apiKey) {
                     showError(texts[currentLang].authError);
-                    setTimeout(() => {
-                        window.location.href = 'sign-in.html';
-                    }, 2000);
                     return;
                 }
-
+                
                 try {
                     const response = await fetch('api.php?action=devices', {
                         method: 'GET',
@@ -904,23 +869,27 @@
                             'Content-Type': 'application/json'
                         }
                     });
-
+                    
                     if (response.status === 401) {
+                        // Invalid or expired token
                         localStorage.removeItem('api_key');
                         localStorage.removeItem('isLoggedIn');
+                        isLoggedIn = false;
+                        updateAuthLinks();
+                        
                         showError(texts[currentLang].authError);
                         setTimeout(() => {
                             window.location.href = 'sign-in.html';
                         }, 2000);
                         return;
                     }
-
+                    
                     if (!response.ok) {
                         throw new Error('Failed to fetch devices');
                     }
-
+                    
                     const data = await response.json();
-                    devices = data.devices || [];
+                    devices = Array.isArray(data.devices) ? data.devices : [];
                     renderDevicesList();
                 } catch (error) {
                     console.error('Error loading devices:', error);
@@ -928,7 +897,7 @@
                     devicesList.innerHTML = `<div class="device-item">${texts[currentLang].noDevices}</div>`;
                 }
             }
-
+            
             // Show status message
             function showStatus(message, type = 'success') {
                 connectionStatus.textContent = message;
@@ -943,12 +912,12 @@
                     connectionStatus.style.display = 'none';
                 }, 3000);
             }
-
+            
             // Show error message
             function showError(message) {
                 showStatus(message, 'error');
-}
-
+            }
+            
             // Render devices list
             function renderDevicesList() {
                 if (devices.length === 0) {
@@ -974,7 +943,7 @@
                     });
                 });
             }
-
+            
             // Select device
             function selectDevice(device) {
                 currentDevice = device;
@@ -1001,7 +970,7 @@
                 // Clear logs
                 logList.innerHTML = `<li class="log-item">${texts[currentLang].selectDeviceLogs}</li>`;
             }
-
+            
             // Update device status display
             function updateDeviceStatus(isOn) {
                 if (isOn) {
@@ -1020,30 +989,31 @@
                     toggleBtn.classList.remove('on');
                 }
             }
-
+            
             // Toggle device
             async function toggleDevice() {
                 if (!currentDevice) return;
-
-                const apiKey = localStorage.getItem('api_key'); // ✅
+                const apiKey = localStorage.getItem('api_key');
                 if (!apiKey) return;
-
+                
                 const newStatus = currentDevice.status === 'ON' ? 'OFF' : 'ON';
+                
                 try {
                     const response = await fetch(`api.php?action=devices&sub_action=control&device_id=${currentDevice.id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + apiKey // ✅
+                            'Authorization': 'Bearer ' + apiKey
                         },
                         body: JSON.stringify({ status: newStatus })
                     });
-
+                    
                     if (response.ok) {
                         currentDevice.status = newStatus;
                         updateDeviceStatus(newStatus === 'ON');
                         showStatus(texts[currentLang].deviceUpdated, 'success');
-
+                        
+                        // Update device item in list
                         const deviceItem = document.querySelector(`[data-device-id="${currentDevice.id}"]`);
                         if (deviceItem) {
                             deviceItem.querySelector('small').textContent = 
@@ -1057,27 +1027,26 @@
                     showStatus(texts[currentLang].error, 'error');
                 }
             }
-
+            
             // Set timer
             async function setTimer() {
                 if (!currentDevice || !timerMinutes.value) return;
-
-                const apiKey = localStorage.getItem('api_key'); // ✅
+                const apiKey = localStorage.getItem('api_key');
                 if (!apiKey) return;
-
+                
                 const minutes = parseInt(timerMinutes.value);
                 if (minutes < 1) return;
-
+                
                 try {
                     const response = await fetch(`api.php?action=devices&sub_action=timer&device_id=${currentDevice.id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + apiKey // ✅
+                            'Authorization': 'Bearer ' + apiKey
                         },
                         body: JSON.stringify({ duration_minutes: minutes })
                     });
-
+                    
                     if (response.ok) {
                         showStatus(texts[currentLang].timerSet, 'success');
                         timerMinutes.value = '';
@@ -1089,25 +1058,24 @@
                     showStatus(texts[currentLang].error, 'error');
                 }
             }
-
+            
             // Get logs
             async function getLogs() {
                 if (!currentDevice) return;
-
-                const apiKey = localStorage.getItem('api_key'); // ✅
+                const apiKey = localStorage.getItem('api_key');
                 if (!apiKey) return;
-
+                
                 try {
                     const response = await fetch(`api.php?action=devices&sub_action=logs&device_id=${currentDevice.id}`, {
                         method: 'GET',
                         headers: {
-                            'Authorization': 'Bearer ' + apiKey // ✅
+                            'Authorization': 'Bearer ' + apiKey
                         }
                     });
-
+                    
                     if (response.ok) {
                         const data = await response.json();
-                        renderLogs(data.logs || []);
+                        renderLogs(Array.isArray(data.logs) ? data.logs : []);
                         showStatus(texts[currentLang].logsLoaded, 'success');
                     } else {
                         throw new Error('Failed to get logs');
@@ -1117,7 +1085,7 @@
                     showStatus(texts[currentLang].error, 'error');
                 }
             }
-
+            
             // Render logs
             function renderLogs(logs) {
                 if (logs.length === 0) {
@@ -1131,28 +1099,13 @@
                     </li>
                 `).join('');
             }
-
-            // Status messages
-            function showStatus(message, type) {
-                connectionStatus.textContent = message;
-                connectionStatus.className = `connection-status status-${type}`;
-                connectionStatus.style.display = 'block';
-                
-                setTimeout(() => {
-                    connectionStatus.style.display = 'none';
-                }, 3000);
-            }
-
-            function showError(message) {
-                showStatus(message, 'error');
-            }
-
+            
             // Initialize dark mode
             const isDarkMode = localStorage.getItem('darkMode') === 'true';
             if (isDarkMode) {
                 body.classList.add('dark-mode');
             }
-
+            
             // Start the application
             init();
         });
