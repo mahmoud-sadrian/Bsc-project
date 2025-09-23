@@ -222,13 +222,14 @@ if ($method === 'POST' && $action === 'signin') {
     }
     
     sendJson([
-        'message' => 'Login successful',
-        'userId' => $user['id'],
-        'username' => $user['username'],
-        'firstName' => $user['first_name'],
-        'lastName' => $user['last_name'],
-        'role' => $user['role'] ?? 'user',
-        'note' => 'API Key authentication is now required for future requests'
+    'message' => 'Login successful',
+    'userId' => $user['id'],
+    'username' => $user['username'],
+    'firstName' => $user['first_name'],
+    'lastName' => $user['last_name'],
+    'role' => $user['role'] ?? 'user',
+    'apiKey' => $user['api_key'],
+    'note' => 'Use this API Key for future requests'
     ]);
 }
 
