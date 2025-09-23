@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <style>
+        :root {
+            --bg-primary: #f9fafb;
+            --bg-secondary: white;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6b7280;
+            --border-primary: #d1d5db;
+            --border-focus: #3b82f6;
+            --accent-primary: #111827;
+            --accent-hover: #1f2937;
+            --shadow-primary: rgba(0, 0, 0, 0.1);
+            --shadow-focus: rgba(59, 130, 246, 0.1);
+            --divider: #e5e7eb;
+            --social-bg: white;
+            --social-border: #d1d5db;
+            --social-hover: #f3f4f6;
+            --social-hover-border: #3b82f6;
+            --error-color: #ef4444;
+            --success-color: #16a34a;
+            --warning-color: #f59e0b;
+            --sidebar-width: 280px;
+        }
+
+        body.dark-mode {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #f9fafb;
+            --text-muted: #9ca3af;
+            --border-primary: #4b5563;
+            --border-focus: #60a5fa;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow-primary: rgba(0, 0, 0, 0.3);
+            --shadow-focus: rgba(96, 165, 250, 0.1);
+            --divider: #374151;
+            --social-bg: #374151;
+            --social-border: #4b5563;
+            --social-hover: #4b5563;
+            --social-hover-border: #60a5fa;
+            --error-color: #f87171;
+            --success-color: #4ade80;
+            --warning-color: #fbbf24;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode .sun-icon { display: none; }
+        body.dark-mode .moon-icon { display: block; }
+        .sun-icon { display: block; }
+        .moon-icon { display: none; }
+
+        /* NAVBAR */
+        header {
+            background: var(--bg-secondary);
+            box-shadow: 0 2px 4px var(--shadow-primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 32px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .admin-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--border-focus);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 16px;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-muted);
+            transition: fill 0.2s ease;
+        }
+
+        .nav-icon:hover {
+            fill: var(--border-focus);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-primary);
+            height: calc(100vh - 60px);
+            position: fixed;
+            top: 60px;
+            left: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 24px;
+        }
+
+        .sidebar-menu-item {
+            margin-bottom: 12px;
+        }
+
+        .sidebar-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu-link:hover, .sidebar-menu-link.active {
+            background-color: var(--social-hover);
+            color: var(--text-primary);
+        }
+
+        .sidebar-menu-link i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 24px;
+            flex: 1;
+            min-height: calc(100vh - 60px);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: var(--bg-secondary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: var(--bg-secondary);
+        }
+
+        .btn-danger:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--bg-secondary);
+        }
+
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+
+        /* TABLES */
+        .table-container {
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px var(--shadow-primary);
+            margin-bottom: 24px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 12px 16px;
+            background-color: var(--bg-primary);
+            border-bottom: 2px solid var(--border-primary);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        tbody td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        tbody tr:hover {
+            background-color: var(--social-hover);
+        }
+
+        .status-pill {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-on {
+            background-color: rgba(22, 163, 74, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-off {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error-color);
+        }
+
+        .status-active {
+            background-color: rgba(22, 163, 74, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background-color: rgba(156, 163, 175, 0.1);
+            color: var(--text-muted);
+        }
+
+        .action-cell {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--bg-primary);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .action-btn.edit {
+            color: var(--border-focus);
+        }
+
+        .action-btn.delete {
+            color: var(--error-color);
+        }
+
+        /* FORM MODALS */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background-color: var(--social-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-primary);
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--border-focus);
+            box-shadow: 0 0 0 3px var(--shadow-focus);
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* FILTERS */
+        .filters {
+            background-color: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px var(--shadow-primary);
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        /* FOOTER */
+        footer {
+            flex-shrink: 0;
+            background: var(--bg-secondary);
+            box-shadow: 0 -2px 4px var(--shadow-primary);
+            padding: 16px 32px;
+            text-align: center;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-secondary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+        }
+
+        .social-link img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.2s ease;
+        }
+
+        .social-link:hover img {
+            transform: scale(1.1);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+                --sidebar-width: 240px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                --sidebar-width: 80px;
+            }
+            
+            .sidebar-menu-link span {
+                display: none;
+            }
+            
+            .sidebar-menu-link i {
+                font-size: 18px;
+            }
+            
+            .main-content {
+                margin-left: 80px;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 16px;
+            }
+            
+            .action-buttons {
+                justify-content: flex-end;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 16px;
+            }
+            
+            .table-container, .filters {
+                padding: 16px;
+            }
+            
+            .modal-content {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- NAVBAR -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="index.html">Smartify24</a>
+            </div>
+            <div class="admin-title">Admin Dashboard</div>
+            <div class="nav-links">
+                <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
+                        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" viewBox="0 0 16 16">
+                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="sidebar-menu-item">
+                <a href="#users" class="sidebar-menu-link active" data-page="users">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item">
+                <a href="#devices" class="sidebar-menu-link" data-page="devices">
+                    <i class="fas fa-microchip"></i>
+                    <span>Devices</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item">
+                <a href="#schedules" class="sidebar-menu-link" data-page="schedules">
+                    <i class="fas fa-clock"></i>
+                    <span>Schedules</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item">
+                <a href="#logs" class="sidebar-menu-link" data-page="logs">
+                    <i class="fas fa-history"></i>
+                    <span>Activity Logs</span>
+                </a>
+            </li>
+            <li class="sidebar-menu-item">
+                <a href="#system" class="sidebar-menu-link" data-page="system">
+                    <i class="fas fa-cogs"></i>
+                    <span>System Info</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- USERS PAGE -->
+        <div id="users" class="page active">
+            <div class="page-header">
+                <h1 class="page-title">Manage Users</h1>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="addUserBtn">
+                        <i class="fas fa-plus"></i> Add User
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DEVICES PAGE -->
+        <div id="devices" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Manage Devices</h1>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="addDeviceBtn">
+                        <i class="fas fa-plus"></i> Add Device
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="userFilter">Filter by User</label>
+                    <select id="userFilter" class="form-control">
+                        <option value="">All Users</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter" class="form-control">
+                        <option value="">All Statuses</option>
+                        <option value="ON">ON</option>
+                        <option value="OFF">OFF</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary" id="applyFilters">Apply Filters</button>
+                    <button class="btn btn-warning" id="resetFilters">Reset</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devicesTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SCHEDULES PAGE -->
+        <div id="schedules" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Manage Schedules</h1>
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="addScheduleBtn">
+                        <i class="fas fa-plus"></i> Add Schedule
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="deviceFilter">Filter by Device</label>
+                    <select id="deviceFilter" class="form-control">
+                        <option value="">All Devices</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="typeFilter">Type</label>
+                    <select id="typeFilter" class="form-control">
+                        <option value="">All Types</option>
+                        <option value="TIMER">Timer</option>
+                        <option value="SCHEDULE">Schedule</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="activeFilter">Active</label>
+                    <select id="activeFilter" class="form-control">
+                        <option value="">All</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary" id="applyScheduleFilters">Apply Filters</button>
+                    <button class="btn btn-warning" id="resetScheduleFilters">Reset</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Device ID</th>
+                            <th>Type</th>
+                            <th>Duration (min)</th>
+                            <th>On Time</th>
+                            <th>Off Time</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedulesTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LOGS PAGE -->
+        <div id="logs" class="page">
+            <div class="page-header">
+                <h1 class="page-title">Activity Logs</h1>
+                <div class="action-buttons">
+                    <button class="btn btn-warning" id="clearLogsBtn">
+                        <i class="fas fa-trash"></i> Clear Logs
+                    </button>
+                </div>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="logDeviceFilter">Device</label>
+                    <select id="logDeviceFilter" class="form-control">
+                        <option value="">All Devices</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="logUserFilter">User</label>
+                    <select id="logUserFilter" class="form-control">
+                        <option value="">All Users</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="startDate">Start Date</label>
+                    <input type="datetime-local" id="startDate" class="form-control">
+                </div>
+                <div class="filter-group">
+                    <label for="endDate">End Date</label>
+                    <input type="datetime-local" id="endDate" class="form-control">
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-primary" id="applyLogFilters">Apply Filters</button>
+                    <button class="btn btn-warning" id="resetLogFilters">Reset</button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Device ID</th>
+                            <th>Action</th>
+                            <th>Timestamp</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <!-- Data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SYSTEM INFO PAGE -->
+        <div id="system" class="page">
+            <div class="page-header">
+                <h1 class="page-title">System Information</h1>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Users</td>
+                            <td id="totalUsers">-</td>
+                        </tr>
+                        <tr>
+                            <td>Total Devices</td>
+                            <td id="totalDevices">-</td>
+                        </tr>
+                        <tr>
+                            <td>Total Schedules</td>
+                            <td id="totalSchedules">-</td>
+                        </tr>
+                        <tr>
+                            <td>Total Logs</td>
+                            <td id="totalLogs">-</td>
+                        </tr>
+                        <tr>
+                            <td>Database Size</td>
+                            <td id="dbSize">-</td>
+                        </tr>
+                        <tr>
+                            <td>Last Backup</td>
+                            <td id="lastBackup">Never</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="action-buttons" style="margin-top: 24px;">
+                <button class="btn btn-primary" id="backupDatabase">
+                    <i class="fas fa-download"></i> Backup Database
+                </button>
+                <button class="btn btn-warning" id="optimizeDatabase">
+                    <i class="fas fa-cog"></i> Optimize Database
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <!-- ADD USER MODAL -->
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New User</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addUserForm">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelAddUser">Cancel</button>
+                <button class="btn btn-primary" id="saveUser">Save User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT USER MODAL -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit User</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editUserForm">
+                    <input type="hidden" id="editUserId">
+                    <div class="form-group">
+                        <label for="editFirstName">First Name</label>
+                        <input type="text" id="editFirstName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLastName">Last Name</label>
+                        <input type="text" id="editLastName" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="editUsername">Username</label>
+                        <input type="text" id="editUsername" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPassword">New Password (optional)</label>
+                        <input type="password" id="editPassword" class="form-control">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelEditUser">Cancel</button>
+                <button class="btn btn-primary" id="updateUser">Update User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD DEVICE MODAL -->
+    <div id="addDeviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Device</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addDeviceForm">
+                    <div class="form-group">
+                        <label for="deviceUserId">User</label>
+                        <select id="deviceUserId" class="form-control" required>
+                            <option value="">Select User</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceName">Device Name</label>
+                        <input type="text" id="deviceName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="deviceStatus">Initial Status</label>
+                        <select id="deviceStatus" class="form-control">
+                            <option value="OFF">OFF</option>
+                            <option value="ON">ON</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelAddDevice">Cancel</button>
+                <button class="btn btn-primary" id="saveDevice">Save Device</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT DEVICE MODAL -->
+    <div id="editDeviceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Device</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editDeviceForm">
+                    <input type="hidden" id="editDeviceId">
+                    <div class="form-group">
+                        <label for="editDeviceUserId">User</label>
+                        <select id="editDeviceUserId" class="form-control" required>
+                            <option value="">Select User</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDeviceName">Device Name</label>
+                        <input type="text" id="editDeviceName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDeviceStatus">Status</label>
+                        <select id="editDeviceStatus" class="form-control">
+                            <option value="OFF">OFF</option>
+                            <option value="ON">ON</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelEditDevice">Cancel</button>
+                <button class="btn btn-primary" id="updateDevice">Update Device</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD SCHEDULE MODAL -->
+    <div id="addScheduleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Schedule</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addScheduleForm">
+                    <div class="form-group">
+                        <label for="scheduleDeviceId">Device</label>
+                        <select id="scheduleDeviceId" class="form-control" required>
+                            <option value="">Select Device</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleType">Type</label>
+                        <select id="scheduleType" class="form-control" required>
+                            <option value="TIMER">Timer</option>
+                            <option value="SCHEDULE">Schedule</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="durationGroup">
+                        <label for="durationMinutes">Duration (minutes)</label>
+                        <input type="number" id="durationMinutes" class="form-control" min="1" required>
+                    </div>
+                    <div class="form-group" id="onTimeGroup" style="display: none;">
+                        <label for="onTime">On Time</label>
+                        <input type="datetime-local" id="onTime" class="form-control">
+                    </div>
+                    <div class="form-group" id="offTimeGroup" style="display: none;">
+                        <label for="offTime">Off Time</label>
+                        <input type="datetime-local" id="offTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="scheduleActive">Active</label>
+                        <select id="scheduleActive" class="form-control">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelAddSchedule">Cancel</button>
+                <button class="btn btn-primary" id="saveSchedule">Save Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT SCHEDULE MODAL -->
+    <div id="editScheduleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Schedule</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editScheduleForm">
+                    <input type="hidden" id="editScheduleId">
+                    <div class="form-group">
+                        <label for="editScheduleDeviceId">Device</label>
+                        <select id="editScheduleDeviceId" class="form-control" required>
+                            <option value="">Select Device</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editScheduleType">Type</label>
+                        <select id="editScheduleType" class="form-control" required>
+                            <option value="TIMER">Timer</option>
+                            <option value="SCHEDULE">Schedule</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="editDurationGroup">
+                        <label for="editDurationMinutes">Duration (minutes)</label>
+                        <input type="number" id="editDurationMinutes" class="form-control" min="1" required>
+                    </div>
+                    <div class="form-group" id="editOnTimeGroup" style="display: none;">
+                        <label for="editOnTime">On Time</label>
+                        <input type="datetime-local" id="editOnTime" class="form-control">
+                    </div>
+                    <div class="form-group" id="editOffTimeGroup" style="display: none;">
+                        <label for="editOffTime">Off Time</label>
+                        <input type="datetime-local" id="editOffTime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="editScheduleActive">Active</label>
+                        <select id="editScheduleActive" class="form-control">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelEditSchedule">Cancel</button>
+                <button class="btn btn-primary" id="updateSchedule">Update Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Action</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-warning" id="cancelConfirm">Cancel</button>
+                <button class="btn btn-danger" id="confirmAction">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <h3 class="footer-title">Smartify24 Admin Panel</h3>
+            <div class="social-links">
+                <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+                </a>
+                <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu-link');
+            const pages = document.querySelectorAll('.page');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+
+            // Modal elements
+            const modals = {
+                addUser: document.getElementById('addUserModal'),
+                editUser: document.getElementById('editUserModal'),
+                addDevice: document.getElementById('addDeviceModal'),
+                editDevice: document.getElementById('editDeviceModal'),
+                addSchedule: document.getElementById('addScheduleModal'),
+                editSchedule: document.getElementById('editScheduleModal'),
+                confirm: document.getElementById('confirmModal')
+            };
+
+            // Form elements
+            const forms = {
+                addUser: document.getElementById('addUserForm'),
+                editUser: document.getElementById('editUserForm'),
+                addDevice: document.getElementById('addDeviceForm'),
+                editDevice: document.getElementById('editDeviceForm'),
+                addSchedule: document.getElementById('addScheduleForm'),
+                editSchedule: document.getElementById('editScheduleForm')
+            };
+
+            // Button elements
+            const buttons = {
+                addUser: document.getElementById('addUserBtn'),
+                editUser: document.getElementById('updateUser'),
+                cancelAddUser: document.getElementById('cancelAddUser'),
+                cancelEditUser: document.getElementById('cancelEditUser'),
+                addDevice: document.getElementById('addDeviceBtn'),
+                editDevice: document.getElementById('updateDevice'),
+                cancelAddDevice: document.getElementById('cancelAddDevice'),
+                cancelEditDevice: document.getElementById('cancelEditDevice'),
+                addSchedule: document.getElementById('addScheduleBtn'),
+                editSchedule: document.getElementById('updateSchedule'),
+                cancelAddSchedule: document.getElementById('cancelAddSchedule'),
+                cancelEditSchedule: document.getElementById('cancelEditSchedule'),
+                clearLogs: document.getElementById('clearLogsBtn'),
+                backupDatabase: document.getElementById('backupDatabase'),
+                optimizeDatabase: document.getElementById('optimizeDatabase'),
+                confirmAction: document.getElementById('confirmAction'),
+                cancelConfirm: document.getElementById('cancelConfirm')
+            };
+
+            // Filter elements
+            const filters = {
+                user: document.getElementById('userFilter'),
+                status: document.getElementById('statusFilter'),
+                apply: document.getElementById('applyFilters'),
+                reset: document.getElementById('resetFilters'),
+                device: document.getElementById('deviceFilter'),
+                type: document.getElementById('typeFilter'),
+                active: document.getElementById('activeFilter'),
+                applySchedule: document.getElementById('applyScheduleFilters'),
+                resetSchedule: document.getElementById('resetScheduleFilters'),
+                logDevice: document.getElementById('logDeviceFilter'),
+                logUser: document.getElementById('logUserFilter'),
+                startDate: document.getElementById('startDate'),
+                endDate: document.getElementById('endDate'),
+                applyLog: document.getElementById('applyLogFilters'),
+                resetLog: document.getElementById('resetLogFilters')
+            };
+
+            // Table bodies
+            const tableBodies = {
+                users: document.getElementById('usersTableBody'),
+                devices: document.getElementById('devicesTableBody'),
+                schedules: document.getElementById('schedulesTableBody'),
+                logs: document.getElementById('logsTableBody')
+            };
+
+            // System info elements
+            const systemInfo = {
+                totalUsers: document.getElementById('totalUsers'),
+                totalDevices: document.getElementById('totalDevices'),
+                totalSchedules: document.getElementById('totalSchedules'),
+                totalLogs: document.getElementById('totalLogs'),
+                dbSize: document.getElementById('dbSize'),
+                lastBackup: document.getElementById('lastBackup')
+            };
+
+            // State
+            let currentPage = 'users';
+            let usersData = [];
+            let devicesData = [];
+            let schedulesData = [];
+            let logsData = [];
+            let confirmationCallback = null;
+
+            // Initialize
+            function init() {
+                setupEventListeners();
+                loadAllData();
+                updateSidebarActive();
+            }
+
+            // Setup event listeners
+            function setupEventListeners() {
+                // Sidebar navigation
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = link.getAttribute('data-page');
+                        showPage(page);
+                    });
+                });
+
+                // Dark mode toggle
+                darkModeToggle.addEventListener('click', () => {
+                    body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
+                });
+
+                // Modal close buttons
+                Object.keys(modals).forEach(key => {
+                    const modal = modals[key];
+                    const closeBtn = modal.querySelector('.modal-close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', () => closeModal(modal));
+                    }
+                });
+
+                // Close modals when clicking outside
+                Object.keys(modals).forEach(key => {
+                    modals[key].addEventListener('click', (e) => {
+                        if (e.target === modals[key]) {
+                            closeModal(modals[key]);
+                        }
+                    });
+                });
+
+                // Form submission
+                forms.addUser.addEventListener('submit', handleAddUser);
+                forms.editUser.addEventListener('submit', handleEditUser);
+                forms.addDevice.addEventListener('submit', handleAddDevice);
+                forms.editDevice.addEventListener('submit', handleEditDevice);
+                forms.addSchedule.addEventListener('submit', handleAddSchedule);
+                forms.editSchedule.addEventListener('submit', handleEditSchedule);
+
+                // Button actions
+                buttons.addUser.addEventListener('click', openAddUserModal);
+                buttons.cancelAddUser.addEventListener('click', () => closeModal(modals.addUser));
+                buttons.cancelEditUser.addEventListener('click', () => closeModal(modals.editUser));
+                buttons.addDevice.addEventListener('click', openAddDeviceModal);
+                buttons.cancelAddDevice.addEventListener('click', () => closeModal(modals.addDevice));
+                buttons.cancelEditDevice.addEventListener('click', () => closeModal(modals.editDevice));
+                buttons.addSchedule.addEventListener('click', openAddScheduleModal);
+                buttons.cancelAddSchedule.addEventListener('click', () => closeModal(modals.addSchedule));
+                buttons.cancelEditSchedule.addEventListener('click', () => closeModal(modals.editSchedule));
+                buttons.clearLogs.addEventListener('click', openClearLogsModal);
+                buttons.backupDatabase.addEventListener('click', openBackupModal);
+                buttons.optimizeDatabase.addEventListener('click', openOptimizeModal);
+                buttons.confirmAction.addEventListener('click', confirmAction);
+                buttons.cancelConfirm.addEventListener('click', () => closeModal(modals.confirm));
+
+                // Filter actions
+                filters.apply.addEventListener('click', applyDeviceFilters);
+                filters.reset.addEventListener('click', resetDeviceFilters);
+                filters.applySchedule.addEventListener('click', applyScheduleFilters);
+                filters.resetSchedule.addEventListener('click', resetScheduleFilters);
+                filters.applyLog.addEventListener('click', applyLogFilters);
+                filters.resetLog.addEventListener('click', resetLogFilters);
+
+                // Schedule type change
+                document.getElementById('scheduleType').addEventListener('change', updateScheduleForm);
+                document.getElementById('editScheduleType').addEventListener('change', updateEditScheduleForm);
+            }
+
+            // Show specific page
+            function showPage(page) {
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(page).classList.add('active');
+                currentPage = page;
+                updateSidebarActive();
+                
+                // Load data based on page
+                switch(page) {
+                    case 'users':
+                        renderUsers();
+                        break;
+                    case 'devices':
+                        renderDevices();
+                        populateUserFilter();
+                        break;
+                    case 'schedules':
+                        renderSchedules();
+                        populateDeviceFilter();
+                        break;
+                    case 'logs':
+                        renderLogs();
+                        populateLogFilters();
+                        break;
+                    case 'system':
+                        updateSystemInfo();
+                        break;
+                }
+            }
+
+            // Update sidebar active state
+            function updateSidebarActive() {
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-page') === currentPage) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            // Load all data from API
+            async function loadAllData() {
+                try {
+                    // Load users
+                    const usersResponse = await fetch('api.php?action=users');
+                    if (usersResponse.ok) {
+                        usersData = await usersResponse.json();
+                        if (Array.isArray(usersData)) {
+                            renderUsers();
+                            populateUserFilter();
+                            populateUserDeviceSelects();
+                        }
+                    }
+
+                    // Load devices
+                    const devicesResponse = await fetch('api.php?action=devices');
+                    if (devicesResponse.ok) {
+                        const devicesResult = await devicesResponse.json();
+                        devicesData = devicesResult.devices || [];
+                        renderDevices();
+                        populateDeviceFilter();
+                        populateDeviceScheduleSelects();
+                    }
+
+                    // Load schedules
+                    const schedulesResponse = await fetch('api.php?action=schedules');
+                    if (schedulesResponse.ok) {
+                        const schedulesResult = await schedulesResponse.json();
+                        schedulesData = schedulesResult.schedules || [];
+                        renderSchedules();
+                    }
+
+                    // Load logs
+                    const logsResponse = await fetch('api.php?action=logs');
+                    if (logsResponse.ok) {
+                        const logsResult = await logsResponse.json();
+                        logsData = logsResult.logs || [];
+                        renderLogs();
+                        populateLogFilters();
+                    }
+
+                    // Update system info
+                    updateSystemInfo();
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    alert('Failed to load data. Please check your connection and API.');
+                }
+            }
+
+            // Render users table
+            function renderUsers() {
+                if (!tableBodies.users) return;
+                
+                if (usersData.length === 0) {
+                    tableBodies.users.innerHTML = '<tr><td colspan="6" style="text-align: center;">No users found</td></tr>';
+                    return;
+                }
+
+                tableBodies.users.innerHTML = usersData.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.first_name || ''} ${user.last_name || ''}</td>
+                        <td>${user.username}</td>
+                        <td>
+                            <span class="status-pill status-active">Active</span>
+                        </td>
+                        <td>${new Date(user.created_at).toLocaleString()}</td>
+                        <td class="action-cell">
+                            <button class="action-btn edit" onclick="openEditUser(${user.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="confirmDeleteUser(${user.id}, '${user.username}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Render devices table
+            function renderDevices() {
+                if (!tableBodies.devices) return;
+                
+                let filteredDevices = [...devicesData];
+
+                // Apply filters if on devices page
+                if (currentPage === 'devices') {
+                    const userId = filters.user.value;
+                    const status = filters.status.value;
+
+                    if (userId) {
+                        filteredDevices = filteredDevices.filter(d => d.user_id == userId);
+                    }
+                    if (status) {
+                        filteredDevices = filteredDevices.filter(d => d.status === status);
+                    }
+                }
+
+                if (filteredDevices.length === 0) {
+                    tableBodies.devices.innerHTML = '<tr><td colspan="6" style="text-align: center;">No devices found</td></tr>';
+                    return;
+                }
+
+                tableBodies.devices.innerHTML = filteredDevices.map(device => {
+                    const user = usersData.find(u => u.id == device.user_id);
+                    return `
+                        <tr>
+                            <td>${device.id}</td>
+                            <td>${device.user_id}</td>
+                            <td>${device.name}</td>
+                            <td>
+                                <span class="status-pill status-${device.status.toLowerCase()}">${device.status}</span>
+                            </td>
+                            <td>${new Date(device.last_updated).toLocaleString()}</td>
+                            <td class="action-cell">
+                                <button class="action-btn edit" onclick="openEditDevice(${device.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="confirmDeleteDevice(${device.id}, '${device.name}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Render schedules table
+            function renderSchedules() {
+                if (!tableBodies.schedules) return;
+                
+                let filteredSchedules = [...schedulesData];
+
+                // Apply filters if on schedules page
+                if (currentPage === 'schedules') {
+                    const deviceId = filters.device.value;
+                    const type = filters.type.value;
+                    const active = filters.active.value;
+
+                    if (deviceId) {
+                        filteredSchedules = filteredSchedules.filter(s => s.device_id == deviceId);
+                    }
+                    if (type) {
+                        filteredSchedules = filteredSchedules.filter(s => s.type === type);
+                    }
+                    if (active !== '') {
+                        filteredSchedules = filteredSchedules.filter(s => s.active == active);
+                    }
+                }
+
+                if (filteredSchedules.length === 0) {
+                    tableBodies.schedules.innerHTML = '<tr><td colspan="9" style="text-align: center;">No schedules found</td></tr>';
+                    return;
+                }
+
+                tableBodies.schedules.innerHTML = filteredSchedules.map(schedule => {
+                    const device = devicesData.find(d => d.id == schedule.device_id);
+                    return `
+                        <tr>
+                            <td>${schedule.id}</td>
+                            <td>${schedule.device_id}</td>
+                            <td>${schedule.type}</td>
+                            <td>${schedule.duration_minutes || '-'}</td>
+                            <td>${schedule.on_time ? new Date(schedule.on_time).toLocaleString() : '-'}</td>
+                            <td>${schedule.off_time ? new Date(schedule.off_time).toLocaleString() : '-'}</td>
+                            <td>
+                                <span class="status-pill status-${schedule.active ? 'active' : 'inactive'}">${schedule.active ? 'Active' : 'Inactive'}</span>
+                            </td>
+                            <td>${new Date(schedule.created_at).toLocaleString()}</td>
+                            <td class="action-cell">
+                                <button class="action-btn edit" onclick="openEditSchedule(${schedule.id})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="confirmDeleteSchedule(${schedule.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Render logs table
+            function renderLogs() {
+                if (!tableBodies.logs) return;
+                
+                let filteredLogs = [...logsData];
+
+                // Apply filters if on logs page
+                if (currentPage === 'logs') {
+                    const deviceId = filters.logDevice.value;
+                    const userId = filters.logUser.value;
+                    const startDate = filters.startDate.value;
+                    const endDate = filters.endDate.value;
+
+                    if (deviceId) {
+                        filteredLogs = filteredLogs.filter(l => l.device_id == deviceId);
+                    }
+                    if (userId) {
+                        const userDevices = devicesData.filter(d => d.user_id == userId).map(d => d.id);
+                        filteredLogs = filteredLogs.filter(l => userDevices.includes(l.device_id));
+                    }
+                    if (startDate) {
+                        const start = new Date(startDate);
+                        filteredLogs = filteredLogs.filter(l => new Date(l.timestamp) >= start);
+                    }
+                    if (endDate) {
+                        const end = new Date(endDate);
+                        filteredLogs = filteredLogs.filter(l => new Date(l.timestamp) <= end);
+                    }
+                }
+
+                if (filteredLogs.length === 0) {
+                    tableBodies.logs.innerHTML = '<tr><td colspan="4" style="text-align: center;">No logs found</td></tr>';
+                    return;
+                }
+
+                tableBodies.logs.innerHTML = filteredLogs.map(log => {
+                    const device = devicesData.find(d => d.id == log.device_id);
+                    const user = usersData.find(u => u.id == device?.user_id);
+                    return `
+                        <tr>
+                            <td>${log.id}</td>
+                            <td>${log.device_id}</td>
+                            <td>${log.action}</td>
+                            <td>${new Date(log.timestamp).toLocaleString()}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Update system information
+            function updateSystemInfo() {
+                systemInfo.totalUsers.textContent = usersData.length;
+                systemInfo.totalDevices.textContent = devicesData.length;
+                systemInfo.totalSchedules.textContent = schedulesData.length;
+                systemInfo.totalLogs.textContent = logsData.length;
+                
+                // Calculate approximate DB size (this would need server-side implementation)
+                const dbSizeKB = (usersData.length * 200 + devicesData.length * 100 + 
+                                schedulesData.length * 150 + logsData.length * 80) / 1024;
+                systemInfo.dbSize.textContent = `${dbSizeKB.toFixed(1)} KB`;
+            }
+
+            // Populate user filter
+            function populateUserFilter() {
+                if (!filters.user) return;
+                
+                filters.user.innerHTML = '<option value="">All Users</option>';
+                usersData.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.username} (${user.first_name || ''} ${user.last_name || ''})`.trim();
+                    filters.user.appendChild(option);
+                });
+            }
+
+            // Populate device filter
+            function populateDeviceFilter() {
+                if (!filters.device) return;
+                
+                filters.device.innerHTML = '<option value="">All Devices</option>';
+                devicesData.forEach(device => {
+                    const user = usersData.find(u => u.id == device.user_id);
+                    const option = document.createElement('option');
+                    option.value = device.id;
+                    option.textContent = `${device.name} (User: ${user?.username || device.user_id})`;
+                    filters.device.appendChild(option);
+                });
+            }
+
+            // Populate log filters
+            function populateLogFilters() {
+                if (!filters.logDevice || !filters.logUser) return;
+                
+                // Device filter
+                filters.logDevice.innerHTML = '<option value="">All Devices</option>';
+                devicesData.forEach(device => {
+                    const user = usersData.find(u => u.id == device.user_id);
+                    const option = document.createElement('option');
+                    option.value = device.id;
+                    option.textContent = `${device.name} (User: ${user?.username || device.user_id})`;
+                    filters.logDevice.appendChild(option);
+                });
+
+                // User filter
+                filters.logUser.innerHTML = '<option value="">All Users</option>';
+                usersData.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.textContent = `${user.username} (${user.first_name || ''} ${user.last_name || ''})`.trim();
+                    filters.logUser.appendChild(option);
+                });
+            }
+
+            // Populate user select in device modals
+            function populateUserDeviceSelects() {
+                ['deviceUserId', 'editDeviceUserId'].forEach(id => {
+                    const select = document.getElementById(id);
+                    if (select) {
+                        select.innerHTML = '<option value="">Select User</option>';
+                        usersData.forEach(user => {
+                            const option = document.createElement('option');
+                            option.value = user.id;
+                            option.textContent = `${user.username} (${user.first_name || ''} ${user.last_name || ''})`.trim();
+                            select.appendChild(option);
+                        });
+                    }
+                });
+            }
+
+            // Populate device select in schedule modals
+            function populateDeviceScheduleSelects() {
+                ['scheduleDeviceId', 'editScheduleDeviceId'].forEach(id => {
+                    const select = document.getElementById(id);
+                    if (select) {
+                        select.innerHTML = '<option value="">Select Device</option>';
+                        devicesData.forEach(device => {
+                            const user = usersData.find(u => u.id == device.user_id);
+                            const option = document.createElement('option');
+                            option.value = device.id;
+                            option.textContent = `${device.name} (User: ${user?.username || device.user_id})`;
+                            select.appendChild(option);
+                        });
+                    }
+                });
+            }
+
+            // Modal functions
+            function openModal(modal) {
+                modal.classList.add('active');
+            }
+
+            function closeModal(modal) {
+                modal.classList.remove('active');
+            }
+
+            // User management
+            function openAddUserModal() {
+                forms.addUser.reset();
+                openModal(modals.addUser);
+            }
+
+            async function handleAddUser(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.addUser);
+                const userData = {
+                    first_name: formData.get('firstName'),
+                    last_name: formData.get('lastName'),
+                    username: formData.get('username'),
+                    password: formData.get('password'),
+                    confirmed_password: formData.get('confirmPassword')
+                };
+
+                // Validate passwords match
+                if (userData.password !== userData.confirmed_password) {
+                    alert('Passwords do not match');
+                    return;
+                }
+
+                try {
+                    const response = await fetch('api.php?action=create_user', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.addUser);
+                        loadAllData(); // Reload all data
+                        alert('User created successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error creating user:', error);
+                    alert('Failed to create user');
+                }
+            }
+
+            window.openEditUser = function(userId) {
+                const user = usersData.find(u => u.id == userId);
+                if (!user) return;
+
+                document.getElementById('editUserId').value = user.id;
+                document.getElementById('editFirstName').value = user.first_name || '';
+                document.getElementById('editLastName').value = user.last_name || '';
+                document.getElementById('editUsername').value = user.username;
+                document.getElementById('editPassword').value = '';
+
+                openModal(modals.editUser);
+            };
+
+            async function handleEditUser(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.editUser);
+                const userId = formData.get('editUserId');
+                const userData = {
+                    first_name: formData.get('editFirstName'),
+                    last_name: formData.get('editLastName'),
+                    username: formData.get('editUsername')
+                };
+
+                // Include password only if provided
+                const newPassword = formData.get('editPassword');
+                if (newPassword) {
+                    userData.password = newPassword;
+                }
+
+                try {
+                    const response = await fetch(`api.php?action=update_user&user_id=${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(userData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.editUser);
+                        loadAllData(); // Reload all data
+                        alert('User updated successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error updating user:', error);
+                    alert('Failed to update user');
+                }
+            }
+
+            window.confirmDeleteUser = function(userId, username) {
+                document.getElementById('confirmMessage').textContent = 
+                    `Are you sure you want to delete user "${username}"? This action cannot be undone.`;
+                confirmationCallback = async () => {
+                    try {
+                        const response = await fetch(`api.php?action=delete_user&user_id=${userId}`, {
+                            method: 'POST'
+                        });
+
+                        if (response.ok) {
+                            closeModal(modals.confirm);
+                            loadAllData(); // Reload all data
+                            alert('User deleted successfully');
+                        } else {
+                            const error = await response.json();
+                            alert(`Error: ${error.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting user:', error);
+                        alert('Failed to delete user');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            // Device management
+            function openAddDeviceModal() {
+                forms.addDevice.reset();
+                populateUserDeviceSelects();
+                openModal(modals.addDevice);
+            }
+
+            async function handleAddDevice(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.addDevice);
+                const deviceData = {
+                    user_id: formData.get('deviceUserId'),
+                    name: formData.get('deviceName'),
+                    status: formData.get('deviceStatus')
+                };
+
+                try {
+                    const response = await fetch('api.php?action=create_device', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(deviceData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.addDevice);
+                        loadAllData(); // Reload all data
+                        alert('Device created successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error creating device:', error);
+                    alert('Failed to create device');
+                }
+            }
+
+            window.openEditDevice = function(deviceId) {
+                const device = devicesData.find(d => d.id == deviceId);
+                if (!device) return;
+
+                document.getElementById('editDeviceId').value = device.id;
+                document.getElementById('editDeviceUserId').value = device.user_id;
+                document.getElementById('editDeviceName').value = device.name;
+                document.getElementById('editDeviceStatus').value = device.status;
+
+                openModal(modals.editDevice);
+            };
+
+            async function handleEditDevice(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.editDevice);
+                const deviceId = formData.get('editDeviceId');
+                const deviceData = {
+                    user_id: formData.get('editDeviceUserId'),
+                    name: formData.get('editDeviceName'),
+                    status: formData.get('editDeviceStatus')
+                };
+
+                try {
+                    const response = await fetch(`api.php?action=update_device&device_id=${deviceId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(deviceData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.editDevice);
+                        loadAllData(); // Reload all data
+                        alert('Device updated successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error updating device:', error);
+                    alert('Failed to update device');
+                }
+            }
+
+            window.confirmDeleteDevice = function(deviceId, deviceName) {
+                document.getElementById('confirmMessage').textContent = 
+                    `Are you sure you want to delete device "${deviceName}"? This action cannot be undone.`;
+                confirmationCallback = async () => {
+                    try {
+                        const response = await fetch(`api.php?action=delete_device&device_id=${deviceId}`, {
+                            method: 'POST'
+                        });
+
+                        if (response.ok) {
+                            closeModal(modals.confirm);
+                            loadAllData(); // Reload all data
+                            alert('Device deleted successfully');
+                        } else {
+                            const error = await response.json();
+                            alert(`Error: ${error.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting device:', error);
+                        alert('Failed to delete device');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            // Schedule management
+            function openAddScheduleModal() {
+                forms.addSchedule.reset();
+                populateDeviceScheduleSelects();
+                updateScheduleForm();
+                openModal(modals.addSchedule);
+            }
+
+            function updateScheduleForm() {
+                const type = document.getElementById('scheduleType').value;
+                const durationGroup = document.getElementById('durationGroup');
+                const onTimeGroup = document.getElementById('onTimeGroup');
+                const offTimeGroup = document.getElementById('offTimeGroup');
+
+                if (type === 'TIMER') {
+                    durationGroup.style.display = 'block';
+                    onTimeGroup.style.display = 'none';
+                    offTimeGroup.style.display = 'none';
+                } else {
+                    durationGroup.style.display = 'none';
+                    onTimeGroup.style.display = 'block';
+                    offTimeGroup.style.display = 'block';
+                }
+            }
+
+            async function handleAddSchedule(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.addSchedule);
+                const scheduleData = {
+                    device_id: formData.get('scheduleDeviceId'),
+                    type: formData.get('scheduleType'),
+                    active: formData.get('scheduleActive')
+                };
+
+                if (scheduleData.type === 'TIMER') {
+                    scheduleData.duration_minutes = parseInt(formData.get('durationMinutes'));
+                } else {
+                    scheduleData.on_time = formData.get('onTime');
+                    scheduleData.off_time = formData.get('offTime');
+                }
+
+                try {
+                    const response = await fetch('api.php?action=create_schedule', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(scheduleData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.addSchedule);
+                        loadAllData(); // Reload all data
+                        alert('Schedule created successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error creating schedule:', error);
+                    alert('Failed to create schedule');
+                }
+            }
+
+            window.openEditSchedule = function(scheduleId) {
+                const schedule = schedulesData.find(s => s.id == scheduleId);
+                if (!schedule) return;
+
+                document.getElementById('editScheduleId').value = schedule.id;
+                document.getElementById('editScheduleDeviceId').value = schedule.device_id;
+                document.getElementById('editScheduleType').value = schedule.type;
+                document.getElementById('editDurationMinutes').value = schedule.duration_minutes || '';
+                document.getElementById('editOnTime').value = schedule.on_time ? schedule.on_time.replace(' ', 'T') : '';
+                document.getElementById('editOffTime').value = schedule.off_time ? schedule.off_time.replace(' ', 'T') : '';
+                document.getElementById('editScheduleActive').value = schedule.active;
+
+                updateEditScheduleForm();
+                openModal(modals.editSchedule);
+            };
+
+            function updateEditScheduleForm() {
+                const type = document.getElementById('editScheduleType').value;
+                const durationGroup = document.getElementById('editDurationGroup');
+                const onTimeGroup = document.getElementById('editOnTimeGroup');
+                const offTimeGroup = document.getElementById('editOffTimeGroup');
+
+                if (type === 'TIMER') {
+                    durationGroup.style.display = 'block';
+                    onTimeGroup.style.display = 'none';
+                    offTimeGroup.style.display = 'none';
+                } else {
+                    durationGroup.style.display = 'none';
+                    onTimeGroup.style.display = 'block';
+                    offTimeGroup.style.display = 'block';
+                }
+            }
+
+            async function handleEditSchedule(e) {
+                e.preventDefault();
+                const formData = new FormData(forms.editSchedule);
+                const scheduleId = formData.get('editScheduleId');
+                const scheduleData = {
+                    device_id: formData.get('editScheduleDeviceId'),
+                    type: formData.get('editScheduleType'),
+                    active: formData.get('editScheduleActive')
+                };
+
+                if (scheduleData.type === 'TIMER') {
+                    scheduleData.duration_minutes = parseInt(formData.get('editDurationMinutes'));
+                } else {
+                    scheduleData.on_time = formData.get('editOnTime');
+                    scheduleData.off_time = formData.get('editOffTime');
+                }
+
+                try {
+                    const response = await fetch(`api.php?action=update_schedule&schedule_id=${scheduleId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(scheduleData)
+                    });
+
+                    if (response.ok) {
+                        closeModal(modals.editSchedule);
+                        loadAllData(); // Reload all data
+                        alert('Schedule updated successfully');
+                    } else {
+                        const error = await response.json();
+                        alert(`Error: ${error.error}`);
+                    }
+                } catch (error) {
+                    console.error('Error updating schedule:', error);
+                    alert('Failed to update schedule');
+                }
+            }
+
+            window.confirmDeleteSchedule = function(scheduleId) {
+                document.getElementById('confirmMessage').textContent = 
+                    'Are you sure you want to delete this schedule? This action cannot be undone.';
+                confirmationCallback = async () => {
+                    try {
+                        const response = await fetch(`api.php?action=delete_schedule&schedule_id=${scheduleId}`, {
+                            method: 'POST'
+                        });
+
+                        if (response.ok) {
+                            closeModal(modals.confirm);
+                            loadAllData(); // Reload all data
+                            alert('Schedule deleted successfully');
+                        } else {
+                            const error = await response.json();
+                            alert(`Error: ${error.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error deleting schedule:', error);
+                        alert('Failed to delete schedule');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            // Log management
+            function openClearLogsModal() {
+                document.getElementById('confirmMessage').textContent = 
+                    'Are you sure you want to clear all activity logs? This action cannot be undone.';
+                confirmationCallback = async () => {
+                    try {
+                        const response = await fetch('api.php?action=clear_logs', {
+                            method: 'POST'
+                        });
+
+                        if (response.ok) {
+                            closeModal(modals.confirm);
+                            loadAllData(); // Reload all data
+                            alert('Logs cleared successfully');
+                        } else {
+                            const error = await response.json();
+                            alert(`Error: ${error.error}`);
+                        }
+                    } catch (error) {
+                        console.error('Error clearing logs:', error);
+                        alert('Failed to clear logs');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            // System management
+            function openBackupModal() {
+                document.getElementById('confirmMessage').textContent = 
+                    'Are you sure you want to backup the database? This may take a few moments.';
+                confirmationCallback = async () => {
+                    try {
+                        // In a real implementation, this would trigger a database backup
+                        alert('Database backup initiated. In a real implementation, this would download a SQL file.');
+                        closeModal(modals.confirm);
+                        systemInfo.lastBackup.textContent = new Date().toLocaleString();
+                    } catch (error) {
+                        console.error('Error backing up database:', error);
+                        alert('Failed to backup database');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            function openOptimizeModal() {
+                document.getElementById('confirmMessage').textContent = 
+                    'Are you sure you want to optimize the database? This will improve performance but may take some time.';
+                confirmationCallback = async () => {
+                    try {
+                        // In a real implementation, this would optimize database tables
+                        alert('Database optimization completed.');
+                        closeModal(modals.confirm);
+                        updateSystemInfo();
+                    } catch (error) {
+                        console.error('Error optimizing database:', error);
+                        alert('Failed to optimize database');
+                    }
+                };
+                openModal(modals.confirm);
+            }
+
+            // Filter functions
+            function applyDeviceFilters() {
+                renderDevices();
+            }
+
+            function resetDeviceFilters() {
+                filters.user.value = '';
+                filters.status.value = '';
+                renderDevices();
+            }
+
+            function applyScheduleFilters() {
+                renderSchedules();
+            }
+
+            function resetScheduleFilters() {
+                filters.device.value = '';
+                filters.type.value = '';
+                filters.active.value = '';
+                renderSchedules();
+            }
+
+            function applyLogFilters() {
+                renderLogs();
+            }
+
+            function resetLogFilters() {
+                filters.logDevice.value = '';
+                filters.logUser.value = '';
+                filters.startDate.value = '';
+                filters.endDate.value = '';
+                renderLogs();
+            }
+
+            // Confirmation action
+            function confirmAction() {
+                if (confirmationCallback) {
+                    confirmationCallback();
+                }
+                closeModal(modals.confirm);
+            }
+
+            // Check dark mode preference
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (savedDarkMode) {
+                body.classList.add('dark-mode');
+            }
+
+            // Initialize the application
+            init();
+        });
+    </script>
+</body>
+</html>
