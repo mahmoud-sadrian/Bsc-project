@@ -732,7 +732,7 @@
                     isValid = false;
                 }
 
-                // Password validation (minimum 6 characters as per API)
+                // Password validation
                 if (password.length < 6) {
                     document.getElementById('passwordError').textContent = texts[currentLang].passwordError;
                     document.getElementById('passwordError').classList.add('visible');
@@ -740,7 +740,7 @@
                     isValid = false;
                 }
 
-                // Confirm password validation
+                // Confirm password
                 if (password !== confirmPassword) {
                     document.getElementById('confirmPasswordError').textContent = texts[currentLang].confirmPasswordError;
                     document.getElementById('confirmPasswordError').classList.add('visible');
@@ -748,7 +748,7 @@
                     isValid = false;
                 }
 
-                // Terms validation
+                // Terms
                 if (!termsChecked) {
                     document.getElementById('termsError').textContent = texts[currentLang].termsError;
                     document.getElementById('termsError').classList.add('visible');
@@ -757,14 +757,12 @@
 
                 if (!isValid) return;
 
-                // Disable submit button and show loading state
                 const submitButton = document.getElementById('submitButton');
                 const originalText = submitButton.textContent;
                 submitButton.textContent = texts[currentLang].signingUp;
                 submitButton.disabled = true;
 
                 try {
-                    // API call to your PHP backend
                     const response = await fetch('api.php?action=signup', {
                         method: 'POST',
                         headers: {
@@ -781,13 +779,20 @@
 
                     const data = await response.json();
 
-                    if (response.ok) {
+                    if (response.ok && data.userId && data.apiKey) {
+                        // ✅ ذخیره تمام اطلاعات لازم
+                        localStorage.setItem('user_id', data.userId);
+                        localStorage.setItem('username', data.username);
+                        localStorage.setItem('isLoggedIn', 'true');
+                        localStorage.setItem('loginTime', new Date().getTime());
+                        localStorage.setItem('role', data.role || 'user');
+                        localStorage.setItem('api_key', data.apiKey);
+
                         showMessage(texts[currentLang].signupSuccess, 'success');
                         setTimeout(() => {
                             window.location.href = 'sign-in.html';
                         }, 2000);
                     } else {
-                        // Handle specific error messages from API
                         let errorMessage = texts[currentLang].signupFailed;
                         if (data.error && data.error.includes('Username already exists')) {
                             errorMessage = texts[currentLang].usernameExists;
@@ -797,6 +802,7 @@
                         showMessage(errorMessage, 'error');
                     }
                 } catch (error) {
+                    console.error('Network error:', error);
                     showMessage(texts[currentLang].networkError, 'error');
                 } finally {
                     submitButton.textContent = originalText;
