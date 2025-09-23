@@ -69,7 +69,7 @@ $action = $_GET['action'] ?? '';
 $deviceId = $_GET['device_id'] ?? null;
 $subAction = $_GET['sub_action'] ?? '';
 
-=if ($method === 'GET' && empty($action)) {
+if ($method === 'GET' && empty($action)) {
     sendJson([
         'message' => 'Smartify24 API 🚀',
         'version' => '1.0',
