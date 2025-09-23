@@ -6,8 +6,7 @@
     <title>Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Vazirmatn:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2eTDRtGz5U66b6j9B6Tf6s1K1jH5vW5gP5t9lQ5m5o5x5y5t7y5y5t5x5y5g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
     <style>
         :root {
@@ -72,6 +71,7 @@
         body.dark-mode .moon-icon { display: block; }
         .sun-icon { display: block; }
         .moon-icon { display: none; }
+
         header {
             background: var(--bg-secondary);
             box-shadow: 0 2px 4px var(--shadow-primary);
@@ -79,6 +79,7 @@
             top: 0;
             z-index: 100;
         }
+
         nav {
             max-width: 1200px;
             margin: 0 auto;
@@ -87,17 +88,24 @@
             justify-content: space-between;
             align-items: center;
         }
+
         .logo {
             font-size: 24px;
             font-weight: 600;
             color: var(--text-primary);
         }
-        .logo a { text-decoration: none; color: inherit; }
+
+        .logo a { 
+            text-decoration: none; 
+            color: inherit; 
+        }
+
         .nav-links {
             display: flex;
             align-items: center;
             gap: 24px;
         }
+
         .nav-links a {
             text-decoration: none;
             color: var(--text-muted);
@@ -105,41 +113,52 @@
             font-weight: 500;
             transition: color 0.2s ease;
         }
-        .nav-links a:hover { color: var(--border-focus); }
+
+        .nav-links a:hover { 
+            color: var(--border-focus); 
+        }
+
         .nav-control {
             display: flex;
             align-items: center;
             gap: 8px;
-            cursor: pointer;
         }
+
         .nav-icon {
             width: 24px;
             height: 24px;
             fill: var(--text-muted);
             transition: fill 0.2s ease;
         }
-        .nav-icon:hover { fill: var(--border-focus); }
+
+        .nav-icon:hover { 
+            fill: var(--border-focus); 
+        }
+
         .theme-toggle {
             background: none;
             border: none;
             cursor: pointer;
             padding: 0;
         }
+
         .language-select-wrapper {
             position: relative;
             display: flex;
             align-items: center;
         }
+
         .language-dropdown-icon {
             cursor: pointer;
             padding: 4px;
             border-radius: 8px;
-            transition: background-color 0.2s ease, transform 0.2s ease;
+            transition: background-color 0.2s ease;
         }
+
         .language-dropdown-icon:hover {
             background-color: var(--social-hover);
-            transform: scale(1.05);
         }
+
         .language-dropdown {
             position: absolute;
             top: 100%;
@@ -154,15 +173,16 @@
             min-width: 120px;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px) scale(0.95);
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
         }
+
         .language-dropdown.active {
             opacity: 1;
             visibility: visible;
-            transform: translateY(0) scale(1);
-            transition-delay: 0s;
+            transform: translateY(0);
         }
+
         .language-dropdown-item {
             display: block;
             padding: 8px 16px;
@@ -170,52 +190,33 @@
             color: var(--text-primary);
             text-decoration: none;
             cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-        .language-dropdown-item:hover {
-            background-color: var(--social-hover);
-            color: var(--text-primary);
+            transition: background-color 0.2s ease;
         }
 
-        /* NEW CSS FOR DYNAMIC LAYOUT */
+        .language-dropdown-item:hover {
+            background-color: var(--social-hover);
+        }
+
+        /* Dashboard Styles */
         .dashboard-wrapper {
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             padding: 24px;
             gap: 24px;
-            transition: all 0.5s ease-in-out;
-        }
-
-        .dashboard-wrapper.connected {
-            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .sidebar {
             background-color: var(--bg-secondary);
             border-radius: 16px;
             padding: 24px;
-            width: 380px;
-            max-width: 100%;
+            width: 300px;
             box-shadow: 0 10px 25px var(--shadow-primary);
             height: fit-content;
-            transition: all 0.5s ease-in-out;
-            position: relative;
-        }
-
-        .dashboard-wrapper.connected .sidebar {
-            width: 300px; /* Smaller width when connected */
-        }
-        
-        .sidebar-content {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .dashboard-wrapper.connected .sidebar-content {
-            flex-direction: column;
         }
 
         .sidebar h2 {
@@ -223,65 +224,64 @@
             font-weight: 600;
             margin-bottom: 24px;
         }
-        
-        .sidebar input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-primary);
-            border-radius: 8px;
-            font-size: 16px;
-            color: var(--text-primary);
+
+        .devices-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .device-item {
             background-color: var(--bg-primary);
-            outline: none;
-        }
-        
-        .sidebar input:focus {
-            border-color: var(--border-focus);
-            box-shadow: 0 0 0 3px var(--shadow-focus);
-        }
-        
-        .sidebar button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--accent-primary);
-            color: var(--bg-secondary);
-            border: none;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
+            padding: 16px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: all 0.2s ease;
+            border: 1px solid var(--divider);
         }
-        
-        .sidebar button:hover { background-color: var(--accent-hover); }
-        
+
+        .device-item:hover {
+            background-color: var(--social-hover);
+            border-color: var(--border-primary);
+        }
+
+        .device-item.active {
+            border-color: var(--border-focus);
+            background-color: var(--shadow-focus);
+        }
+
+        .device-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .device-item small {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
         .main-dashboard {
             flex: 1;
-            display: none; /* Initially hidden */
+            display: none;
             flex-direction: column;
             gap: 24px;
-            width: 100%;
-            max-width: 800px;
-            transition: opacity 0.5s ease;
+            min-width: 0;
         }
-        
+
         .device-card {
             background-color: var(--bg-secondary);
             border-radius: 16px;
             padding: 32px;
             box-shadow: 0 10px 25px var(--shadow-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
         }
-        
+
         .device-card h2 {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 24px;
+            text-align: center;
         }
-        
+
         .device-status {
             margin-bottom: 32px;
             display: flex;
@@ -289,70 +289,99 @@
             align-items: center;
             gap: 16px;
         }
-        
+
         .light-bulb {
-            font-size: 120px;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
+            font-size: 80px;
+            transition: all 0.3s ease;
             color: #888;
-            text-shadow: none;
         }
-        
+
         .light-bulb.on {
             color: #ffcc00;
-            text-shadow: 0 0 20px #ffcc00;
+            filter: drop-shadow(0 0 20px #ffcc00);
         }
-        
+
         .device-status p {
             font-size: 18px;
             font-weight: 500;
             color: var(--text-secondary);
         }
-        
+
+        .toggle-btn {
+            width: 200px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            color: white;
+        }
+
+        .toggle-btn.on { 
+            background-color: var(--success-color); 
+        }
+
+        .toggle-btn.on:hover { 
+            background-color: #15803d; 
+        }
+
+        .toggle-btn.off { 
+            background-color: var(--error-color); 
+        }
+
+        .toggle-btn.off:hover { 
+            background-color: #dc2626; 
+        }
+
         .controls {
             display: flex;
             flex-direction: column;
-            width: 100%;
-            gap: 16px;
+            gap: 20px;
         }
-        
+
         .control-group {
             background-color: var(--bg-primary);
             border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
+            padding: 20px;
             border: 1px solid var(--divider);
         }
-        
+
         .control-group h3 {
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
         }
-        
+
+        .control-group p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
         .control-row {
             display: flex;
-            align-items: center;
             gap: 12px;
+            align-items: center;
         }
-        
+
         .control-row input {
             flex: 1;
             padding: 10px;
             border: 1px solid var(--border-primary);
             border-radius: 8px;
             font-size: 16px;
-            color: var(--text-primary);
             background-color: var(--bg-secondary);
+            color: var(--text-primary);
             outline: none;
         }
-        
+
         .control-row input:focus {
             border-color: var(--border-focus);
             box-shadow: 0 0 0 3px var(--shadow-focus);
         }
-        
+
         .control-row button {
             padding: 10px 20px;
             background-color: var(--accent-primary);
@@ -363,40 +392,26 @@
             font-weight: 500;
             cursor: pointer;
             transition: background 0.2s ease;
+            white-space: nowrap;
         }
-        
-        .control-row button:hover { background-color: var(--accent-hover); }
-        
-        .toggle-btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s ease, color 0.2s ease;
-            color: white;
+
+        .control-row button:hover {
+            background-color: var(--accent-hover);
         }
-        
-        .toggle-btn.on { background-color: var(--success-color); }
-        .toggle-btn.on:hover { background-color: #15803d; }
-        .toggle-btn.off { background-color: var(--error-color); }
-        .toggle-btn.off:hover { background-color: #dc2626; }
-        
+
         .log-card {
             background-color: var(--bg-secondary);
             border-radius: 16px;
-            padding: 32px;
+            padding: 24px;
             box-shadow: 0 10px 25px var(--shadow-primary);
         }
-        
+
         .log-card h2 {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
             margin-bottom: 16px;
         }
-        
+
         .log-list {
             list-style: none;
             padding: 0;
@@ -407,80 +422,145 @@
             border-radius: 8px;
             padding: 12px;
         }
-        
+
         .log-item {
             padding: 8px 0;
             border-bottom: 1px solid var(--divider);
             font-size: 14px;
             color: var(--text-secondary);
+            line-height: 1.4;
         }
-        
-        .log-item:last-child { border-bottom: none; }
-        
+
+        .log-item:last-child {
+            border-bottom: none;
+        }
+
+        .connection-status {
+            margin-top: 12px;
+            font-size: 14px;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .status-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .status-error {
+            background-color: var(--error-color);
+            color: white;
+        }
+
         footer {
-            flex-shrink: 0;
             background: var(--bg-secondary);
             box-shadow: 0 -2px 4px var(--shadow-primary);
-            padding: 5px 32px;
+            padding: 20px 32px;
             text-align: center;
-            width: 100%;
             margin-top: auto;
         }
-        
+
         .footer-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 16px 0;
         }
-        
+
         .footer-title {
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 16px;
             color: var(--text-secondary);
         }
-        
+
         .social-links {
             display: flex;
             justify-content: center;
             gap: 24px;
         }
-        
+
         .social-link img {
             width: 32px;
             height: 32px;
             transition: transform 0.2s ease;
         }
-        
+
         .social-link:hover img {
             transform: scale(1.1);
         }
 
-        body[dir="rtl"] { font-family: 'Vazirmatn', sans-serif; }
-        body[dir="rtl"] nav, body[dir="rtl"] .dashboard-wrapper, body[dir="rtl"] footer { text-align: right; direction: rtl; }
-        body[dir="rtl"] .nav-links { flex-direction: row; }
-        body[dir="rtl"] .language-dropdown { left: auto; right: 0; }
-        body[dir="rtl"] .sidebar input, body[dir="rtl"] .control-row input {
-            text-align: right;
-        }
-        body[dir="rtl"] .log-list { padding-right: 0; }
-        
-        @media (max-width: 992px) {
-            .dashboard-wrapper { flex-direction: column; align-items: center; }
-            .sidebar { width: 100%; max-width: 600px; }
-            .main-dashboard { width: 100%; max-width: 600px; }
-            .dashboard-wrapper.connected .sidebar {
-                width: 100%;
-                max-width: 600px;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            nav { flex-direction: column; gap: 16px; }
-            .nav-links { flex-wrap: wrap; justify-content: center; gap: 16px; }
-            .dashboard-wrapper { padding: 16px; }
+        /* RTL Support */
+        body[dir="rtl"] { 
+            font-family: 'Vazirmatn', sans-serif; 
         }
 
+        body[dir="rtl"] .nav-links,
+        body[dir="rtl"] .sidebar,
+        body[dir="rtl"] .device-card,
+        body[dir="rtl"] .log-card {
+            text-align: right;
+        }
+
+        body[dir="rtl"] .language-dropdown {
+            left: auto;
+            right: 0;
+        }
+
+        body[dir="rtl"] .control-row {
+            flex-direction: row-reverse;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-wrapper {
+                flex-direction: column;
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+
+            .main-dashboard {
+                width: 100%;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 16px;
+                padding: 16px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            .control-row {
+                flex-direction: column;
+            }
+
+            .control-row button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .device-card,
+            .log-card {
+                padding: 20px;
+            }
+
+            .light-bulb {
+                font-size: 60px;
+            }
+
+            .toggle-btn {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -493,64 +573,65 @@
                 <a href="index.html" id="homeLink">Home</a>
                 <a href="about.html" id="aboutLink">About</a>
                 <a href="contact.html" id="contactLink">Contact</a>
+                <a href="dashboard.html" id="dashboardLink">Dashboard</a>
                 <a href="sign-in.html" id="signInLink">Sign in</a>
                 <a href="sign-up.html" id="signUpLink">Sign up</a>
                 <button class="theme-toggle" id="darkModeToggle" aria-label="Toggle dark mode">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon sun-icon" viewBox="0 0 16 16">
+                        <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon moon-icon" viewBox="0 0 16 16">
+                        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278M4.858 1.311A7.269 7.269 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.316 7.316 0 0 0 5.205-2.119c-.504.014-1.004.03-1.5.03-3.419 0-6.393-2.3-7.302-5.41A7.312 7.312 0 0 0 4.858 1.311z"/>
+                    </svg>
                 </button>
                 <div class="language-select-wrapper" id="languageWrapper">
-    <div class="language-dropdown-icon">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h1v1.93h-1zm6.93-2.52c-.42 1.42-1.63 2.49-3.09 2.82V19h-1V6.16c3.16.78 5.61 3.53 5.61 6.84 0 1.25-.37 2.41-1.03 3.41zM11 4.07V5h1v-1.93c.96-.06 1.9-.06 2.8-.02l-6.84 3.39c-.11-.02-.23-.04-.34-.07C7.63 6.07 7 7.01 7 8.01c0 .4.07.79.2 1.16L4.21 11.2C4.08 10.62 4 10.01 4 9.38c0-2.85 1.66-5.32 4.07-6.53zM18.8 14.8C18.42 13.9 18 12.98 18 12c0-.5-.03-.99-.08-1.48l-5.74 5.74v-1.95c.57-.22 1.07-.5 1.5-.83l-2.67-2.67c-.24-.24-.39-.56-.39-.91 0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25c0 .35-.15.67-.39.91l-2.67 2.67c-.33-.43-.61-.93-.83-1.5L9.52 4.08C9.03 4.14 8.53 4.17 8.04 4.17c-1.12 0-2.18-.28-3.12-.76L16.09 3.01c2.09.52 3.73 2.22 3.91 4.34-.14.28-.27.57-.4.86L18.8 14.8z"/>
-        </svg>
-    </div>
-    <div class="language-dropdown" id="languageDropdown">
-        <a href="#" class="language-dropdown-item" data-lang="en">English</a>
-        <a href="#" class="language-dropdown-item" data-lang="fa">فارسی</a>
-    </div>
-</div>
-
+                    <div class="language-dropdown-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="nav-icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2h1v1.93h-1zm6.93-2.52c-.42 1.42-1.63 2.49-3.09 2.82V19h-1V6.16c3.16.78 5.61 3.53 5.61 6.84 0 1.25-.37 2.41-1.03 3.41zM11 4.07V5h1v-1.93c.96-.06 1.9-.06 2.8-.02l-6.84 3.39c-.11-.02-.23-.04-.34-.07C7.63 6.07 7 7.01 7 8.01c0 .4.07.79.2 1.16L4.21 11.2C4.08 10.62 4 10.01 4 9.38c0-2.85 1.66-5.32 4.07-6.53zM18.8 14.8C18.42 13.9 18 12.98 18 12c0-.5-.03-.99-.08-1.48l-5.74 5.74v-1.95c.57-.22 1.07-.5 1.5-.83l-2.67-2.67c-.24-.24-.39-.56-.39-.91 0-.69.56-1.25 1.25-1.25s1.25.56 1.25 1.25c0 .35-.15.67-.39.91l-2.67 2.67c-.33-.43-.61-.93-.83-1.5L9.52 4.08C9.03 4.14 8.53 4.17 8.04 4.17c-1.12 0-2.18-.28-3.12-.76L16.09 3.01c2.09.52 3.73 2.22 3.91 4.34-.14.28-.27.57-.4.86L18.8 14.8z"/>
+                        </svg>
+                    </div>
+                    <div class="language-dropdown" id="languageDropdown">
+                        <a href="#" class="language-dropdown-item" data-lang="en">English</a>
+                        <a href="#" class="language-dropdown-item" data-lang="fa">فارسی</a>
+                    </div>
+                </div>
             </div>
         </nav>
     </header>
 
-    <div class="dashboard-wrapper" id="dashboardWrapper">
-        <div class="sidebar" id="sidebar">
-            <h2 id="sidebarTitle">Select Device</h2>
-            <div class="sidebar-content">
-                <input type="text" id="deviceIdInput" placeholder="Enter Device ID" />
-                <button id="connectDeviceBtn">Connect</button>
-                <p id="connectionStatus" style="margin-top: 12px; font-size: 14px; text-align: center; color: var(--text-muted);"></p>
+    <div class="dashboard-wrapper">
+        <div class="sidebar">
+            <h2 id="sidebarTitle">Your Devices</h2>
+            <div id="devicesList" class="devices-list">
+                <!-- Devices will be loaded here -->
             </div>
+            <div id="connectionStatus" class="connection-status" style="display: none;"></div>
         </div>
 
         <div class="main-dashboard" id="mainDashboard">
             <div class="device-card">
-                <h2 id="deviceName">Lamp 1</h2>
+                <h2 id="deviceName">Select a Device</h2>
                 <div class="device-status">
                     <div id="lightBulb" class="light-bulb">💡</div>
-                    <p id="deviceStatusText">Current Status: OFF</p>
-                    <button id="toggleBtn" class="toggle-btn off">Turn ON</button>
+                    <p id="deviceStatusText">Please select a device from the list</p>
+                    <button id="toggleBtn" class="toggle-btn off" style="display: none;">Turn ON</button>
                 </div>
 
                 <div class="controls">
                     <div class="control-group">
                         <h3 id="timerControlTitle">Set Timer</h3>
-                        <p id="timerControlDesc" style="font-size: 14px; margin-bottom: 8px;">(e.g., 15 minutes)</p>
+                        <p id="timerControlDesc">Set a timer to automatically turn off the device</p>
                         <div class="control-row">
-                            <input type="number" id="timerMinutes" min="1" placeholder="Minutes" />
+                            <input type="number" id="timerMinutes" min="1" placeholder="Enter minutes" />
                             <button id="setTimerBtn">Set Timer</button>
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <h3 id="scheduleControlTitle">Schedule ON/OFF</h3>
-                        <p id="scheduleControlDesc" style="font-size: 14px; margin-bottom: 8px;">(Set a date & time to turn ON)</p>
+                        <h3 id="scheduleControlTitle">Device Logs</h3>
+                        <p id="scheduleControlDesc">View recent activity logs for this device</p>
                         <div class="control-row">
-                            <input type="datetime-local" id="scheduleDateTime" />
-                            <input type="number" id="scheduleDuration" min="1" placeholder="Duration (min)" />
-                            <button id="setScheduleBtn">Set Schedule</button>
+                            <button id="getLogsBtn">Get Logs</button>
                         </div>
                     </div>
                 </div>
@@ -559,6 +640,7 @@
             <div class="log-card">
                 <h2 id="logTitle">Activity Log</h2>
                 <ul id="logList" class="log-list">
+                    <li class="log-item">Select a device to view activity logs</li>
                 </ul>
             </div>
         </div>
@@ -579,234 +661,449 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
             const darkModeToggle = document.getElementById('darkModeToggle');
             const body = document.body;
             const langWrapper = document.getElementById('languageWrapper');
             const langDropdown = document.getElementById('languageDropdown');
             const langItems = document.querySelectorAll('.language-dropdown-item');
+            const devicesList = document.getElementById('devicesList');
+            const mainDashboard = document.getElementById('mainDashboard');
+            const deviceName = document.getElementById('deviceName');
+            const lightBulb = document.getElementById('lightBulb');
+            const deviceStatusText = document.getElementById('deviceStatusText');
+            const toggleBtn = document.getElementById('toggleBtn');
+            const timerMinutes = document.getElementById('timerMinutes');
+            const setTimerBtn = document.getElementById('setTimerBtn');
+            const getLogsBtn = document.getElementById('getLogsBtn');
+            const logList = document.getElementById('logList');
+            const connectionStatus = document.getElementById('connectionStatus');
 
+            // Texts
             const texts = {
                 en: {
-                    logo: "Smartify24", 
-                    homeLink: "Home", 
-                    aboutLink: "About", 
-                    contactLink: "Contact", 
-                    signInLink: "Sign in", 
+                    // Navigation
+                    homeLink: "Home",
+                    aboutLink: "About",
+                    contactLink: "Contact",
+                    dashboardLink: "Dashboard",
+                    signInLink: "Sign in",
                     signUpLink: "Sign up",
-                    sidebarTitle: "Select Device", 
-                    deviceIdInput: "Enter Device ID", 
-                    connectDeviceBtn: "Connect",
-                    connectionStatus: "", 
-                    deviceName: "Lamp 1", 
-                    deviceStatusTextOff: "Current Status: OFF", 
-                    deviceStatusTextOn: "Current Status: ON",
-                    toggleBtnOff: "Turn ON", 
-                    toggleBtnOn: "Turn OFF", 
-                    timerControlTitle: "Set Timer", 
-                    timerControlDesc: "(e.g., 15 minutes)",
-                    timerMinutes: "Minutes", 
-                    setTimerBtn: "Set Timer", 
-                    scheduleControlTitle: "Schedule ON/OFF", 
-                    scheduleControlDesc: "(Set a date & time to turn ON)",
-                    scheduleDuration: "Duration (min)", 
-                    setScheduleBtn: "Set Schedule", 
-                    logTitle: "Activity Log", 
-                    footerContactTitle: "Contact Us",
-                    log_on: "Device turned ON manually.", 
-                    log_off: "Device turned OFF manually.",
-                    log_timer_set: (minutes) => `Timer set for ${minutes} minutes.`,
-                    log_schedule_set: (dateTime, duration) => `Scheduled to turn ON at ${dateTime} for ${duration} minutes.`,
-                    log_connected: (id) => `Successfully connected to device ${id}.`,
-                    log_connection_failed: "Failed to connect. Please check the Device ID."
+                    
+                    // Sidebar
+                    sidebarTitle: "Your Devices",
+                    noDevices: "No devices found",
+                    loadingDevices: "Loading devices...",
+                    
+                    // Device Card
+                    selectDevice: "Select a Device",
+                    deviceStatusOff: "Status: OFF",
+                    deviceStatusOn: "Status: ON",
+                    turnOn: "Turn ON",
+                    turnOff: "Turn OFF",
+                    
+                    // Controls
+                    timerTitle: "Set Timer",
+                    timerDesc: "Set a timer to automatically turn off the device",
+                    timerPlaceholder: "Enter minutes",
+                    setTimer: "Set Timer",
+                    logsTitle: "Device Logs",
+                    logsDesc: "View recent activity logs for this device",
+                    getLogs: "Get Logs",
+                    
+                    // Logs
+                    logTitle: "Activity Log",
+                    noLogs: "No activity logs found",
+                    selectDeviceLogs: "Select a device to view activity logs",
+                    
+                    // Status Messages
+                    connected: "Connected to device",
+                    connectionFailed: "Failed to connect to device",
+                    deviceUpdated: "Device status updated",
+                    timerSet: "Timer set successfully",
+                    logsLoaded: "Logs loaded successfully",
+                    
+                    // Errors
+                    error: "Error",
+                    authError: "Please sign in to access dashboard",
+                    deviceError: "Device not found",
+                    genericError: "Something went wrong"
                 },
                 fa: {
-                    logo: "Smartify24", 
-                    homeLink: "خانه", 
-                    aboutLink: "درباره", 
-                    contactLink: "تماس", 
-                    signInLink: "ورود", 
+                    // Navigation
+                    homeLink: "خانه",
+                    aboutLink: "درباره",
+                    contactLink: "تماس",
+                    dashboardLink: "داشبورد",
+                    signInLink: "ورود",
                     signUpLink: "ثبت‌نام",
-                    sidebarTitle: "انتخاب دستگاه", 
-                    deviceIdInput: "شناسه دستگاه را وارد کنید", 
-                    connectDeviceBtn: "اتصال",
-                    connectionStatus: "", 
-                    deviceName: "لامپ ۱", 
-                    deviceStatusTextOff: "وضعیت فعلی: خاموش", 
-                    deviceStatusTextOn: "وضعیت فعلی: روشن",
-                    toggleBtnOff: "روشن کردن", 
-                    toggleBtnOn: "خاموش کردن", 
-                    timerControlTitle: "تنظیم تایمر", 
-                    timerControlDesc: "(مثال: ۱۵ دقیقه)",
-                    timerMinutes: "دقیقه", 
-                    setTimerBtn: "ثبت تایمر", 
-                    scheduleControlTitle: "زمان‌بندی روشن/خاموش", 
-                    scheduleControlDesc: "(تاریخ و زمان را برای روشن شدن تنظیم کنید)",
-                    scheduleDuration: "مدت زمان (دقیقه)", 
-                    setScheduleBtn: "ثبت زمان‌بندی", 
-                    logTitle: "تاریخچه فعالیت‌ها", 
-                    footerContactTitle: "تماس با ما",
-                    log_on: "دستگاه به صورت دستی روشن شد.", 
-                    log_off: "دستگاه به صورت دستی خاموش شد.",
-                    log_timer_set: (minutes) => `تایمر برای ${minutes} دقیقه تنظیم شد.`,
-                    log_schedule_set: (dateTime, duration) => `برای روشن شدن در تاریخ و ساعت ${dateTime} به مدت ${duration} دقیقه زمان‌بندی شد.`,
-                    log_connected: (id) => `با موفقیت به دستگاه ${id} متصل شد.`,
-                    log_connection_failed: "اتصال ناموفق بود. لطفاً شناسه دستگاه را بررسی کنید."
+                    
+                    // Sidebar
+                    sidebarTitle: "دستگاه‌های شما",
+                    noDevices: "هیچ دستگاهی یافت نشد",
+                    loadingDevices: "در حال بارگذاری دستگاه‌ها...",
+                    
+                    // Device Card
+                    selectDevice: "انتخاب دستگاه",
+                    deviceStatusOff: "وضعیت: خاموش",
+                    deviceStatusOn: "وضعیت: روشن",
+                    turnOn: "روشن کردن",
+                    turnOff: "خاموش کردن",
+                    
+                    // Controls
+                    timerTitle: "تنظیم تایمر",
+                    timerDesc: "تنظیم تایمر برای خاموش کردن خودکار دستگاه",
+                    timerPlaceholder: "دقیقه وارد کنید",
+                    setTimer: "تنظیم تایمر",
+                    logsTitle: "لاگ‌های دستگاه",
+                    logsDesc: "مشاهده تاریخچه فعالیت‌های دستگاه",
+                    getLogs: "دریافت لاگ‌ها",
+                    
+                    // Logs
+                    logTitle: "تاریخچه فعالیت",
+                    noLogs: "هیچ فعالیتی ثبت نشده",
+                    selectDeviceLogs: "برای مشاهده لاگ‌ها یک دستگاه انتخاب کنید",
+                    
+                    // Status Messages
+                    connected: "اتصال به دستگاه برقرار شد",
+                    connectionFailed: "اتصال به دستگاه ناموفق بود",
+                    deviceUpdated: "وضعیت دستگاه به روز شد",
+                    timerSet: "تایمر با موفقیت تنظیم شد",
+                    logsLoaded: "لاگ‌ها با موفقیت بارگذاری شدند",
+                    
+                    // Errors
+                    error: "خطا",
+                    authError: "لطفاً برای دسترسی به داشبورد وارد شوید",
+                    deviceError: "دستگاه یافت نشد",
+                    genericError: "مشکلی پیش آمده است"
                 }
             };
-            
-            const elements = {
-                logo: document.getElementById('logo'), 
-                homeLink: document.getElementById('homeLink'), 
-                aboutLink: document.getElementById('aboutLink'),
-                contactLink: document.getElementById('contactLink'), 
-                signInLink: document.getElementById('signInLink'), 
-                signUpLink: document.getElementById('signUpLink'),
-                sidebarTitle: document.getElementById('sidebarTitle'), 
-                deviceIdInput: document.getElementById('deviceIdInput'),
-                connectDeviceBtn: document.getElementById('connectDeviceBtn'), 
-                connectionStatus: document.getElementById('connectionStatus'),
-                mainDashboard: document.getElementById('mainDashboard'), 
-                deviceName: document.getElementById('deviceName'),
-                deviceStatusText: document.getElementById('deviceStatusText'), 
-                toggleBtn: document.getElementById('toggleBtn'),
-                timerControlTitle: document.getElementById('timerControlTitle'), 
-                timerControlDesc: document.getElementById('timerControlDesc'),
-                timerMinutes: document.getElementById('timerMinutes'), 
-                setTimerBtn: document.getElementById('setTimerBtn'),
-                scheduleControlTitle: document.getElementById('scheduleControlTitle'), 
-                scheduleControlDesc: document.getElementById('scheduleControlDesc'),
-                scheduleDateTime: document.getElementById('scheduleDateTime'), 
-                scheduleDuration: document.getElementById('scheduleDuration'),
-                setScheduleBtn: document.getElementById('setScheduleBtn'), 
-                logTitle: document.getElementById('logTitle'),
-                logList: document.getElementById('logList'), 
-                footerContactTitle: document.getElementById('contactTitle'),
-                dashboardWrapper: document.getElementById('dashboardWrapper'), 
-                sidebar: document.getElementById('sidebar')
-            };
 
-            const lightBulb = document.getElementById('lightBulb');
-            let isLightOn = false;
-
-            function updateLightStatus(isOn) {
-                isLightOn = isOn;
-                if (isOn) {
-                    lightBulb.classList.remove('off');
-                    lightBulb.classList.add('on');
-                    elements.deviceStatusText.textContent = texts[currentLang].deviceStatusTextOn;
-                    elements.toggleBtn.textContent = texts[currentLang].toggleBtnOn;
-                    elements.toggleBtn.classList.remove('off');
-                    elements.toggleBtn.classList.add('on');
-                } else {
-                    lightBulb.classList.remove('on');
-                    lightBulb.classList.add('off');
-                    elements.deviceStatusText.textContent = texts[currentLang].deviceStatusTextOff;
-                    elements.toggleBtn.textContent = texts[currentLang].toggleBtnOff;
-                    elements.toggleBtn.classList.remove('on');
-                    elements.toggleBtn.classList.add('off');
-                }
-            }
-
-            function addLog(text) {
-                const logItem = document.createElement('li');
-                logItem.classList.add('log-item');
-                const now = new Date();
-                const timeString = now.toLocaleTimeString();
-                logItem.textContent = `[${timeString}] ${text}`;
-                elements.logList.prepend(logItem);
-            }
-
+            // State
             let currentLang = localStorage.getItem('uiLanguage') || 'en';
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            let currentDevice = null;
+            let devices = [];
 
-            if (isDarkMode) body.classList.add('dark-mode');
+            // Initialize
+            function init() {
+                applyLanguage(currentLang);
+                setupEventListeners();
+                checkAuthAndLoadDevices();
+            }
 
+            // Apply language
             function applyLanguage(lang) {
-                Object.keys(elements).forEach(key => {
-                    if (texts[lang][key]) {
-                        if (key === 'toggleBtn') {
-                            elements.toggleBtn.textContent = isLightOn ? texts[lang].toggleBtnOn : texts[lang].toggleBtnOff;
-                        } else if (key === 'deviceStatusText') {
-                            elements.deviceStatusText.textContent = isLightOn ? texts[lang].deviceStatusTextOn : texts[lang].deviceStatusTextOff;
-                        } else if (elements[key].placeholder && texts[lang][key]) {
-                            elements[key].placeholder = texts[lang][key];
-                        } else if (elements[key].textContent !== undefined) {
-                            elements[key].textContent = texts[lang][key];
-                        }
-                    }
-                });
+                currentLang = lang;
+                
+                // Update navigation
+                document.getElementById('homeLink').textContent = texts[lang].homeLink;
+                document.getElementById('aboutLink').textContent = texts[lang].aboutLink;
+                document.getElementById('contactLink').textContent = texts[lang].contactLink;
+                document.getElementById('dashboardLink').textContent = texts[lang].dashboardLink;
+                document.getElementById('signInLink').textContent = texts[lang].signInLink;
+                document.getElementById('signUpLink').textContent = texts[lang].signUpLink;
+                
+                // Update sidebar
+                document.getElementById('sidebarTitle').textContent = texts[lang].sidebarTitle;
+                
+                // Update device card
+                if (!currentDevice) {
+                    deviceName.textContent = texts[lang].selectDevice;
+                    deviceStatusText.textContent = texts[lang].selectDevice;
+                }
+                
+                // Update controls
+                document.getElementById('timerControlTitle').textContent = texts[lang].timerTitle;
+                document.getElementById('timerControlDesc').textContent = texts[lang].timerDesc;
+                timerMinutes.placeholder = texts[lang].timerPlaceholder;
+                setTimerBtn.textContent = texts[lang].setTimer;
+                
+                document.getElementById('scheduleControlTitle').textContent = texts[lang].logsTitle;
+                document.getElementById('scheduleControlDesc').textContent = texts[lang].logsDesc;
+                getLogsBtn.textContent = texts[lang].getLogs;
+                
+                // Update logs
+                document.getElementById('logTitle').textContent = texts[lang].logTitle;
+                
+                // Update footer
+                document.getElementById('contactTitle').textContent = texts[lang].contactLink;
+                
+                // Update body direction
                 body.setAttribute('dir', lang === 'fa' ? 'rtl' : 'ltr');
                 document.documentElement.lang = lang;
-                currentLang = lang;
-                elements.logList.innerHTML = '';
             }
-            applyLanguage(currentLang);
 
-            darkModeToggle.addEventListener('click', () => {
+            // Event listeners
+            function setupEventListeners() {
+                // Dark mode toggle
+                darkModeToggle.addEventListener('click', toggleDarkMode);
+                
+                // Language dropdown
+                langWrapper.addEventListener('click', toggleLanguageDropdown);
+                langItems.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const lang = e.target.getAttribute('data-lang');
+                        switchLanguage(lang);
+                    });
+                });
+                
+                // Device control buttons
+                toggleBtn.addEventListener('click', toggleDevice);
+                setTimerBtn.addEventListener('click', setTimer);
+                getLogsBtn.addEventListener('click', getLogs);
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!langWrapper.contains(e.target)) {
+                        langDropdown.classList.remove('active');
+                    }
+                });
+            }
+
+            // Dark mode
+            function toggleDarkMode() {
                 body.classList.toggle('dark-mode');
                 localStorage.setItem('darkMode', body.classList.contains('dark-mode'));
-            });
+            }
 
-            langWrapper.addEventListener('click', (event) => {
-                event.stopPropagation();
+            // Language dropdown
+            function toggleLanguageDropdown(e) {
+                e.stopPropagation();
                 langDropdown.classList.toggle('active');
-            });
+            }
 
-            langItems.forEach(item => {
-                item.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const selectedLang = item.getAttribute('data-lang');
-                    applyLanguage(selectedLang);
-                    localStorage.setItem('uiLanguage', selectedLang);
-                    langDropdown.classList.remove('active');
+            function switchLanguage(lang) {
+                localStorage.setItem('uiLanguage', lang);
+                applyLanguage(lang);
+                langDropdown.classList.remove('active');
+                // Reload devices to update their names in the new language
+                if (devices.length > 0) {
+                    renderDevicesList();
+                }
+            }
+
+            // Authentication and device loading
+            async function checkAuthAndLoadDevices() {
+                try {
+                    const response = await fetch('api.php?action=devices');
+                    
+                    if (response.status === 401) {
+                        showError(texts[currentLang].authError);
+                        setTimeout(() => {
+                            window.location.href = 'sign-in.html';
+                        }, 2000);
+                        return;
+                    }
+                    
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch devices');
+                    }
+                    
+                    const data = await response.json();
+                    devices = data.devices || [];
+                    renderDevicesList();
+                    
+                } catch (error) {
+                    console.error('Error loading devices:', error);
+                    showError(texts[currentLang].genericError);
+                    devicesList.innerHTML = `<div class="device-item">${texts[currentLang].noDevices}</div>`;
+                }
+            }
+
+            // Render devices list
+            function renderDevicesList() {
+                if (devices.length === 0) {
+                    devicesList.innerHTML = `<div class="device-item">${texts[currentLang].noDevices}</div>`;
+                    return;
+                }
+                
+                devicesList.innerHTML = devices.map(device => `
+                    <div class="device-item" data-device-id="${device.id}">
+                        <strong>${device.name || `Device ${device.id}`}</strong>
+                        <small>ID: ${device.id} | Status: ${device.status}</small>
+                    </div>
+                `).join('');
+                
+                // Add click listeners to device items
+                devicesList.querySelectorAll('.device-item').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const deviceId = this.getAttribute('data-device-id');
+                        const device = devices.find(d => d.id == deviceId);
+                        if (device) {
+                            selectDevice(device);
+                        }
+                    });
                 });
-            });
+            }
 
-            document.addEventListener('click', (event) => {
-                if (!langWrapper.contains(event.target)) {
-                    langDropdown.classList.remove('active');
-                }
-            });
+            // Select device
+            function selectDevice(device) {
+                currentDevice = device;
+                
+                // Update UI
+                document.querySelectorAll('.device-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`[data-device-id="${device.id}"]`).classList.add('active');
+                
+                // Show main dashboard
+                mainDashboard.style.display = 'flex';
+                
+                // Update device info
+                deviceName.textContent = device.name || `Device ${device.id}`;
+                updateDeviceStatus(device.status === 'ON');
+                
+                // Show controls
+                toggleBtn.style.display = 'block';
+                
+                // Show connection status
+                showStatus(texts[currentLang].connected, 'success');
+                
+                // Clear logs
+                logList.innerHTML = `<li class="log-item">${texts[currentLang].selectDeviceLogs}</li>`;
+            }
 
-            elements.connectDeviceBtn.addEventListener('click', () => {
-                const deviceId = elements.deviceIdInput.value.trim();
-                if (deviceId === '1234') { 
-                    elements.dashboardWrapper.classList.add('connected');
-                    elements.mainDashboard.style.display = 'flex';
-                    elements.connectionStatus.textContent = texts[currentLang].log_connected(deviceId);
-                    elements.connectionStatus.style.color = 'var(--success-color)';
-                    updateLightStatus(false);
+            // Update device status display
+            function updateDeviceStatus(isOn) {
+                if (isOn) {
+                    lightBulb.classList.add('on');
+                    lightBulb.classList.remove('off');
+                    deviceStatusText.textContent = texts[currentLang].deviceStatusOn;
+                    toggleBtn.textContent = texts[currentLang].turnOff;
+                    toggleBtn.classList.add('on');
+                    toggleBtn.classList.remove('off');
                 } else {
-                    elements.dashboardWrapper.classList.remove('connected');
-                    elements.mainDashboard.style.display = 'none';
-                    elements.connectionStatus.textContent = texts[currentLang].log_connection_failed;
-                    elements.connectionStatus.style.color = 'var(--error-color)';
+                    lightBulb.classList.add('off');
+                    lightBulb.classList.remove('on');
+                    deviceStatusText.textContent = texts[currentLang].deviceStatusOff;
+                    toggleBtn.textContent = texts[currentLang].turnOn;
+                    toggleBtn.classList.add('off');
+                    toggleBtn.classList.remove('on');
                 }
-            });
+            }
 
-            elements.toggleBtn.addEventListener('click', () => {
-                const newStatus = !isLightOn;
-                updateLightStatus(newStatus);
-                addLog(newStatus ? texts[currentLang].log_on : texts[currentLang].log_off);
-            });
-
-            elements.setTimerBtn.addEventListener('click', () => {
-                const minutes = elements.timerMinutes.value;
-                if (minutes > 0) {
-                    addLog(texts[currentLang].log_timer_set(minutes));
+            // Toggle device
+            async function toggleDevice() {
+                if (!currentDevice) return;
+                
+                const newStatus = currentDevice.status === 'ON' ? 'OFF' : 'ON';
+                
+                try {
+                    const response = await fetch(`api.php?action=devices&sub_action=control&device_id=${currentDevice.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    
+                    if (response.ok) {
+                        currentDevice.status = newStatus;
+                        updateDeviceStatus(newStatus === 'ON');
+                        showStatus(texts[currentLang].deviceUpdated, 'success');
+                        
+                        // Update device in list
+                        const deviceItem = document.querySelector(`[data-device-id="${currentDevice.id}"]`);
+                        if (deviceItem) {
+                            deviceItem.querySelector('small').textContent = 
+                                `ID: ${currentDevice.id} | Status: ${currentDevice.status}`;
+                        }
+                    } else {
+                        throw new Error('Failed to update device');
+                    }
+                } catch (error) {
+                    console.error('Error toggling device:', error);
+                    showStatus(texts[currentLang].error, 'error');
                 }
-            });
+            }
 
-            elements.setScheduleBtn.addEventListener('click', () => {
-                const dateTime = elements.scheduleDateTime.value;
-                const duration = elements.scheduleDuration.value;
-                if (dateTime && duration > 0) {
-                    const formattedDateTime = new Date(dateTime).toLocaleString(currentLang === 'fa' ? 'fa-IR' : 'en-US');
-                    addLog(texts[currentLang].log_schedule_set(formattedDateTime, duration));
+            // Set timer
+            async function setTimer() {
+                if (!currentDevice || !timerMinutes.value) return;
+                
+                const minutes = parseInt(timerMinutes.value);
+                if (minutes < 1) return;
+                
+                try {
+                    const response = await fetch(`api.php?action=devices&sub_action=timer&device_id=${currentDevice.id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ duration_minutes: minutes })
+                    });
+                    
+                    if (response.ok) {
+                        showStatus(texts[currentLang].timerSet, 'success');
+                        timerMinutes.value = '';
+                    } else {
+                        throw new Error('Failed to set timer');
+                    }
+                } catch (error) {
+                    console.error('Error setting timer:', error);
+                    showStatus(texts[currentLang].error, 'error');
                 }
-            });
+            }
 
+            // Get logs
+            async function getLogs() {
+                if (!currentDevice) return;
+                
+                try {
+                    const response = await fetch(`api.php?action=devices&sub_action=logs&device_id=${currentDevice.id}`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        renderLogs(data.logs || []);
+                        showStatus(texts[currentLang].logsLoaded, 'success');
+                    } else {
+                        throw new Error('Failed to get logs');
+                    }
+                } catch (error) {
+                    console.error('Error getting logs:', error);
+                    showStatus(texts[currentLang].error, 'error');
+                }
+            }
+
+            // Render logs
+            function renderLogs(logs) {
+                if (logs.length === 0) {
+                    logList.innerHTML = `<li class="log-item">${texts[currentLang].noLogs}</li>`;
+                    return;
+                }
+                
+                logList.innerHTML = logs.map(log => `
+                    <li class="log-item">
+                        [${new Date(log.timestamp).toLocaleString()}] ${log.action}
+                    </li>
+                `).join('');
+            }
+
+            // Status messages
+            function showStatus(message, type) {
+                connectionStatus.textContent = message;
+                connectionStatus.className = `connection-status status-${type}`;
+                connectionStatus.style.display = 'block';
+                
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            }
+
+            function showError(message) {
+                showStatus(message, 'error');
+            }
+
+            // Initialize dark mode
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+            }
+
+            // Start the application
+            init();
         });
     </script>
 </body>
