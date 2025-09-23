@@ -46,6 +46,23 @@ function authenticate() {
     return $_SESSION['user_id'];
 }
 
+function authenticateAdmin() {
+    if (!isset($_SESSION['user_id'])) {
+        sendJson(['error' => 'Authentication required. Please login first.'], 401);
+    }
+    
+    $db = getDb();
+    $stmt = $db->prepare("SELECT role FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $user = $stmt->fetch();
+    
+    if (!$user || $user['role'] !== 'admin') {
+        sendJson(['error' => 'Access denied. Admin privileges required.'], 403);
+    }
+    
+    return $_SESSION['user_id'];
+}
+
 function validateDeviceOwnership($deviceId, $userId) {
     $db = getDb();
     $stmt = $db->prepare("SELECT id FROM devices WHERE id = ? AND user_id = ?");
@@ -87,6 +104,11 @@ if ($method === 'GET' && empty($action)) {
                 'POST /api.php?action=devices&sub_action=schedule&device_id=1' => 'Set schedule',
                 'GET /api.php?action=devices&sub_action=logs&device_id=1' => 'Get device logs',
                 'GET /api.php?action=devices&sub_action=status&device_id=1' => 'Get device status'
+            ],
+            'Admin' => [
+                'POST /api.php?action=admin_signin' => 'Admin login',
+                'GET /api.php?action=users' => 'Get all users (admin only)',
+                'GET /api.php?action=logs' => 'Get all logs (admin only)'
             ]
         ]
     ]);
@@ -158,7 +180,39 @@ if ($method === 'POST' && $action === 'signin') {
         'userId' => $user['id'],
         'username' => $user['username'],
         'firstName' => $user['first_name'],
-        'lastName' => $user['last_name']
+        'lastName' => $user['last_name'],
+        'role' => $user['role'] ?? 'user'
+    ]);
+}
+
+if ($method === 'POST' && $action === 'admin_signin') {
+    if (!isset($input['username'], $input['password'])) {
+        sendJson(['error' => 'Username and password are required'], 400);
+    }
+    
+    $db = getDb();
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->execute([$input['username']]);
+    $user = $stmt->fetch();
+    
+    if (!$user || !password_verify($input['password'], $user['password_hash'])) {
+        sendJson(['error' => 'Invalid username or password'], 401);
+    }
+    
+    if (($user['role'] ?? 'user') !== 'admin') {
+        sendJson(['error' => 'Access denied. Admin privileges required.'], 403);
+    }
+    
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['login_time'] = time();
+    $_SESSION['is_admin'] = true;
+    
+    sendJson([
+        'message' => 'Admin login successful',
+        'userId' => $user['id'],
+        'username' => $user['username'],
+        'role' => 'admin'
     ]);
 }
 
@@ -268,6 +322,34 @@ if ($action === 'devices') {
             'timestamp' => date('Y-m-d H:i:s')
         ]);
     }
+}
+
+if ($action === 'users') {
+    authenticateAdmin();
+    
+    $db = getDb();
+    $stmt = $db->prepare("SELECT id, first_name, last_name, username, role, created_at FROM users ORDER BY created_at DESC");
+    $stmt->execute();
+    $users = $stmt->fetchAll();
+    
+    sendJson([
+        'users' => $users,
+        'count' => count($users)
+    ]);
+}
+
+if ($action === 'logs') {
+    authenticateAdmin();
+    
+    $db = getDb();
+    $stmt = $db->prepare("SELECT l.*, d.name as device_name, u.username as user_username FROM activity_logs l JOIN devices d ON l.device_id = d.id JOIN users u ON d.user_id = u.id ORDER BY l.timestamp DESC LIMIT 1000");
+    $stmt->execute();
+    $logs = $stmt->fetchAll();
+    
+    sendJson([
+        'logs' => $logs,
+        'count' => count($logs)
+    ]);
 }
 
 sendJson(['error' => 'Invalid action or endpoint not found'], 404);
