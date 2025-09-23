@@ -11,10 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'smartify24');
+require_once '../includes/config.php';
 
 session_start([
     'cookie_httponly' => true,
