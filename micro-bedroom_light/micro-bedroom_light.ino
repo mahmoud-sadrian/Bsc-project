@@ -26,6 +26,8 @@ unsigned long timerCheckInterval = 1000;
 int timerDuration = 0;
 unsigned long timerStartTime = 0;
 bool timerActive = false;
+String currentDeviceStatus = "OFF";
+int userId = USER_ID; // User ID from secrets.h
 
 // SSL Client
 WiFiClientSecure *client = nullptr;
@@ -35,7 +37,7 @@ void setup() {
   
   pinMode(relayPin, OUTPUT);
   pinMode(statusLed, OUTPUT);
-  digitalWrite(relayPin, HIGH); // Start OFF
+  digitalWrite(relayPin, HIGH); // Start OFF (assuming active-low relay)
   digitalWrite(statusLed, LOW);
 
   // Connect to WiFi
@@ -117,18 +119,26 @@ void syncDeviceStatus() {
 
     if (!error) {
       const char* status = doc["status"];
+      const char* deviceId = doc["device_id"];
+      
       Serial.print("Device status: ");
       Serial.println(status);
+      Serial.print("Device ID: ");
+      Serial.println(deviceId);
 
       // Control relay (LOW = ON if active-low)
       if (strcmp(status, "ON") == 0) {
         digitalWrite(relayPin, LOW);
+        currentDeviceStatus = "ON";
       } else {
         digitalWrite(relayPin, HIGH);
+        currentDeviceStatus = "OFF";
+        
+        // Cancel timer if device is turned off externally
         if (timerActive) {
           timerActive = false;
           timerDuration = 0;
-          Serial.println("Timer cancelled");
+          Serial.println("Timer cancelled by external command");
         }
       }
 
@@ -141,6 +151,12 @@ void syncDeviceStatus() {
       Serial.println(error.c_str());
       blinkError(4);
     }
+  } else if (httpCode == 401) {
+    Serial.println("Authentication failed - Invalid API key");
+    blinkError(6);
+  } else if (httpCode == 404) {
+    Serial.println("Device not found on server");
+    blinkError(7);
   } else {
     Serial.print("HTTP Error: ");
     Serial.println(httpCode);
@@ -153,13 +169,17 @@ void syncDeviceStatus() {
 // --- Handle Timer ---
 void handleTimer() {
   if (!timerActive) return;
+  
   unsigned long elapsedTime = (millis() - timerStartTime) / 1000;
   if (elapsedTime >= timerDuration) {
     digitalWrite(relayPin, HIGH);
+    currentDeviceStatus = "OFF";
     timerActive = false;
     timerDuration = 0;
     Serial.println("Timer expired - Device turned OFF");
-    updateDeviceStatus("OFF", "Timer expired");
+    
+    // Update server about timer expiration
+    updateDeviceStatus("OFF", "Timer expired after " + String(timerDuration/60) + " minutes");
   }
 }
 
@@ -190,9 +210,12 @@ void updateDeviceStatus(String status, String action) {
   int httpCode = http.POST(jsonString);
   if (httpCode == HTTP_CODE_OK) {
     logActivity(action);
+    currentDeviceStatus = status;
   } else {
     Serial.print("Status update failed. HTTP Code: ");
     Serial.println(httpCode);
+    Serial.print("Response: ");
+    Serial.println(http.getString());
   }
   http.end();
 }
@@ -201,15 +224,38 @@ void updateDeviceStatus(String status, String action) {
 void logActivity(String action) {
   String timestamp = timeClient.getFormattedTime();
   Serial.println("Activity: [" + timestamp + "] " + action);
+  
+  // Log to server
+  HTTPClient http;
+  String url = serverURL + "?action=devices&sub_action=log&device_id=" + String(DEVICE_ID);
+  http.begin(*client, url);
+  http.addHeader("Content-Type", "application/json");
+  http.addHeader("Authorization", "Bearer " + String((const char*)API_KEY));
+
+  DynamicJsonDocument doc(256);
+  doc["action"] = action;
+  String jsonString;
+  serializeJson(doc, jsonString);
+
+  int httpCode = http.POST(jsonString);
+  if (httpCode != HTTP_CODE_OK) {
+    Serial.print("Log upload failed. HTTP Code: ");
+    Serial.println(httpCode);
+  }
+  http.end();
 }
 
 // --- Start Timer ---
 void startTimer(int minutes) {
   if (minutes <= 0) return;
+  
   timerDuration = minutes * 60;
   timerStartTime = millis();
   timerActive = true;
   digitalWrite(relayPin, LOW);
+  currentDeviceStatus = "ON";
+  
+  Serial.println("Timer started for " + String(minutes) + " minutes");
   updateDeviceStatus("ON", "Timer set for " + String(minutes) + " minutes");
 }
 
