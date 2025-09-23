@@ -6,7 +6,8 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   agreed_to_terms TINYINT(1) DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  role ENUM('user', 'admin') DEFAULT 'user'
+  role ENUM('user', 'admin') DEFAULT 'user'و
+  api_key VARCHAR(64) UNIQUE
 );
 
 CREATE TABLE devices (
