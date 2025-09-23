@@ -886,31 +886,68 @@
 
             // Authentication and device loading
             async function checkAuthAndLoadDevices() {
+
+                const apiKey = localStorage.getItem('api_key');
+                if (!apiKey) {
+                    showError(texts[currentLang].authError);
+                    setTimeout(() => {
+                        window.location.href = 'sign-in.html';
+                    }, 2000);
+                    return;
+                }
+
                 try {
-                    const response = await fetch('api.php?action=devices');
-                    
+                    const response = await fetch('api.php?action=devices', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + apiKey,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
                     if (response.status === 401) {
+                        localStorage.removeItem('api_key');
+                        localStorage.removeItem('isLoggedIn');
                         showError(texts[currentLang].authError);
                         setTimeout(() => {
                             window.location.href = 'sign-in.html';
                         }, 2000);
                         return;
                     }
-                    
+
                     if (!response.ok) {
                         throw new Error('Failed to fetch devices');
                     }
-                    
+
                     const data = await response.json();
                     devices = data.devices || [];
                     renderDevicesList();
-                    
                 } catch (error) {
                     console.error('Error loading devices:', error);
                     showError(texts[currentLang].genericError);
                     devicesList.innerHTML = `<div class="device-item">${texts[currentLang].noDevices}</div>`;
                 }
             }
+
+            // Show status message
+            function showStatus(message, type = 'success') {
+                connectionStatus.textContent = message;
+                connectionStatus.className = 'connection-status';
+                if (type === 'success') {
+                    connectionStatus.classList.add('status-success');
+                } else {
+                    connectionStatus.classList.add('status-error');
+                }
+                connectionStatus.style.display = 'block';
+                setTimeout(() => {
+                    connectionStatus.style.display = 'none';
+                }, 3000);
+            }
+
+            // Show error message
+            function showError(message) {
+                showStatus(message, 'error');
+}
 
             // Render devices list
             function renderDevicesList() {
@@ -987,24 +1024,26 @@
             // Toggle device
             async function toggleDevice() {
                 if (!currentDevice) return;
-                
+
+                const apiKey = localStorage.getItem('api_key'); // ✅
+                if (!apiKey) return;
+
                 const newStatus = currentDevice.status === 'ON' ? 'OFF' : 'ON';
-                
                 try {
                     const response = await fetch(`api.php?action=devices&sub_action=control&device_id=${currentDevice.id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + apiKey // ✅
                         },
                         body: JSON.stringify({ status: newStatus })
                     });
-                    
+
                     if (response.ok) {
                         currentDevice.status = newStatus;
                         updateDeviceStatus(newStatus === 'ON');
                         showStatus(texts[currentLang].deviceUpdated, 'success');
-                        
-                        // Update device in list
+
                         const deviceItem = document.querySelector(`[data-device-id="${currentDevice.id}"]`);
                         if (deviceItem) {
                             deviceItem.querySelector('small').textContent = 
@@ -1022,19 +1061,23 @@
             // Set timer
             async function setTimer() {
                 if (!currentDevice || !timerMinutes.value) return;
-                
+
+                const apiKey = localStorage.getItem('api_key'); // ✅
+                if (!apiKey) return;
+
                 const minutes = parseInt(timerMinutes.value);
                 if (minutes < 1) return;
-                
+
                 try {
                     const response = await fetch(`api.php?action=devices&sub_action=timer&device_id=${currentDevice.id}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + apiKey // ✅
                         },
                         body: JSON.stringify({ duration_minutes: minutes })
                     });
-                    
+
                     if (response.ok) {
                         showStatus(texts[currentLang].timerSet, 'success');
                         timerMinutes.value = '';
@@ -1050,10 +1093,18 @@
             // Get logs
             async function getLogs() {
                 if (!currentDevice) return;
-                
+
+                const apiKey = localStorage.getItem('api_key'); // ✅
+                if (!apiKey) return;
+
                 try {
-                    const response = await fetch(`api.php?action=devices&sub_action=logs&device_id=${currentDevice.id}`);
-                    
+                    const response = await fetch(`api.php?action=devices&sub_action=logs&device_id=${currentDevice.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + apiKey // ✅
+                        }
+                    });
+
                     if (response.ok) {
                         const data = await response.json();
                         renderLogs(data.logs || []);
