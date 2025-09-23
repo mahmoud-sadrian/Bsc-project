@@ -193,6 +193,18 @@ if ($method === 'POST' && $action === 'signup') {
         }
         
         $stmt = $db->prepare("INSERT INTO users (first_name, last_name, username, password_hash, agreed_to_terms) VALUES (?, ?, ?, ?, ?)");
+        // Generate unique API Key
+        $apiKey = bin2hex(random_bytes(32));
+
+        $stmt = $db->prepare("INSERT INTO users (first_name, last_name, username, password_hash, agreed_to_terms, api_key) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->execute([$first_name, $last_name, $input['username'], $hash, 1, $apiKey]);
+
+        sendJson([
+            'message' => 'User registered successfully',
+            'userId' => $db->lastInsertId(),
+            'username' => $input['username'],
+            'apiKey' => $apiKey, 
+        ], 201);
         $stmt->execute([$first_name, $last_name, $input['username'], $hash, 1]);
         
         sendJson([
