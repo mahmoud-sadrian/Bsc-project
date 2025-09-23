@@ -14,7 +14,8 @@ CREATE TABLE devices (
   name VARCHAR(255) NOT NULL,
   status ENUM('ON', 'OFF') DEFAULT 'OFF',
   last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  role ENUM('user', 'admin') DEFAULT 'user'
 );
 
 CREATE TABLE schedules (
