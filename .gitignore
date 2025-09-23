@@ -2,3 +2,4 @@ template.html
 temp.html
 config.php
 /includes/config.php
+secrets.h
