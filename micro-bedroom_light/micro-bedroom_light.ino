@@ -5,17 +5,10 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-// WiFi Configuration
-const char* ssid = "M.sdr";
-const char* password = "12345678";
+#include "secrets.h"
 
 // Server Configuration
-const char* serverHost = "smartify24.ir";
-const String serverURL = "https://smartify24.ir/api.php";
-const int deviceId = 3;
-
-// API Key for authentication (generated on server)
-const char* apiKey = "t9taq56ccbp0fb31a4cg0wcpwg3zzqw7";
+const String serverURL = "https://" + String(SERVER_HOST) + "/api.php";
 
 // Hardware Configuration
 const int relayPin = D1;
@@ -46,7 +39,7 @@ void setup() {
   digitalWrite(statusLed, LOW);
 
   // Connect to WiFi
-  WiFi.begin(ssid, password);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to WiFi");
   
   while (WiFi.status() != WL_CONNECTED) {
@@ -108,12 +101,12 @@ void syncDeviceStatus() {
   }
 
   HTTPClient http;
-  String url = serverURL + "?action=devices&sub_action=status&device_id=" + String(deviceId);
+  String url = serverURL + "?action=devices&sub_action=status&device_id=" + String(DEVICE_ID);
   
   Serial.println("Checking status from: " + url);
 
   http.begin(*client, url);
-  http.addHeader("Authorization", "Bearer " + String(apiKey));
+  http.addHeader("Authorization", "Bearer " + String((const char*)API_KEY));
 
   int httpCode = http.GET();
 
@@ -184,10 +177,10 @@ void updateDeviceStatus(String status, String action) {
   if (WiFi.status() != WL_CONNECTED || client == nullptr) return;
 
   HTTPClient http;
-  String url = serverURL + "?action=devices&sub_action=control&device_id=" + String(deviceId);
+  String url = serverURL + "?action=devices&sub_action=control&device_id=" + String(DEVICE_ID);
   http.begin(*client, url);
   http.addHeader("Content-Type", "application/json");
-  http.addHeader("Authorization", "Bearer " + String(apiKey));
+  http.addHeader("Authorization", "Bearer " + String((const char*)API_KEY));
 
   DynamicJsonDocument doc(256);
   doc["status"] = status;
