@@ -837,31 +837,42 @@
           console.log('داده‌های پاسخ:', data);
 
           if (response.ok && data.userId) {
-            console.log('ورود موفق - ذخیره اطلاعات در localStorage');
-            
-            localStorage.setItem('user_id', data.userId);
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('loginTime', new Date().getTime());
-            
-            // بررسی نقش کاربر
-            if (data.role === 'admin') {
-              localStorage.setItem('isAdmin', 'true');
-              showMessage(texts[currentLang].redirectingAdmin, 'success');
-              
-              setTimeout(() => {
-                window.location.href = 'admin_dashboard.html';
-              }, 1500);
-            } else {
-              localStorage.setItem('isAdmin', 'false');
-              showMessage(texts[currentLang].loginSuccess, 'success');
-              
-              setTimeout(() => {
-                window.location.href = 'dashboard.html';
-              }, 1000);
-            }
-            
-          } else {
+              console.log('ورود موفق - ذخیره اطلاعات در localStorage');
+    
+              localStorage.setItem('user_id', data.userId);
+              localStorage.setItem('username', data.username);
+              localStorage.setItem('isLoggedIn', 'true');
+              localStorage.setItem('loginTime', new Date().getTime());
+              localStorage.setItem('role', data.role || 'user');
+
+              // ✅ ذخیره API Key
+              if (data.apiKey) {
+                  localStorage.setItem('api_key', data.apiKey);
+              } else {
+                  showMessage("API Key not received!", "error");
+                  submitButton.textContent = originalText;
+                  submitButton.disabled = false;
+                  return;
+              }
+
+              // بررسی نقش کاربر
+              if (data.role === 'admin') {
+                  localStorage.setItem('isAdmin', 'true');
+                  showMessage(texts[currentLang].redirectingAdmin, 'success');
+        
+                  setTimeout(() => {
+                      window.location.href = 'admin_dashboard.html';
+                  }, 1500);
+              } else {
+                  localStorage.setItem('isAdmin', 'false');
+                  showMessage(texts[currentLang].loginSuccess, 'success');
+        
+                  setTimeout(() => {
+                      window.location.href = 'dashboard.html';
+                  }, 1000);
+              }
+          }
+          else {
             const errorMessage = data.error || texts[currentLang].invalidCredentials;
             console.log('خطا در ورود:', errorMessage);
             showMessage(errorMessage, 'error');
