@@ -845,7 +845,6 @@
               localStorage.setItem('loginTime', new Date().getTime());
               localStorage.setItem('role', data.role || 'user');
 
-              // ✅ ذخیره API Key
               if (data.apiKey) {
                   localStorage.setItem('api_key', data.apiKey);
               } else {
@@ -855,7 +854,6 @@
                   return;
               }
 
-              // بررسی نقش کاربر
               if (data.role === 'admin') {
                   localStorage.setItem('isAdmin', 'true');
                   showMessage(texts[currentLang].redirectingAdmin, 'success');
