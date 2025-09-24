@@ -387,7 +387,6 @@
         body[dir="rtl"] .social-login { flex-direction: row-reverse; }
         body[dir="rtl"] .toggle-password { right: auto; left: 16px; }
         body[dir="rtl"] input[type="text"],
-        body[dir="rtl"] input[type="email"],
         body[dir="rtl"] input[type="password"] {
             padding: 12px 16px 12px 40px;
         }
@@ -404,7 +403,7 @@
             h1 { font-size: 22px; margin-bottom: 20px; }
             .form-group { margin-bottom: 16px; }
             label { font-size: 14px; }
-            input[type="text"], input[type="email"], input[type="password"] { padding: 12px 40px 12px 16px; font-size: 16px; }
+            input[type="text"], input[type="password"] { padding: 12px 40px 12px 16px; font-size: 16px; }
             button[type="submit"] { padding: 12px; font-size: 16px; }
             .social-login { gap: 8px; }
             .social-btn { padding: 12px; font-size: 15px; }
@@ -508,11 +507,11 @@
         <div class="footer-content">
             <h3 class="footer-title" id="contactTitle">Contact Us</h3>
             <div class="social-links">
-                <a href="https://github.com/mahmoud-sadrian" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" width="32" height="32">
+                <a href="  https://github.com/mahmoud-sadrian  " class="social-link" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png  " alt="GitHub" width="32" height="32">
                 </a>
-                <a href="https://www.linkedin.com/in/mahmood-sadriyan/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" width="32" height="32">
+                <a href="https://www.linkedin.com/in/mahmood-sadriyan/  " class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png  " alt="LinkedIn" width="32" height="32">
                 </a>
             </div>
         </div>
@@ -563,7 +562,7 @@
                     confirmPasswordError: "Passwords do not match",
                     termsError: "You must agree to the terms",
                     signingUp: "Signing up...",
-                    signupSuccess: "Registration successful! Redirecting to login...",
+                    signupSuccess: "Registration successful! Redirecting to dashboard...",
                     signupFailed: "Registration failed",
                     networkError: "Network error",
                     usernameExists: "Username already exists"
@@ -598,7 +597,7 @@
                     confirmPasswordError: "رمزهای عبور مطابقت ندارند",
                     termsError: "باید با شرایط موافقت کنید",
                     signingUp: "در حال ثبت‌نام...",
-                    signupSuccess: "ثبت‌نام موفقیت‌آمیز بود! در حال انتقال به صفحه ورود...",
+                    signupSuccess: "ثبت‌نام موفقیت‌آمیز بود! در حال انتقال به پنل کاربری...",
                     signupFailed: "ثبت‌نام انجام نشد",
                     networkError: "خطای شبکه",
                     usernameExists: "نام کاربری قبلاً استفاده شده است"
@@ -790,7 +789,7 @@
 
                         showMessage(texts[currentLang].signupSuccess, 'success');
                         setTimeout(() => {
-                            window.location.href = 'sign-in.html';
+                            window.location.href = 'dashboard.html';
                         }, 2000);
                     } else {
                         let errorMessage = texts[currentLang].signupFailed;
